@@ -6,4 +6,4 @@
 ### Minimalistic non-intruisive realtime agile task board ###
 
 
-* Project is in private repository now because of using connection to Firebase account
+* Project is in private repository now because of using public firebase server https://sty-board.firebaseio.com/
