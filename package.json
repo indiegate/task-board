@@ -1,0 +1,11 @@
+{
+  "name": "taskboard",
+  "main": "index.html",
+  "window": {
+    "title": "task board application",
+    "toolbar": true
+  },
+  "dependencies": {
+     "firebase": "^2.2.9"
+  }
+}

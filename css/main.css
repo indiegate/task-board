@@ -1,0 +1,47 @@
+
+.ui.divider {
+    margin-right: 0em!important;
+    margin-left: 0em!important;
+}
+
+.ui.segment {
+    padding: 0.5em;
+    margin-bottom: 0em;
+}
+
+.column {
+    padding: 0.5em!important;
+}
+
+.row>.column {
+    padding: 0em!important;
+}
+
+.ui.selection.list>.item {
+  padding: .2em;
+  color: rgba(0,0,0,.7);
+}
+
+.ui.header>.icon {
+  font-size: 0.8em;
+}
+
+.ui.header .icon {
+  margin-right: 0;
+}
+
+.label.dev {
+  background-color: #21ba45!important;
+  border-color: #21ba45!important;
+  color: #fff!important;
+}
+.label.qa {
+  background-color: #fbbd08!important;
+  border-color: #fbbd08!important;
+  color: #fff!important;
+}
+.label.bug {
+  background-color: #db2828!important;
+  border-color: #db2828!important;
+  color: #fff!important;
+}
