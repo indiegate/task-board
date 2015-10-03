@@ -33,5 +33,7 @@
     "watch": "0.16.0",
     "webpack": "1.12.2",
     "webpack-dev-server": "1.11.0"
-  }
+  },
+  "license": "GPL-3.0"
+
 }

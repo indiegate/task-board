@@ -21,3 +21,8 @@
 * Through your favourite REST client do
   > PUT query to {your-firebase-ID}.firebaseio.com/teams.json
 * example of json to be putted: json/create_team.json
+
+## License
+
+Software licensed under GPL-3.0 license (http://opensource.org/licenses/GPL-3.0)
+
