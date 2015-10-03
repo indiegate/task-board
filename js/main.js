@@ -1,8 +1,7 @@
 var gui = require('nw.gui');
 console.log( "ready!" );
 var Firebase = require("firebase");
-var myFirebaseRef = new Firebase("https://sty-board.firebaseio.com/");
-
+var myFirebaseRef = new Firebase("https://" + process.env.FIREBASE_ID + ".firebaseio.com/");
 
 myFirebaseRef.child("teams/frw-int/sections/").once("value", function(snapshot) {
   snapshot.forEach(function(childSnapshot) {
