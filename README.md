@@ -1,5 +1,6 @@
 # README #
-
+## Task Board Project ##
+### Minimalistic non-intruisive realtime agile task board ###
 
 ## Reuqirements
 
@@ -13,9 +14,3 @@
 * cd {this-repository-name}
 * run command: `FIREBASE_ID=${your-firebase-ID} nw .`
   > uses ENV variable `FIREBASE_ID` and instructs nw to open app in current folder.
-
-## Task Board Project ##
-### Minimalistic non-intruisive realtime agile task board ###
-
-
-* Project is in private repository now because of using public firebase server https://sty-board.firebaseio.com/
