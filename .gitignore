@@ -15,3 +15,7 @@ node_modules
 npm-debug.log
 
 .idea
+
+dist/app*
+dist/*.svg
+dist/*.ttf
