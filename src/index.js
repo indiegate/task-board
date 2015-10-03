@@ -1,9 +1,9 @@
 import React from 'react';
-import Component from './Component.jsx';
+import { App } from './App.jsx';
 
 window.onload = () => {
   React.render(
-    <Component />,
+    <App />,
     document.querySelector('#container')
   );
 };

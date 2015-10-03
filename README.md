@@ -12,6 +12,8 @@
 * be sure nw executalbe is on $PATH
 * git clone {this-repository-name}
 * cd {this-repository-name}
+* run command: `npm install`
+* run command: `npm run build`
 * run command: `FIREBASE_ID=${your-firebase-ID} nw .`
   > uses ENV variable `FIREBASE_ID` and instructs nw to open app in current folder.
 
