@@ -1,0 +1,55 @@
+{
+  "fwk-int": {
+    "columns": [
+      {
+        "rows": [
+          {
+            "id":"section10",
+            "name":"TODO"
+          },
+          {
+            "id":"section11",
+            "name":"Ready for test"
+          }
+        ]
+      },
+      {
+        "name":"In Progress",
+        "rows": [
+          {
+            "id":"section41",
+            "name":"Radek"
+          },
+          {
+            "id":"section42",
+            "name":"Peter"
+          },
+          {
+            "id":"section43",
+            "name":"Jiri P."
+          },
+          {
+            "id":"section44",
+            "name":"Eldar"
+          },
+          {
+            "id":"section45",
+            "name":"Zdenek"
+          },
+          {
+            "id":"section46",
+            "name":"Jan"
+          },
+          {
+            "id":"section47",
+            "name":"Jiri K."
+          }
+        ]
+      },
+      {
+        "id":"section30",
+        "name":"Done"
+      }
+    ]
+  }
+}
