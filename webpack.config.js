@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var env = process.env.WEBPACK_ENV;
+var FIREBASE_ID = process.env.FIREBASE_ID;
 var WebpackDevServer = require('webpack-dev-server');
 
 var appName = 'app';
@@ -25,9 +26,26 @@ var config = {
         test: /(\.jsx|\.js)$/,
         loader: "eslint-loader",
         exclude: /node_modules/
-      }
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass'],
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000',
+      },
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+        FIREBASE_ID: JSON.stringify(FIREBASE_ID),
+    })
+  ]
 };
 
 if (env === 'dev') {

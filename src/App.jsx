@@ -1,10 +1,37 @@
 import React, { Component } from 'react';
 
+import * as APIService from './services/APIService';
+
 export class App extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      layout: null,
+    };
+  }
+
+  componentWillMount() {
+    APIService.fetchLayout()
+      .then(layout => {
+        this.setState({
+          layout,
+        });
+      });
+  }
+
   render() {
+    if (!this.state.layout) {
+      return <p>Loading</p>;
+    }
+
     return (
-      <p>Here goes the todo list</p>
+      <div className="ui internally celled stackable three column grid">
+        {this.state.layout.columns.map(item => {
+          return <p>{JSON.stringify(item)}</p>;
+        })}
+      </div>
     );
   }
 }
