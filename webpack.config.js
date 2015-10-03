@@ -45,7 +45,10 @@ var config = {
     new webpack.DefinePlugin({
         FIREBASE_ID: JSON.stringify(FIREBASE_ID),
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  }
 };
 
 if (env === 'dev') {
