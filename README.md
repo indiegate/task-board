@@ -13,9 +13,8 @@
 * git clone {this-repository-name}
 * cd {this-repository-name}
 * run command: `npm install`
-* run command: `FIREBASE_ID=${your-firebase-ID} npm run build`
+* run command: `FIREBASE_ID=${your-firebase-ID} npm  run build` *# FIREBASE_ID as ENV variable will be used in the build process.*
 * run command: `nw .`
-  > uses ENV variable `FIREBASE_ID` and instructs nw to open app in current folder.
 
 ## Team Layout
 
