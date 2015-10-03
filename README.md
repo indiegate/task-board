@@ -24,5 +24,5 @@
 
 ## License
 
-Software licensed under GPL-3.0 license (http://opensource.org/licenses/GPL-3.0)
+Software is released under the GPL-3.0 license (http://opensource.org/licenses/GPL-3.0)
 
