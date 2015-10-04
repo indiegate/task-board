@@ -1,10 +1,21 @@
 import { fromJS } from 'immutable';
 
 const updateLayout = (layout, task) => {
+  const isPresent = (tasks, innerTask) => {
+    for (let idx = 0; idx < tasks.length; idx++) {
+      if (tasks[idx].content === innerTask.content) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const updateRow = (row) => {
     if (row.id === task.sectionId) {
       row.tasks = row.tasks || [];
-      row.tasks.push(task);
+      if (!isPresent(row.tasks, task)) {
+        row.tasks.push(task);
+      }
     }
     return row;
   };
