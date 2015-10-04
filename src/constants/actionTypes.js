@@ -1,0 +1,2 @@
+export const BOARD_MOUNTED = 'BOARD_MOUNTED';
+export const LAYOUT_FETCHED_OK = 'LAYOUT_FETCHED_OK';
