@@ -9,7 +9,9 @@ export class BoardRow extends Component {
     if (!this.props.tasks) {
       return <p>No tasks</p>;
     }
-    // TODO vire - add logic for task paining
+    return this.props.tasks.map((task, idx) => {
+      return <div key={idx}>{task.content}</div>;
+    });
   }
 
   render() {

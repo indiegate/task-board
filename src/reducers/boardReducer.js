@@ -1,3 +1,5 @@
+import { fromJS } from 'immutable';
+
 import buildMessage from '../utils/buildMessage';
 
 export const layoutFetchRequested = (reduction, payload) => {
@@ -11,5 +13,5 @@ export const layoutFetchRequested = (reduction, payload) => {
 
 export const layoutFetched = (reduction, payload) => {
   return reduction
-    .setIn(['appState', 'layout'], payload);
+    .setIn(['appState', 'layout'], fromJS(payload));
 };

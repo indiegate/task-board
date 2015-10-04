@@ -1,6 +1,9 @@
+/* global FIREBASE_ID */
+
 import React from 'react';
 import { PureComponent } from '../components/PureComponent';
 import { BoardColumn } from '../components/BoardColumn';
+import Firebase from 'firebase';
 
 export class BoardView extends PureComponent {
 
@@ -17,6 +20,17 @@ export class BoardView extends PureComponent {
           payload: null,
         });
       });
+    } else {
+      // register for firebase updates
+      this.firebaseRef = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
+      this.firebaseRef
+        .child('teams/fwk-int/tasks/')
+          .on('value', snapshot => {
+            this.dispatchAction({
+              type: 'FIREBASE_TASKS_RECEIVED',
+              payload: snapshot.val(),
+            });
+          });
     }
   }
 
@@ -27,7 +41,7 @@ export class BoardView extends PureComponent {
 
     return (
       <div className="ui internally celled stackable three column grid">
-        {this.props.layout.columns.map((item, idx) => {
+        {this.props.layout.toJS().columns.map((item, idx) => {
           return <BoardColumn key={idx} {...item} />;
         })}
       </div>

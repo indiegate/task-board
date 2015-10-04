@@ -1,4 +1,5 @@
 import * as BoardReducer from './boardReducer';
+import * as FirebaseReducer from './firebaseReducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 export default (reduction, action) => {
@@ -6,6 +7,7 @@ export default (reduction, action) => {
 
   console.debug(`Handling action: ${type}`);
 
+  // mutate the global appState here
   return reduction.withMutations(mutableReduction => {
     switch (type) {
     case ActionTypes.BOARD_MOUNTED:
@@ -13,6 +15,9 @@ export default (reduction, action) => {
       break;
     case ActionTypes.LAYOUT_FETCHED_OK:
       mutableReduction.update(_r => BoardReducer.layoutFetched(_r, payload));
+      break;
+    case 'FIREBASE_TASKS_RECEIVED':
+      mutableReduction.update(_r => FirebaseReducer.tasksReceived(_r, payload));
       break;
     default:
       console.debug(`Unhandled action of type: ${type}`);
