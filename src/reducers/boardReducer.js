@@ -13,5 +13,5 @@ export const layoutFetchRequested = (reduction, payload) => {
 
 export const layoutFetched = (reduction, payload) => {
   return reduction
-    .setIn(['appState', 'layout'], fromJS(payload));
+    .setIn(['appState', 'initialLayout'], fromJS(payload));
 };

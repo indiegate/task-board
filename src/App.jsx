@@ -28,6 +28,7 @@ const APICallEffectHandler = ((handlers) => {
 
 const Reduction = record({
   appState: fromJS({
+    initialLayout: null,
     layout: null,
     loading: false,
   }),
@@ -63,7 +64,6 @@ export class App extends Component {
       dispatcher,
       reduction: new Reduction(),
       actionLog: List.of(),
-      layout: null,
     };
 
     // if hot-module-reload, replay state after file save.
@@ -87,14 +87,18 @@ export class App extends Component {
   }
 
   render() {
-    if (this.state.reduction.getIn(['appState', 'loading']) && !this.state.reduction.getIn(['appState', 'layout'])) {
+    const initialLayout = this.state.reduction.getIn(['appState', 'initialLayout']);
+    const stateLayout = this.state.reduction.getIn(['appState', 'layout']);
+    const layout = stateLayout ? stateLayout : initialLayout;
+
+    if (this.state.reduction.getIn(['appState', 'loading']) && !layout) {
       return <p>Loading</p>;
     }
 
     return (
       <div>
         <BoardView dispatcher={this.state.dispatcher}
-                    layout={this.state.reduction.getIn(['appState', 'layout'])}/>
+            layout={layout}/>
       </div>
     );
   }
