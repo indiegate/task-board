@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PureComponent } from '../components/PureComponent';
-import { BoardColumn } from '../components/BoardColumn';
+import { HorizontalBox } from '../components/HorizontalBox';
 import Firebase from 'firebase';
 
 export class BoardView extends PureComponent {
@@ -40,11 +40,7 @@ export class BoardView extends PureComponent {
     }
 
     return (
-      <div className="ui internally celled stackable three column grid">
-        {this.props.layout.toJS().columns.map((item, idx) => {
-          return <BoardColumn key={idx} {...item} />;
-        })}
-      </div>
+      <HorizontalBox columns={this.props.layout.columns} />
     );
   }
 }

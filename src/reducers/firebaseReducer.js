@@ -1,25 +1,35 @@
 import { fromJS } from 'immutable';
 
 const updateLayout = (layout, task) => {
-  const updateRow = (row) => {
-    if (row.id === task.sectionId) {
-      row.tasks = row.tasks || [];
-      row.tasks.push(task);
+  const updateBoardSection = (section) => {
+    if (section.id === task.sectionId) {
+      section.tasks = section.tasks || [];
+      section.tasks.push(task);
     }
-    return row;
+    return section;
   };
 
-  const updateColumn = (column) => {
-    if (column.rows) {
-      column.rows = column.rows.map(row => {
-        return updateRow(row);
+  const updateBox = (item) => {
+    if (item.columns) {
+      item.columns = item.columns.map(column => {
+        if (column.id) {
+          return updateBoardSection(column);
+        }
+        return updateBox(column);
+      });
+    } else if (item.rows) {
+      item.rows = item.rows.map(row => {
+        if (row.id) {
+          return updateBoardSection(row);
+        }
+        return updateBox(row);
       });
     }
-    return column;
+    return item;
   };
 
   return layout.columns.map(column => {
-    return updateColumn(column);
+    return updateBox(column);
   });
 };
 
