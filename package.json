@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:indiegate/taskboard.git"
+    "url": "git@github.com:indiegate/task-board.git"
   },
   "scripts": {
     "dev": "WEBPACK_ENV=dev ./node_modules/.bin/webpack --watch --inline",
