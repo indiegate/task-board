@@ -40,7 +40,7 @@ export class BoardView extends PureComponent {
     }
 
     return (
-      <HorizontalBox columns={this.props.layout.columns} />
+      <HorizontalBox columns={this.props.layout.toJS().columns} />
     );
   }
 }
