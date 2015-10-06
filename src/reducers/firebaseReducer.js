@@ -44,3 +44,11 @@ export const tasksReceived = (reduction, payload) => {
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout));
 };
+
+
+export const saveTaskRequested = (reduction, payload) => {
+  if (!payload) {
+    return reduction
+      .setIn(['appState', 'newTaskId'], null);
+  }
+};
