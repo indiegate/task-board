@@ -9,8 +9,16 @@
               "name":"TODO"
             },
             {
-              "id":"section11",
-              "name":"Ready for test"
+              "columns":[
+                {
+                  "id":"section11",
+                  "name":"Committed to test"
+                },
+                {
+                  "id":"section12",
+                  "name":"Deployed to test"
+                }
+              ]
             }
           ]
         },
