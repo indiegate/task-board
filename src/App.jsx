@@ -31,6 +31,7 @@ const Reduction = record({
     initialLayout: null,
     layout: null,
     loading: false,
+    newTaskId: null,
   }),
   effects: List.of(),
 });
@@ -98,6 +99,7 @@ export class App extends Component {
     return (
       <div>
         <BoardView dispatcher={this.state.dispatcher}
+            newTaskId={this.state.reduction.getIn(['appState', 'newTaskId'])}
             layout={layout}/>
       </div>
     );

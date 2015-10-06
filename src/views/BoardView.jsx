@@ -1,4 +1,4 @@
-/* global FIREBASE_ID */
+/* global FIREBASE_ID, $ */
 
 import React from 'react';
 import { PureComponent } from '../components/PureComponent';
@@ -34,13 +34,64 @@ export class BoardView extends PureComponent {
     }
   }
 
+  _saveTask() {
+    // this.dispatchAction({
+    //   type: 'TASK_ADD_REQUESTED',
+    //   payload: {
+    //     sectionId: this.props.newTaskId,
+    //     text: this.refs.taskText.getDOMNode().value,
+    //   },
+    // });
+
+    this.firebaseRef
+      .child('teams/fwk-int/tasks/')
+      .push()
+      .set({
+        sectionId: this.props.newTaskId,
+        content: this.refs.taskText.getDOMNode().value,
+      }, (err) => {
+        if (!err) {
+          this.dispatchAction({
+            type: 'FIREBASE_SAVE_TASK_REQUESTED',
+            payload: err,
+          });
+        }
+      });
+  }
+
+  _cancelAddTask() {
+    this.dispatchAction({
+      type: 'CANCEL_ADD_TASK_CLICKED',
+      payload: null,
+    });
+  }
+
   render() {
     if (!this.props.layout) {
       return <div>Nothing</div>;
     }
 
+    const displayModal = this.props.newTaskId ? 'block' : '';
+
     return (
-      <HorizontalBox columns={this.props.layout.toJS().columns} />
+      <div>
+        <div className="ui modal" style={{display: displayModal}}>
+          <i className="close icon"></i>
+          <div className="header">
+            Add new task
+          </div>
+          <div className="ui fluid input">
+            <input type="text" ref="taskText" placeholder="Type new task" />
+          </div>
+          <div className="actions">
+            <div className="ui button" onClick={this._cancelAddTask.bind(this)}>Cancel</div>
+            <div className="ui button"
+                onClick={this._saveTask.bind(this)}>OK</div>
+          </div>
+        </div>
+        <HorizontalBox columns={this.props.layout.toJS().columns}
+            dispatcher={this.props.dispatcher}/>
+      </div>
     );
   }
 }
@@ -48,4 +99,5 @@ export class BoardView extends PureComponent {
 BoardView.propTypes = {
   dispatcher: React.PropTypes.object.isRequired,
   layout: React.PropTypes.object,
+  newTaskId: React.PropTypes.string,
 };

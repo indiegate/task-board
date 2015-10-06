@@ -15,9 +15,15 @@ export class HorizontalBox extends Component {
 
     return this.props.columns.map((column, idx) => {
       if (column.id) {
-        return <BoardSection key={idx} {...column} />;
+        return (
+          <BoardSection key={idx} {...column}
+              dispatcher={this.props.dispatcher} />
+        );
       }
-      return <VerticalBox key={idx} {...column} />;
+      return (
+        <VerticalBox key={idx} {...column}
+          dispatcher={this.props.dispatcher} />
+      );
     });
   }
 
@@ -32,4 +38,5 @@ export class HorizontalBox extends Component {
 
 HorizontalBox.propTypes = {
   columns: React.PropTypes.array,
+  dispatcher: React.PropTypes.object.isRequired,
 };

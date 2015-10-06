@@ -19,6 +19,15 @@ export default (reduction, action) => {
     case 'FIREBASE_TASKS_RECEIVED':
       mutableReduction.update(_r => FirebaseReducer.tasksReceived(_r, payload));
       break;
+    case 'ADD_TASK_CLICKED':
+      mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
+      break;
+    case 'CANCEL_ADD_TASK_CLICKED':
+      mutableReduction.update(_r => BoardReducer.cancelAddTaskClicked(_r, payload));
+      break;
+    case 'FIREBASE_SAVE_TASK_REQUESTED':
+      mutableReduction.update(_r => FirebaseReducer.saveTaskRequested(_r, payload));
+      break;
     default:
       console.debug(`Unhandled action of type: ${type}`);
     }
