@@ -34,15 +34,13 @@ export class BoardView extends PureComponent {
     }
   }
 
-  _saveTask() {
-    // this.dispatchAction({
-    //   type: 'TASK_ADD_REQUESTED',
-    //   payload: {
-    //     sectionId: this.props.newTaskId,
-    //     text: this.refs.taskText.getDOMNode().value,
-    //   },
-    // });
+  componentDidUpdate() {
+    if (!this.props.newTaskId) {
+      this.refs.taskText.getDOMNode().value = '';
+    }
+  }
 
+  _saveTask() {
     this.firebaseRef
       .child('teams/fwk-int/tasks/')
       .push()
