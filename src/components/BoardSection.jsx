@@ -14,6 +14,13 @@ export class BoardSection extends Component {
     });
   }
 
+  _handleAddTaskClick() {
+    this.props.dispatcher.dispatch({
+      type: 'ADD_TASK_CLICKED',
+      payload: this.props.id,
+    });
+  }
+
   render() {
     return (
       <div className="column">
@@ -22,7 +29,7 @@ export class BoardSection extends Component {
             <div className="content">
               {this.props.name}
             </div>
-            <button className="ui icon button">
+            <button className="ui icon button" onClick={this._handleAddTaskClick.bind(this)}>
               <i className="plus icon"></i>
             </button>
           </h4>
@@ -41,4 +48,5 @@ BoardSection.propTypes = {
   id: React.PropTypes.string.isRequired,
   name: React.PropTypes.string,
   tasks: React.PropTypes.array,
+  dispatcher: React.PropTypes.object.isRequired,
 };

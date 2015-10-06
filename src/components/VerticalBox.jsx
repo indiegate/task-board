@@ -15,9 +15,15 @@ export class VerticalBox extends Component {
 
     return this.props.rows.map((row, idx) => {
       if (row.id) {
-        return <BoardSection key={idx} {...row} />;
+        return (
+          <BoardSection key={idx} {...row}
+              dispatcher={this.props.dispatcher} />
+        );
       }
-      return <HorizontalBox key={idx} {...row} />;
+      return (
+        <HorizontalBox key={idx} {...row}
+          dispatcher={this.props.dispatcher} />
+      );
     });
   }
 
@@ -32,4 +38,5 @@ export class VerticalBox extends Component {
 
 VerticalBox.propTypes = {
   rows: React.PropTypes.array,
+  dispatcher: React.PropTypes.object.isRequired,
 };

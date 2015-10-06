@@ -15,3 +15,14 @@ export const layoutFetched = (reduction, payload) => {
   return reduction
     .setIn(['appState', 'initialLayout'], fromJS(payload));
 };
+
+
+export const addTaskClicked = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'newTaskId'], payload);
+};
+
+export const cancelAddTaskClicked = (reduction) => {
+  return reduction
+    .setIn(['appState', 'newTaskId'], null);
+};
