@@ -26,8 +26,9 @@ export class BoardTask extends Component {
         tags.push(word.substring(1, word.length));
       }
     });
-    return tags.map((tag) => {
-      return <div className="ui mini horizontal label">{tag}</div>;
+    return tags.map((tag, idx) => {
+      const classes = 'ui mini horizontal label ' + tag;
+      return <div className={classes} key={idx}>{tag}</div>;
     });
   }
 
