@@ -93,7 +93,7 @@ export class App extends Component {
     const layout = stateLayout ? stateLayout : initialLayout;
 
     if (this.state.reduction.getIn(['appState', 'loading']) && !layout) {
-      return <div className="ui active loader"></div>;
+      return <div className="ui large active loader"></div>;
     }
 
     return (

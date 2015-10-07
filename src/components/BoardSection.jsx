@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { BoardTask } from './BoardTask';
 export class BoardSection extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +10,7 @@ export class BoardSection extends Component {
       return <p>No tasks</p>;
     }
     return this.props.tasks.map((task, idx) => {
-      return <div key={idx}>{task.content}</div>;
+      return <BoardTask key={idx} {...task} />;
     });
   }
 

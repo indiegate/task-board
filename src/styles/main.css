@@ -2,21 +2,35 @@
     padding: 0.5em!important;
 }
 
-.row>.column {
-    padding: 0em!important;
-}
-
 .ui.selection.list>.item {
   padding: .2em;
   color: rgba(0,0,0,.7);
 }
 
-.ui.header>.icon {
-  font-size: 0.8em;
+.ui.header {
+  margin-bottom: 0.5em;
 }
 
 .ui.header .icon {
-  margin-right: 0;
+  font-size: 0.8em;
+  margin-right: 0px!important;
+}
+
+.ui.header .button {
+  display: none;
+  padding: 0.4em;
+}
+
+.board-section:hover .ui.header .button {
+  display: block;
+}
+
+.ui.celled.grid .column {
+    border-bottom: 1px solid #d4d4d5;
+}
+
+.board-section button {
+  float: right;
 }
 
 .label.dev {
@@ -33,8 +47,4 @@
   background-color: #db2828!important;
   border-color: #db2828!important;
   color: #fff!important;
-}
-
-.ui.celled.grid .column {
-    border-bottom: 1px solid #d4d4d5;
 }
