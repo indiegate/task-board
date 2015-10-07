@@ -24,6 +24,8 @@ const updateLayout = (layout, task) => {
         }
         return updateBox(row);
       });
+    } else if (item.id) {
+      return updateBoardSection(item);
     }
     return item;
   };
