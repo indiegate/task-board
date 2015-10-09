@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BoardTask } from './BoardTask';
+import BoardTask from './BoardTask';
+
 export class BoardSection extends Component {
   constructor(props) {
     super(props);

@@ -1,7 +1,7 @@
 /* global FIREBASE_ID, $ */
 
 import React from 'react';
-import { PureComponent } from '../components/PureComponent';
+import PureComponent from '../components/PureComponent';
 import { HorizontalBox } from '../components/HorizontalBox';
 import Firebase from 'firebase';
 

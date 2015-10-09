@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PureComponent from './PureComponent';
 
-export class BoardTask extends Component {
+class BoardTask extends PureComponent {
   constructor(props) {
     super(props);
   }
@@ -45,3 +46,5 @@ export class BoardTask extends Component {
 BoardTask.propTypes = {
   content: React.PropTypes.string.isRequired,
 };
+
+export default BoardTask;
