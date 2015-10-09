@@ -1,5 +1,21 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { DragSource } from 'react-dnd';
 import PureComponent from './PureComponent';
+
+const taskSource = {
+  beginDrag(props) {
+    return {
+      text: props.content,
+    };
+  },
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  };
+}
 
 class BoardTask extends PureComponent {
   constructor(props) {
@@ -34,17 +50,23 @@ class BoardTask extends PureComponent {
   }
 
   render() {
+    const { isDragging, connectDragSource, content } = this.props;
+
     return (
-      <div>
-        {this._renderTags(this._splitToWords(this.props.content))}
-        {this._renderSentence(this._splitToWords(this.props.content))}
-      </div>
+      connectDragSource(
+        <div style={{ opacity: isDragging ? 0.5 : 1 }}>
+          {this._renderTags(this._splitToWords(content))}
+          {this._renderSentence(this._splitToWords(content))}
+        </div>
+      )
     );
   }
 }
 
 BoardTask.propTypes = {
-  content: React.PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func.isRequired,
 };
 
-export default BoardTask;
+export default DragSource('task', taskSource, collect)(BoardTask);
