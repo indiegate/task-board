@@ -16,16 +16,17 @@ export default (reduction, action) => {
     case ActionTypes.LAYOUT_FETCHED_OK:
       mutableReduction.update(_r => BoardReducer.layoutFetched(_r, payload));
       break;
-    case 'FIREBASE_TASKS_RECEIVED':
+    case ActionTypes.FIREBASE_TASKS_RECEIVED:
       mutableReduction.update(_r => FirebaseReducer.tasksReceived(_r, payload));
       break;
-    case 'ADD_TASK_CLICKED':
-      mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
+    case ActionTypes.ADD_TASK_CLICKED:
+    case ActionTypes.EDIT_TASK_CLICKED:
+      mutableReduction.update(_r => BoardReducer.saveTaskClicked(_r, payload));
       break;
-    case 'CANCEL_ADD_TASK_CLICKED':
-      mutableReduction.update(_r => BoardReducer.cancelAddTaskClicked(_r, payload));
+    case ActionTypes.CANCEL_SAVE_TASK_CLICKED:
+      mutableReduction.update(_r => BoardReducer.cancelSaveTaskClicked(_r, payload));
       break;
-    case 'FIREBASE_SAVE_TASK_REQUESTED':
+    case ActionTypes.FIREBASE_SAVE_TASK_REQUESTED:
       mutableReduction.update(_r => FirebaseReducer.saveTaskRequested(_r, payload));
       break;
     case 'TASK_SECTION_UPDATED':

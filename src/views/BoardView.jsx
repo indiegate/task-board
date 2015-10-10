@@ -4,6 +4,7 @@ import React from 'react';
 import PureComponent from '../components/PureComponent';
 import HorizontalBox from '../components/HorizontalBox';
 import Firebase from 'firebase';
+import * as ActionTypes from '../constants/actionTypes';
 
 export default class BoardView extends PureComponent {
 
@@ -16,7 +17,7 @@ export default class BoardView extends PureComponent {
     if (!this.props.layout) {
       setTimeout(() => {
         this.dispatchAction({
-          type: 'BOARD_MOUNTED',
+          type: ActionTypes.BOARD_MOUNTED,
           payload: null,
         });
       });
@@ -28,7 +29,7 @@ export default class BoardView extends PureComponent {
           .on('value', snapshot => {
             setTimeout(() => {
               this.dispatchAction({
-                type: 'FIREBASE_TASKS_RECEIVED',
+                type: ActionTypes.FIREBASE_TASKS_RECEIVED,
                 payload: snapshot.val(),
               });
             }, 1);
@@ -51,31 +52,50 @@ export default class BoardView extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (!this.props.newTaskId) {
+    if (!this.props.task) {
       this.refs.taskText.getDOMNode().value = '';
     }
   }
 
   _saveTask() {
-    this.firebaseRef
-      .child('teams/fwk-int/tasks/')
-      .push()
-      .set({
-        sectionId: this.props.newTaskId,
-        content: this.refs.taskText.getDOMNode().value,
-      }, (err) => {
-        if (!err) {
-          this.dispatchAction({
-            type: 'FIREBASE_SAVE_TASK_REQUESTED',
-            payload: err,
-          });
-        }
-      });
+    const task = this.props.task;
+    // new task
+    if (!task.id) {
+      this.firebaseRef
+        .child('teams/fwk-int/tasks/')
+        .push()
+        .set({
+          sectionId: task.sectionId,
+          content: this.refs.taskText.getDOMNode().value,
+        }, (err) => {
+          if (!err) {
+            this.dispatchAction({
+              type: ActionTypes.FIREBASE_SAVE_TASK_REQUESTED,
+              payload: err,
+            });
+          }
+        });
+    // update task content
+    } else {
+      this.firebaseRef
+        .child('teams/fwk-int/tasks/')
+        .child(task.id)
+        .update({
+          content: this.refs.taskText.getDOMNode().value,
+        }, (err) => {
+          if (!err) {
+            this.dispatchAction({
+              type: ActionTypes.FIREBASE_SAVE_TASK_REQUESTED,
+              payload: err,
+            });
+          }
+        });
+    }
   }
 
-  _cancelAddTask() {
+  _cancelSaveTask() {
     this.dispatchAction({
-      type: 'CANCEL_ADD_TASK_CLICKED',
+      type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
       payload: null,
     });
   }
@@ -85,20 +105,29 @@ export default class BoardView extends PureComponent {
       return <div>Nothing</div>;
     }
 
-    const displayModal = this.props.newTaskId ? 'block' : '';
-
+    const task = this.props.task;
+    let displayModal = '';
+    let dialogName = 'Add new task';
+    let dialogContent = '';
+    if (task) {
+      displayModal = 'block';
+      if (task.id) {
+        dialogContent = task.content;
+        dialogName = 'Edit task';
+      }
+    }
     return (
       <div>
         <div className="ui modal" style={{display: displayModal}}>
           <i className="close icon"></i>
           <div className="header">
-            Add new task
+            {dialogName}
           </div>
           <div className="ui fluid input">
-            <input type="text" ref="taskText" placeholder="Type new task" />
+            <input type="text" ref="taskText" defaultValue={dialogContent}/>
           </div>
           <div className="actions">
-            <div className="ui button" onClick={this._cancelAddTask.bind(this)}>Cancel</div>
+            <div className="ui button" onClick={this._cancelSaveTask.bind(this)}>Cancel</div>
             <div className="ui button"
                 onClick={this._saveTask.bind(this)}>OK</div>
           </div>
@@ -113,5 +142,5 @@ export default class BoardView extends PureComponent {
 BoardView.propTypes = {
   dispatcher: React.PropTypes.object.isRequired,
   layout: React.PropTypes.object,
-  newTaskId: React.PropTypes.string,
+  task: React.PropTypes.object,
 };

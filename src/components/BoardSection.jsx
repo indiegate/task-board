@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BoardTask from './BoardTask';
 import { DropTarget } from 'react-dnd';
+import * as ActionTypes from '../constants/actionTypes';
 
 const sectionTarget = {
   canDrop() {
@@ -58,8 +59,8 @@ class BoardSection extends Component {
 
   _handleAddTaskClick() {
     this.props.dispatcher.dispatch({
-      type: 'ADD_TASK_CLICKED',
-      payload: this.props.id,
+      type: ActionTypes.ADD_TASK_CLICKED,
+      payload: {sectionId: this.props.id},
     });
   }
 
