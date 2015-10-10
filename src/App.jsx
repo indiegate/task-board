@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-dnd';
 
 import masterReducer from './reducers/masterReducer';
 
-import { BoardView } from './views/BoardView';
+import BoardView from './views/BoardView';
 
 // services
 import * as APIService from './services/APIService';

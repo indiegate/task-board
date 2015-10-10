@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { VerticalBox } from './VerticalBox';
+import VerticalBox from './VerticalBox';
 import BoardSection from './BoardSection';
 
-export class HorizontalBox extends Component {
+export default class HorizontalBox extends Component {
 
   constructor(props) {
     super(props);

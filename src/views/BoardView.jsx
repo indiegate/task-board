@@ -2,10 +2,10 @@
 
 import React from 'react';
 import PureComponent from '../components/PureComponent';
-import { HorizontalBox } from '../components/HorizontalBox';
+import HorizontalBox from '../components/HorizontalBox';
 import Firebase from 'firebase';
 
-export class BoardView extends PureComponent {
+export default class BoardView extends PureComponent {
 
   constructor(props) {
     super(props);
@@ -38,11 +38,15 @@ export class BoardView extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.updatedTask) {
-      console.log('nextProps.updatedTask', nextProps.updatedTask);
+      const { content, sectionId } = nextProps.updatedTask;
+
       this.firebaseRef
         .child('teams/fwk-int/tasks/')
         .child(nextProps.updatedTask.id)
-        .set(nextProps.updatedTask);
+        .set({
+          sectionId,
+          content,
+        });
     }
   }
 
