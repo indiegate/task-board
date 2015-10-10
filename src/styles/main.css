@@ -48,3 +48,21 @@
   border-color: #db2828!important;
   color: #fff!important;
 }
+
+.board-section {
+  border: 1px solid rgba(0, 0, 0, 0.0);
+}
+
+.red-target {
+  border: 1px dashed rgb(255, 138, 138);
+  background-color: rgba(255, 138, 138, 0.4);
+}
+
+.green-target {
+  border: 1px dashed #18B918;
+  background-color: rgba(24, 185, 24, 0.21);
+}
+
+.yellow-target {
+  border: 1px dashed #9A9A9A;
+}

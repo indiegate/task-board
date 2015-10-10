@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { HorizontalBox } from './HorizontalBox';
-import { BoardSection } from './BoardSection';
+import BoardSection from './BoardSection';
 
 export class VerticalBox extends Component {
 
