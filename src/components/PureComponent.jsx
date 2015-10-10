@@ -1,7 +1,7 @@
 import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
 
-export class PureComponent extends React.Component {
+export default class PureComponent extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !shallowEqual(this.props, nextProps) ||

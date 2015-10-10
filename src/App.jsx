@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Dispatcher } from 'flux';
 import { Record as record, Map as createMap, fromJS, List } from 'immutable';
+import HTML5Backend from 'react-dnd/modules/backends/HTML5';
+import { DragDropContext } from 'react-dnd';
+
 import masterReducer from './reducers/masterReducer';
 
-import { BoardView } from './views/BoardView';
-
+import BoardView from './views/BoardView';
 
 // services
 import * as APIService from './services/APIService';
@@ -32,11 +34,12 @@ const Reduction = record({
     layout: null,
     loading: false,
     newTaskId: null,
+    updatedTask: null,
   }),
   effects: List.of(),
 });
 
-export class App extends Component {
+class App extends Component {
 
   constructor(props) {
     super(props);
@@ -100,8 +103,11 @@ export class App extends Component {
       <div>
         <BoardView dispatcher={this.state.dispatcher}
             newTaskId={this.state.reduction.getIn(['appState', 'newTaskId'])}
+            updatedTask={this.state.reduction.getIn(['appState', 'updatedTask'])}
             layout={layout}/>
       </div>
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(App);

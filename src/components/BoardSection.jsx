@@ -1,8 +1,50 @@
 import React, { Component } from 'react';
-import { BoardTask } from './BoardTask';
-export class BoardSection extends Component {
+import BoardTask from './BoardTask';
+import { DropTarget } from 'react-dnd';
+
+const sectionTarget = {
+  canDrop() {
+    return true;
+  },
+
+  drop(props, monitor, component) {
+    if (monitor.didDrop()) {
+      return null;
+    }
+    return {
+      sectionId: component.props.id,
+    };
+  },
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    isOverCurrent: monitor.isOver({ shallow: true }),
+    canDrop: monitor.canDrop(),
+    itemType: monitor.getItemType(),
+  };
+}
+
+class BoardSection extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isOver && nextProps.isOver) {
+      // You can use this as enter handler
+    }
+
+    if (this.props.isOver && !nextProps.isOver) {
+      // You can use this as leave handler
+    }
+
+    if (this.props.isOverCurrent && !nextProps.isOverCurrent) {
+      // You can be more specific and track enter/leave
+      // shallowly, not including nested targets
+    }
   }
 
   _renderTasks() {
@@ -10,7 +52,7 @@ export class BoardSection extends Component {
       return <p>No tasks</p>;
     }
     return this.props.tasks.map((task, idx) => {
-      return <BoardTask key={idx} {...task} />;
+      return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher} />;
     });
   }
 
@@ -21,13 +63,34 @@ export class BoardSection extends Component {
     });
   }
 
+  _getTargetClass() {
+    const {isOver, canDrop} = this.props;
+
+    if (isOver && canDrop) {
+      return 'green-target';
+    }
+
+    if (isOver && !canDrop) {
+      return 'red-target';
+    }
+
+    if (!isOver && canDrop) {
+      return 'yellow-target';
+    }
+
+    return '';
+  }
+
   render() {
-    return (
+    const { connectDropTarget, name } = this.props;
+
+    const sectionClass = 'board-section ' + this._getTargetClass();
+    return connectDropTarget(
       <div className="column">
-        <div className="board-section">
+        <div className={sectionClass}>
           <h4 className="ui header">
             <div className="content">
-              {this.props.name}
+              {name}
             </div>
             <button className="ui icon button" onClick={this._handleAddTaskClick.bind(this)}>
               <i className="plus icon"></i>
@@ -50,3 +113,5 @@ BoardSection.propTypes = {
   tasks: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,
 };
+
+export default DropTarget('task', sectionTarget, collect)(BoardSection);
