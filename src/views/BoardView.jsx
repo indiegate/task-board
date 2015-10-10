@@ -26,11 +26,23 @@ export class BoardView extends PureComponent {
       this.firebaseRef
         .child('teams/fwk-int/tasks/')
           .on('value', snapshot => {
-            this.dispatchAction({
-              type: 'FIREBASE_TASKS_RECEIVED',
-              payload: snapshot.val(),
-            });
+            setTimeout(() => {
+              this.dispatchAction({
+                type: 'FIREBASE_TASKS_RECEIVED',
+                payload: snapshot.val(),
+              });
+            }, 1);
           });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.updatedTask) {
+      console.log('nextProps.updatedTask', nextProps.updatedTask);
+      this.firebaseRef
+        .child('teams/fwk-int/tasks/')
+        .child(nextProps.updatedTask.id)
+        .set(nextProps.updatedTask);
     }
   }
 

@@ -5,8 +5,20 @@ import PureComponent from './PureComponent';
 const taskSource = {
   beginDrag(props) {
     return {
-      text: props.content,
+      content: props.content,
     };
+  },
+  endDrag(props, monitor, component) {
+    const { sectionId } = monitor.getDropResult();
+    const { dispatcher, content, id} = component.props;
+    dispatcher.dispatch({
+      type: 'TASK_SECTION_UPDATED',
+      payload: {
+        id,
+        content,
+        sectionId,
+      },
+    });
   },
 };
 

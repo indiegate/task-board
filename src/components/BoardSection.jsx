@@ -3,25 +3,17 @@ import BoardTask from './BoardTask';
 import { DropTarget } from 'react-dnd';
 
 const sectionTarget = {
-  canDrop(props, monitor) {
+  canDrop() {
     return true;
   },
 
-  hover(props, monitor, component) {
-    const clientOffset = monitor.getClientOffset();
-    const componentRect = React.findDOMNode(component).getBoundingClientRect();
-    const isJustOverThisOne = monitor.isOver({ shallow: true });
-    const canDrop = monitor.canDrop();
-  },
-
-  drop(props, monitor) {
+  drop(props, monitor, component) {
     if (monitor.didDrop()) {
-      return;
+      return null;
     }
-
-    const item = monitor.getItem();
-    console.log('Item:', item);
-    return { moved: true };
+    return {
+      sectionId: component.props.id,
+    };
   },
 };
 
@@ -60,7 +52,7 @@ class BoardSection extends Component {
       return <p>No tasks</p>;
     }
     return this.props.tasks.map((task, idx) => {
-      return <BoardTask key={idx} {...task} />;
+      return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher} />;
     });
   }
 
@@ -73,9 +65,10 @@ class BoardSection extends Component {
 
   _getTargetClass() {
     const {isOver, canDrop} = this.props;
+
     if (isOver && canDrop) {
       return 'green-target';
-    };
+    }
 
     if (isOver && !canDrop) {
       return 'red-target';
