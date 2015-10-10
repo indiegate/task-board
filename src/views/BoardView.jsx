@@ -1,11 +1,11 @@
 /* global FIREBASE_ID, $ */
 
 import React from 'react';
-import { PureComponent } from '../components/PureComponent';
-import { HorizontalBox } from '../components/HorizontalBox';
+import PureComponent from '../components/PureComponent';
+import HorizontalBox from '../components/HorizontalBox';
 import Firebase from 'firebase';
 
-export class BoardView extends PureComponent {
+export default class BoardView extends PureComponent {
 
   constructor(props) {
     super(props);
@@ -26,11 +26,27 @@ export class BoardView extends PureComponent {
       this.firebaseRef
         .child('teams/fwk-int/tasks/')
           .on('value', snapshot => {
-            this.dispatchAction({
-              type: 'FIREBASE_TASKS_RECEIVED',
-              payload: snapshot.val(),
-            });
+            setTimeout(() => {
+              this.dispatchAction({
+                type: 'FIREBASE_TASKS_RECEIVED',
+                payload: snapshot.val(),
+              });
+            }, 1);
           });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.updatedTask) {
+      const { content, sectionId } = nextProps.updatedTask;
+
+      this.firebaseRef
+        .child('teams/fwk-int/tasks/')
+        .child(nextProps.updatedTask.id)
+        .set({
+          sectionId,
+          content,
+        });
     }
   }
 
