@@ -64,7 +64,7 @@ export const saveTaskRequested = (reduction, payload) => {
 export const updateTaskSection = (reduction, payload) => {
   const foundTask = reduction
     .getIn(['appState', 'tasks'])
-    .filter(task => task.content === payload.content)[0];
+    .filter(task => task.id === payload.id)[0];
 
   const updatedTask = {
     ...payload,

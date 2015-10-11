@@ -60,6 +60,13 @@ export default class BoardView extends PureComponent {
     }
   }
 
+  _dispatchSaveTask() {
+    this.dispatchAction({
+      type: ActionTypes.FIREBASE_SAVE_TASK_REQUESTED,
+      payload: null,
+    });
+  }
+
   _saveTask() {
     const task = this.props.task;
     // new task
@@ -72,10 +79,7 @@ export default class BoardView extends PureComponent {
           content: this.refs.taskText.getDOMNode().value,
         }, (err) => {
           if (!err) {
-            this.dispatchAction({
-              type: ActionTypes.FIREBASE_SAVE_TASK_REQUESTED,
-              payload: err,
-            });
+            this._dispatchSaveTask();
           }
         });
     // update task content
@@ -87,10 +91,7 @@ export default class BoardView extends PureComponent {
           content: this.state.taskText,
         }, (err) => {
           if (!err) {
-            this.dispatchAction({
-              type: ActionTypes.FIREBASE_SAVE_TASK_REQUESTED,
-              payload: err,
-            });
+            this._dispatchSaveTask();
           }
         });
       this.setState({taskText: ''});
