@@ -75,7 +75,8 @@ class BoardTask extends PureComponent {
     return (
       connectDragSource(
         <div className="item"
-             onDoubleClick={this._handleEditTaskDblClick.bind(this)} style={{ opacity: isDragging ? 0.5 : 1 }}>
+            onDoubleClick={this._handleEditTaskDblClick.bind(this)}
+            style={{ opacity: isDragging ? 0.5 : 1 }}>
           {this._renderTags(this._splitToWords(content))}
           {this._renderSentence(this._splitToWords(content))}
         </div>

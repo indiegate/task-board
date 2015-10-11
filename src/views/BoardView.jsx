@@ -10,6 +10,9 @@ export default class BoardView extends PureComponent {
 
   constructor(props) {
     super(props);
+    this.state = {
+      taskText: '',
+    };
   }
 
   componentWillMount() {
@@ -81,7 +84,7 @@ export default class BoardView extends PureComponent {
         .child('teams/fwk-int/tasks/')
         .child(task.id)
         .update({
-          content: this.refs.taskText.getDOMNode().value,
+          content: this.state.taskText,
         }, (err) => {
           if (!err) {
             this.dispatchAction({
@@ -90,6 +93,7 @@ export default class BoardView extends PureComponent {
             });
           }
         });
+      this.setState({taskText: ''});
     }
   }
 
@@ -112,8 +116,11 @@ export default class BoardView extends PureComponent {
     if (task) {
       displayModal = 'block';
       if (task.id) {
-        dialogContent = task.content;
+        // initialy there is no taskText, use `passed-in` task
+        dialogContent = this.state.taskText || task.content;
         dialogName = 'Edit task';
+      } else {
+        dialogContent = this.state.taskText;
       }
     }
     return (
@@ -124,7 +131,16 @@ export default class BoardView extends PureComponent {
             {dialogName}
           </div>
           <div className="ui fluid input">
-            <input type="text" ref="taskText" defaultValue={dialogContent}/>
+            <input type="text"
+                ref="taskText"
+                onChange={(event) => {
+                  console.log('called on change');
+                  this.setState({
+                    taskText: event.target.value,
+                  });
+                }}
+                value={dialogContent}
+                />
           </div>
           <div className="actions">
             <div className="ui button" onClick={this._cancelSaveTask.bind(this)}>Cancel</div>

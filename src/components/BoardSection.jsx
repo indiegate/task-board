@@ -93,7 +93,8 @@ class BoardSection extends Component {
             <div className="content">
               {name}
             </div>
-            <button className="ui icon button" onClick={this._handleAddTaskClick.bind(this)}>
+            <button className="ui icon button"
+                onClick={this._handleAddTaskClick.bind(this)}>
               <i className="plus icon"></i>
             </button>
           </h4>
