@@ -105,6 +105,12 @@ export default class BoardView extends PureComponent {
     });
   }
 
+  _handleInputChange(event) {
+    this.setState({
+      taskText: event.target.value,
+    });
+  }
+
   render() {
     if (!this.props.layout) {
       return <div>Nothing</div>;
@@ -134,12 +140,7 @@ export default class BoardView extends PureComponent {
           <div className="ui fluid input">
             <input type="text"
                 ref="taskText"
-                onChange={(event) => {
-                  console.log('called on change');
-                  this.setState({
-                    taskText: event.target.value,
-                  });
-                }}
+                onChange={this._handleInputChange.bind(this)}
                 value={dialogContent}
                 />
           </div>
