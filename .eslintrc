@@ -5,5 +5,13 @@
       "ignoreComments": true
     }],
     "new-cap": [0]
+  },
+  "env": {
+      "browser": true,
+      "mocha": true
+  },
+  "globals": {
+    "assert": true,
+    "expect": true,
   }
 }
