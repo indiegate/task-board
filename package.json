@@ -12,7 +12,8 @@
   },
   "scripts": {
     "dev": "WEBPACK_ENV=dev ./node_modules/.bin/webpack --watch --inline",
-    "build": "WEBPACK_ENV=build ./node_modules/.bin/webpack"
+    "build": "WEBPACK_ENV=build ./node_modules/.bin/webpack",
+    "test": "./node_modules/karma/bin/karma start"
   },
   "devDependencies": {
     "babel-core": "5.8.24",

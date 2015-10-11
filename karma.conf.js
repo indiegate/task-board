@@ -10,11 +10,6 @@ module.exports = function(config) {
       module: {
         preLoaders: [
           {
-            test: /(\.jsx)|(\.js)$/,
-            // exclude this dirs from coverage
-            exclude: /(spec|node_modules)\//,
-            loader: 'isparta-instrumenter-loader',
-          }, {
             test: /\.jsx$|\.js$/,
             loader: 'eslint-loader',
             exclude: /node_modules/,
@@ -31,7 +26,7 @@ module.exports = function(config) {
       },
     },
     preprocessors: {
-      'src/spec/**/*.spec.js': ['webpack'],
+      'src/test/**/*.spec.js': ['webpack'],
     },
     reporters: ['mocha'],
     plugins: [
