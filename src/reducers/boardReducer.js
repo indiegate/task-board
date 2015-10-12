@@ -17,12 +17,12 @@ export const layoutFetched = (reduction, payload) => {
 };
 
 
-export const addTaskClicked = (reduction, payload) => {
+export const saveTaskClicked = (reduction, payload) => {
   return reduction
-    .setIn(['appState', 'newTaskId'], payload);
+    .setIn(['appState', 'task'], payload);
 };
 
-export const cancelAddTaskClicked = (reduction) => {
+export const cancelSaveTaskClicked = (reduction) => {
   return reduction
-    .setIn(['appState', 'newTaskId'], null);
+    .setIn(['appState', 'task'], null);
 };

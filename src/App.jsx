@@ -33,7 +33,7 @@ const Reduction = record({
     initialLayout: null,
     layout: null,
     loading: false,
-    newTaskId: null,
+    task: null,
     updatedTask: null,
   }),
   effects: List.of(),
@@ -102,7 +102,7 @@ class App extends Component {
     return (
       <div>
         <BoardView dispatcher={this.state.dispatcher}
-            newTaskId={this.state.reduction.getIn(['appState', 'newTaskId'])}
+            task={this.state.reduction.getIn(['appState', 'task'])}
             updatedTask={this.state.reduction.getIn(['appState', 'updatedTask'])}
             layout={layout}/>
       </div>

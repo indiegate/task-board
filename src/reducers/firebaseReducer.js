@@ -24,6 +24,8 @@ const updateLayout = (layout, task) => {
         }
         return updateBox(row);
       });
+    } else if (item.id) {
+      return updateBoardSection(item);
     }
     return item;
   };
@@ -38,13 +40,9 @@ export const tasksReceived = (reduction, payload) => {
   const tasksArray = [];
   // put tasks into initialLayout
   Object.keys(payload).forEach(key => {
-    updateLayout(layout, payload[key]);
-    const task = {
-      id: key,
-      sectionId: payload[key].sectionId,
-      content: payload[key].content,
-    };
-
+    const task = payload[key];
+    task.id = key;
+    updateLayout(layout, task);
     tasksArray.push(task);
   });
 
@@ -59,14 +57,14 @@ export const tasksReceived = (reduction, payload) => {
 export const saveTaskRequested = (reduction, payload) => {
   if (!payload) {
     return reduction
-      .setIn(['appState', 'newTaskId'], null);
+      .setIn(['appState', 'task'], null);
   }
 };
 
 export const updateTaskSection = (reduction, payload) => {
   const foundTask = reduction
     .getIn(['appState', 'tasks'])
-    .filter(task => task.content === payload.content)[0];
+    .filter(task => task.id === payload.id)[0];
 
   const updatedTask = {
     ...payload,
