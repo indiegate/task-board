@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "WEBPACK_ENV=dev ./node_modules/.bin/webpack --watch --inline",
     "build": "WEBPACK_ENV=build ./node_modules/.bin/webpack",
-    "test": "./node_modules/karma/bin/karma start"
+    "test:dev": "./node_modules/karma/bin/karma start",
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "devDependencies": {
     "babel-core": "5.8.24",
