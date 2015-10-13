@@ -11,7 +11,7 @@ export default class BoardView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      taskText: '',
+      dialogContent: '',
     };
   }
 
@@ -52,11 +52,22 @@ export default class BoardView extends PureComponent {
           content,
         });
     }
+
+    // creating a new Task
+    if ((nextProps.task && !nextProps.task.content) || !nextProps.task ) {
+      this.setState({
+        dialogContent: '',
+      });
+    } else {
+      this.setState({
+        dialogContent: nextProps.task.content,
+      });
+    }
   }
 
   componentDidUpdate() {
     if (!this.props.task) {
-      this.refs.taskText.getDOMNode().value = '';
+      this.refs.dialogContent.getDOMNode().value = '';
     }
   }
 
@@ -76,7 +87,7 @@ export default class BoardView extends PureComponent {
         .push()
         .set({
           sectionId: task.sectionId,
-          content: this.refs.taskText.getDOMNode().value,
+          content: this.refs.dialogContent.getDOMNode().value,
         }, (err) => {
           if (!err) {
             this._dispatchSaveTask();
@@ -88,13 +99,13 @@ export default class BoardView extends PureComponent {
         .child('teams/fwk-int/tasks/')
         .child(task.id)
         .update({
-          content: this.state.taskText,
+          content: this.state.dialogContent,
         }, (err) => {
           if (!err) {
             this._dispatchSaveTask();
           }
         });
-      this.setState({taskText: ''});
+      this.setState({dialogContent: ''});
     }
   }
 
@@ -107,7 +118,7 @@ export default class BoardView extends PureComponent {
 
   _handleInputChange(event) {
     this.setState({
-      taskText: event.target.value,
+      dialogContent: event.target.value,
     });
   }
 
@@ -116,20 +127,11 @@ export default class BoardView extends PureComponent {
       return <div>Nothing</div>;
     }
 
-    const task = this.props.task;
-    let displayModal = '';
-    let dialogName = 'Add new task';
-    let dialogContent = '';
-    if (task) {
-      displayModal = 'block';
-      if (task.id) {
-        // initialy there is no taskText, use `passed-in` task
-        dialogContent = this.state.taskText || task.content;
-        dialogName = 'Edit task';
-      } else {
-        dialogContent = this.state.taskText;
-      }
-    }
+    const { dialogContent } = this.state;
+    const { task } = this.props;
+    const displayModal = task ? 'block' : '';
+    const dialogName = task && task.id ? 'Edit task' : 'Add new task';
+
     return (
       <div>
         <div className="ui modal" style={{display: displayModal}}>
@@ -139,13 +141,14 @@ export default class BoardView extends PureComponent {
           </div>
           <div className="ui fluid input">
             <input type="text"
-                ref="taskText"
+                ref="dialogContent"
                 onChange={this._handleInputChange.bind(this)}
                 value={dialogContent}
                 />
           </div>
           <div className="actions">
-            <div className="ui button" onClick={this._cancelSaveTask.bind(this)}>Cancel</div>
+            <div className="ui button"
+                onClick={this._cancelSaveTask.bind(this)}>Cancel</div>
             <div className="ui button"
                 onClick={this._saveTask.bind(this)}>OK</div>
           </div>
