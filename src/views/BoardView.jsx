@@ -1,19 +1,11 @@
-/* global FIREBASE_ID, $ */
-
 import React from 'react';
 import PureComponent from '../components/PureComponent';
 import HorizontalBox from '../components/HorizontalBox';
+import TaskModal from '../components/TaskModal';
 import Firebase from 'firebase';
 import * as ActionTypes from '../constants/actionTypes';
 
-export default class BoardView extends PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      dialogContent: '',
-    };
-  }
+class BoardView extends PureComponent {
 
   componentWillMount() {
     // fetch new layout if there no one present.
@@ -52,23 +44,6 @@ export default class BoardView extends PureComponent {
           content,
         });
     }
-
-    // creating a new Task
-    if ((nextProps.task && !nextProps.task.content) || !nextProps.task ) {
-      this.setState({
-        dialogContent: '',
-      });
-    } else {
-      this.setState({
-        dialogContent: nextProps.task.content,
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.props.task) {
-      this.refs.dialogContent.getDOMNode().value = '';
-    }
   }
 
   _dispatchSaveTask() {
@@ -78,8 +53,7 @@ export default class BoardView extends PureComponent {
     });
   }
 
-  _saveTask() {
-    const task = this.props.task;
+  _saveTask(task) {
     // new task
     if (!task.id) {
       this.firebaseRef
@@ -87,7 +61,7 @@ export default class BoardView extends PureComponent {
         .push()
         .set({
           sectionId: task.sectionId,
-          content: this.refs.dialogContent.getDOMNode().value,
+          content: task.content,
         }, (err) => {
           if (!err) {
             this._dispatchSaveTask();
@@ -99,7 +73,7 @@ export default class BoardView extends PureComponent {
         .child('teams/fwk-int/tasks/')
         .child(task.id)
         .update({
-          content: this.state.dialogContent,
+          content: task.content,
         }, (err) => {
           if (!err) {
             this._dispatchSaveTask();
@@ -109,50 +83,23 @@ export default class BoardView extends PureComponent {
     }
   }
 
-  _cancelSaveTask() {
-    this.dispatchAction({
-      type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
-      payload: null,
-    });
-  }
-
-  _handleInputChange(event) {
-    this.setState({
-      dialogContent: event.target.value,
-    });
-  }
-
   render() {
     if (!this.props.layout) {
       return <div>Nothing</div>;
     }
 
-    const { dialogContent } = this.state;
-    const { task } = this.props;
-    const displayModal = task ? 'block' : '';
-    const dialogName = task && task.id ? 'Edit task' : 'Add new task';
-
     return (
       <div>
-        <div className="ui modal" style={{display: displayModal}}>
-          <i className="close icon"></i>
-          <div className="header">
-            {dialogName}
-          </div>
-          <div className="ui fluid input">
-            <input type="text"
-                ref="dialogContent"
-                onChange={this._handleInputChange.bind(this)}
-                value={dialogContent}
-                />
-          </div>
-          <div className="actions">
-            <div className="ui button"
-                onClick={this._cancelSaveTask.bind(this)}>Cancel</div>
-            <div className="ui button"
-                onClick={this._saveTask.bind(this)}>OK</div>
-          </div>
-        </div>
+        <TaskModal task={this.props.task}
+            onSubmit={(task) => {
+              this._saveTask(task);
+            }}
+            onDismiss={() => {
+              this.dispatchAction({
+                type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
+                payload: null,
+              });
+            }}/>
         <HorizontalBox columns={this.props.layout.toJS().columns}
             dispatcher={this.props.dispatcher}/>
       </div>
@@ -165,3 +112,5 @@ BoardView.propTypes = {
   layout: React.PropTypes.object,
   task: React.PropTypes.object,
 };
+
+export default BoardView;

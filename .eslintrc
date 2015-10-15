@@ -11,7 +11,8 @@
       "mocha": true
   },
   "globals": {
+    "FIREBASE_ID": true,
     "assert": true,
-    "expect": true,
+    "expect": true
   }
 }
