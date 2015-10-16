@@ -20,8 +20,10 @@ class TaskModal extends Component {
         dialogContent: nextProps.task.content,
       });
     }
+  }
 
-    if (nextProps.task) {
+  componentWillUpdate() {
+    if (this.props.task) {
       this._activateKeyListeners();
     } else {
       this._deactivateKeyListeners();
@@ -39,14 +41,17 @@ class TaskModal extends Component {
   }
 
   _activateKeyListeners() {
-    this.boundHandler = this._keyUpHandler.bind(this);
-    document.addEventListener('keyup', this.boundHandler, false);
+    if (!this.boundKeyUpHandler) {
+      this.boundKeyUpHandler = this._keyUpHandler.bind(this);
+      document.addEventListener('keyup', this.boundKeyUpHandler, false);
+    }
   }
 
   _deactivateKeyListeners() {
-    if (this.boundHandler) {
-      document.removeEventListener('keyup', this.boundHandler, false);
-      this.boundHandler = null;
+    const { boundKeyUpHandler } = this;
+    if (boundKeyUpHandler) {
+      document.removeEventListener('keyup', boundKeyUpHandler, false);
+      this.boundKeyUpHandler = null;
     }
   }
 
