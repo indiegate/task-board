@@ -10,24 +10,16 @@ class TaskModal extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if ((nextProps.task && !nextProps.task.content) || !nextProps.task) {
-      this.setState({
-        dialogContent: '',
-      });
-    } else {
-      this.setState({
-        dialogContent: nextProps.task.content,
-      });
-    }
+  componentWillMount() {
+    const dialogContent = this.props.task.content ? this.props.task.content : '';
+    this._activateKeyListeners();
+    this.setState({
+      dialogContent,
+    });
   }
 
-  componentWillUpdate() {
-    if (this.props.task) {
-      this._activateKeyListeners();
-    } else {
-      this._deactivateKeyListeners();
-    }
+  componentWillUnmount() {
+    this._deactivateKeyListeners();
   }
 
   _keyUpHandler(event) {

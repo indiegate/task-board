@@ -83,13 +83,9 @@ class BoardView extends PureComponent {
     }
   }
 
-  render() {
-    if (!this.props.layout) {
-      return <div>Nothing</div>;
-    }
-
-    return (
-      <div>
+  _renderTaskModal() {
+    if (this.props.task) {
+      return (
         <TaskModal task={this.props.task}
             onSubmit={(task) => {
               this._saveTask(task);
@@ -100,6 +96,17 @@ class BoardView extends PureComponent {
                 payload: null,
               });
             }}/>
+      );
+    }
+  }
+
+  render() {
+    if (!this.props.layout) {
+      return <div>Nothing</div>;
+    }
+    return (
+      <div>
+        {this._renderTaskModal()}
         <HorizontalBox columns={this.props.layout.toJS().columns}
             dispatcher={this.props.dispatcher}/>
       </div>
