@@ -98,10 +98,12 @@ class TaskModal extends Component {
         </div>
         <div className="actions">
           <div className="ui button"
+               ref="dismiss"
                onClick={this._dismissHandler.bind(this)}
                >Cancel
           </div>
           <div className="ui button"
+               ref="submit"
                onClick={this._submitHandler.bind(this)}>
             OK
           </div>
