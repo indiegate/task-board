@@ -18,7 +18,6 @@ function setup(propsOverrides) {
   };
 }
 
-
 describe('TaskModal component', () => {
   it('renders ok', () => {
     const { output } = setup();
@@ -26,9 +25,16 @@ describe('TaskModal component', () => {
     expect(output.props.className).to.equal('ui modal');
   });
 
-  it('has initial state', () => {
+  it('has default initial state', () => {
     const output = TestUtils.renderIntoDocument(<TaskModal/>);
     expect(output.state.dialogContent).to.equal('');
+    expect(output.state.errorText).to.equal('');
+  });
+
+  it('updates state based on props', () => {
+    const content = 'Some task text';
+    const output = TestUtils.renderIntoDocument(<TaskModal task={{content}}/>);
+    expect(output.state.dialogContent).to.equal(content);
     expect(output.state.errorText).to.equal('');
   });
 });

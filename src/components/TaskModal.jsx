@@ -11,11 +11,15 @@ class TaskModal extends Component {
   }
 
   componentWillMount() {
-    const dialogContent = this.props.task.content ? this.props.task.content : '';
-    this._activateKeyListeners();
-    this.setState({
-      dialogContent,
-    });
+    const { task } = this.props;
+
+    if (task && task.content) {
+      const dialogContent = this.props.task.content ? this.props.task.content : '';
+      this._activateKeyListeners();
+      this.setState({
+        dialogContent,
+      });
+    }
   }
 
   componentWillUnmount() {
