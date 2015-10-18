@@ -94,6 +94,13 @@ class TaskModal extends Component {
         <div className="ui fluid input">
           <input type="text"
                  ref="dialogContent"
+                 autoFocus
+                 onFocus={(event) => {
+                   event.persist();
+                   const node = event.target;
+                   node.selectionStart = node.value.length;
+                   node.selectionEnd = node.value.length;
+                 }}
                  onChange={this._handleInputChange.bind(this)}
                  value={dialogContent}/>
         </div>
