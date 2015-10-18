@@ -10,22 +10,20 @@ class TaskModal extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if ((nextProps.task && !nextProps.task.content) || !nextProps.task) {
-      this.setState({
-        dialogContent: '',
-      });
-    } else {
-      this.setState({
-        dialogContent: nextProps.task.content,
-      });
-    }
+  componentWillMount() {
+    const { task } = this.props;
 
-    if (nextProps.task) {
+    if (task && task.content) {
+      const dialogContent = this.props.task.content ? this.props.task.content : '';
       this._activateKeyListeners();
-    } else {
-      this._deactivateKeyListeners();
+      this.setState({
+        dialogContent,
+      });
     }
+  }
+
+  componentWillUnmount() {
+    this._deactivateKeyListeners();
   }
 
   _keyUpHandler(event) {
@@ -39,14 +37,17 @@ class TaskModal extends Component {
   }
 
   _activateKeyListeners() {
-    this.boundHandler = this._keyUpHandler.bind(this);
-    document.addEventListener('keyup', this.boundHandler, false);
+    if (!this.boundKeyUpHandler) {
+      this.boundKeyUpHandler = this._keyUpHandler.bind(this);
+      document.addEventListener('keyup', this.boundKeyUpHandler, false);
+    }
   }
 
   _deactivateKeyListeners() {
-    if (this.boundHandler) {
-      document.removeEventListener('keyup', this.boundHandler, false);
-      this.boundHandler = null;
+    const { boundKeyUpHandler } = this;
+    if (boundKeyUpHandler) {
+      document.removeEventListener('keyup', boundKeyUpHandler, false);
+      this.boundKeyUpHandler = null;
     }
   }
 
@@ -97,10 +98,12 @@ class TaskModal extends Component {
         </div>
         <div className="actions">
           <div className="ui button"
+               ref="dismiss"
                onClick={this._dismissHandler.bind(this)}
                >Cancel
           </div>
           <div className="ui button"
+               ref="submit"
                onClick={this._submitHandler.bind(this)}>
             OK
           </div>
