@@ -46,7 +46,6 @@ export const tasksReceived = (reduction, payload) => {
     tasksArray.push(task);
   });
 
-
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout))
     .setIn(['appState', 'tasks'], tasksArray)

@@ -26,10 +26,13 @@ export default (reduction, action) => {
     case ActionTypes.CANCEL_SAVE_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.cancelSaveTaskClicked(_r, payload));
       break;
+    case ActionTypes.ARCHIVE_TASK_CLICKED:
+      mutableReduction.update(_r => BoardReducer.archiveTaskClicked(_r, payload));
+      break;
     case ActionTypes.FIREBASE_SAVE_TASK_REQUESTED:
       mutableReduction.update(_r => FirebaseReducer.saveTaskRequested(_r, payload));
       break;
-    case 'TASK_SECTION_UPDATED':
+    case ActionTypes.TASK_SECTION_UPDATED:
       mutableReduction.update(_r => FirebaseReducer.updateTaskSection(_r, payload));
       break;
     default:

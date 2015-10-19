@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dispatcher } from 'flux';
-import { Record as record, Map as createMap, fromJS, List } from 'immutable';
+import { Record as record, fromJS, List } from 'immutable';
 import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 import { DragDropContext } from 'react-dnd';
 
@@ -9,24 +9,7 @@ import masterReducer from './reducers/masterReducer';
 import BoardView from './views/BoardView';
 
 // services
-import * as APIService from './services/APIService';
-
-const APICallEffectHandler = ((handlers) => {
-  return (dispatcher, effect) => {
-    createMap(handlers)
-      .filter((handler, effectType) => effectType === effect.type)
-      .forEach(handler => handler(dispatcher, effect.payload));
-  };
-}({
-  ['FETCH_LAYOUT_API_CALL']: (dispatcher, payload) => {
-    APIService.fetchLayout(payload).then(layout => {
-      dispatcher.dispatch({
-        type: 'LAYOUT_FETCHED_OK',
-        payload: layout,
-      });
-    });
-  },
-}));
+import APICallEffectHandler from './effect-handlers/APICallEffectHandler';
 
 const Reduction = record({
   appState: fromJS({
@@ -45,7 +28,7 @@ class App extends Component {
     super(props);
     const dispatcher = new Dispatcher();
 
-    // this is top level store that modifies appstate
+    // this is top level store that modifies appState
     dispatcher.register((action) => {
       let reduction = this.state.reduction;
 

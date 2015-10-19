@@ -87,9 +87,17 @@ class TaskModal extends Component {
 
     return (
       <div className="ui modal" style={{display: displayModal}}>
-        <i className="close icon"></i>
-        <div className="header">
-          {dialogName}
+        <div className="ui clearing segment">
+          <h3 className="ui left floated header">
+            {dialogName}
+          </h3>
+          <h3 className="ui right floated header">
+            <i className="archive icon"
+                onClick={() => {
+                  this.props.onArchive(this.props.task);
+                }}
+                title="archive task"/>
+          </h3>
         </div>
         <div className="ui fluid input">
           <input type="text"
@@ -126,6 +134,7 @@ TaskModal.propTypes = {
   task: PropTypes.object,
   onSubmit: PropTypes.func,
   onDismiss: PropTypes.func,
+  onArchive: PropTypes.func,
 };
 
 export default TaskModal;

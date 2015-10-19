@@ -79,8 +79,14 @@ class BoardView extends PureComponent {
             this._dispatchSaveTask();
           }
         });
-      this.setState({dialogContent: ''});
     }
+  }
+
+  _archiveTask(task) {
+    this.dispatchAction({
+      type: ActionTypes.ARCHIVE_TASK_CLICKED,
+      payload: task,
+    });
   }
 
   _renderTaskModal() {
@@ -95,7 +101,9 @@ class BoardView extends PureComponent {
                 type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
                 payload: null,
               });
-            }}/>
+            }}
+            onArchive={this._archiveTask.bind(this)}
+        />
       );
     }
   }
