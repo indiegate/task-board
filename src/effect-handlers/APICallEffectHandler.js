@@ -59,10 +59,19 @@ const FirebaseService = {
     });
   },
   updateTasks(tasks) {
+    const updatedTasks = {};
+
+    tasks.forEach(task => {
+      updatedTasks[task.id] = {
+        content: task.content,
+        sectionId: task.sectionId,
+      };
+    });
+
     return new Promise((resolve, reject) => {
       this._ref
         .child('teams/fwk-int/tasks/')
-        .set(tasks, (err) => {
+        .set(updatedTasks, (err) => {
           if (!err) {
             resolve();
           } else {

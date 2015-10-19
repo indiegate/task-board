@@ -119,7 +119,7 @@ export const draggedTaskToSection = (reduction, payload) => {
 export const archiveTaskClicked = (reduction, payload) => {
   const tasks = reduction.getIn(['appState', 'tasks'])
       .filter(task => task.id !== payload.id);
-
+  console.log('tasks', tasks);
   return reduction
       .set('effects', reduction
           .get('effects')
