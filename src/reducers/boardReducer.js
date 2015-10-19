@@ -81,6 +81,11 @@ export const addTaskClicked = (reduction, payload) => {
     .setIn(['appState', 'task'], {sectionId: payload.sectionId});
 };
 
+export const editTaskClicked = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'task'], payload);
+};
+
 export const saveTaskClicked = (reduction, payload) => {
   reduction
     .set('effects', reduction

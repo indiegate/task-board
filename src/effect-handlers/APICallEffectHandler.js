@@ -42,20 +42,37 @@ const FirebaseService = {
       });
   },
   archiveTask(task) {
-    // get archivedTasks ref
-    // push task to the archivedTasks
-    console.log('task for archive: ', task);
-    return Promise.resolve();
-  },
-  updateTasks(tasks) {
-    return new Promise((resolve) => {
-      // get ref to tasks
-      // push updated tasks
-      resolve(tasks);
+    return new Promise((resolve, reject) => {
+      this._ref
+        .child('teams/fwk-int/archived-tasks/')
+        .push()
+        .set({
+          sectionId: task.sectionId,
+          content: task.content,
+        }, (err) => {
+          if (!err) {
+            resolve();
+          } else {
+            reject();
+          }
+        });
     });
   },
-  start(ref, dispatcher) {
-    this._ref = ref;
+  updateTasks(tasks) {
+    return new Promise((resolve, reject) => {
+      this._ref
+        .child('teams/fwk-int/tasks/')
+        .set(tasks, (err) => {
+          if (!err) {
+            resolve();
+          } else {
+            reject(err);
+          }
+        });
+    });
+  },
+  start(dispatcher) {
+    this._ref = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
     this._dispatcher = dispatcher;
 
     this._ref
@@ -99,8 +116,13 @@ export default buildEffectHandler({
       .then(() => {
         FirebaseService.updateTasks(payload.tasks).then((result) => {
           dispatcher.dispatch({
-            type: 'UPDATE_TASKS_REQUESTED',
+            type: 'FIREBASE_TASK_ARCHIVED_OK',
             payload: result,
+          });
+        }, err => {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_TASK_ARCHIVE_FAILED,
+            payload: err,
           });
         });
       });
@@ -108,9 +130,7 @@ export default buildEffectHandler({
 
   'FIREBASE_START_LISTENING': (dispatcher, payload) => {
     console.log('FIREBASE_START_LISTENING', payload);
-    const firebaseRef = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
-
-    FirebaseService.start(firebaseRef, dispatcher);
+    FirebaseService.start(dispatcher);
   },
 
   'FIREBASE_SAVE_TASK': (dispatcher, payload) => {

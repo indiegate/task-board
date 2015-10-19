@@ -24,12 +24,16 @@ export default (reduction, action) => {
     case ActionTypes.ADD_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
       break;
+    case ActionTypes.EDIT_TASK_CLICKED:
+      mutableReduction.update(_r => BoardReducer.editTaskClicked(_r, payload));
+      break;
     case ActionTypes.SAVE_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.saveTaskClicked(_r, payload));
       break;
     case ActionTypes.FIREBASE_TASK_CREATED_OK:
     case ActionTypes.FIREBASE_TASK_UPDATED_OK:
     case ActionTypes.CANCEL_SAVE_TASK_CLICKED:
+    case ActionTypes.FIREBASE_TASK_ARCHIVED_OK:
       mutableReduction.update(_r => BoardReducer.cancelSaveTaskClicked(_r, payload));
       break;
     case ActionTypes.ARCHIVE_TASK_CLICKED:

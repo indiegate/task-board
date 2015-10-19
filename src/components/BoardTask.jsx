@@ -65,7 +65,11 @@ class BoardTask extends PureComponent {
   _handleEditTaskDblClick() {
     this.props.dispatcher.dispatch({
       type: ActionTypes.EDIT_TASK_CLICKED,
-      payload: {id: this.props.id, content: this.props.content},
+      payload: {
+        id: this.props.id,
+        content: this.props.content,
+        sectionId: this.props.sectionId,
+      },
     });
   }
 
