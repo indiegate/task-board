@@ -13,7 +13,7 @@ const taskSource = {
     const { sectionId } = monitor.getDropResult();
     const { dispatcher, content, id} = component.props;
     dispatcher.dispatch({
-      type: 'TASK_SECTION_UPDATED',
+      type: ActionTypes.DRAGGED_TASK_TO_SECTION,
       payload: {
         id,
         content,
