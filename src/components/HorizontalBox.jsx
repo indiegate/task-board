@@ -27,16 +27,28 @@ export default class HorizontalBox extends Component {
     });
   }
 
+  _renderBoxHeader() {
+    if (this.props.name) {
+      return (<div className="column">
+        <div className="ui small header">{this.props.name}</div>
+      </div>);
+    }
+  }
+
   render() {
     return (
-      <div className="ui internally celled stackable equal width grid">
-       {this._renderColumns()}
+      <div>
+        {this._renderBoxHeader()}
+        <div className="ui internally celled stackable equal width grid">
+         {this._renderColumns()}
+        </div>
       </div>
     );
   }
 }
 
 HorizontalBox.propTypes = {
+  name: React.PropTypes.string,
   columns: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,
 };
