@@ -27,9 +27,19 @@ export default class VerticalBox extends Component {
     });
   }
 
+  _renderBoxHeader() {
+    if (this.props.name) {
+      return (<div className="column">
+        <div className="ui small header">{this.props.name}</div>
+      </div>);
+    }
+  }
+
+
   render() {
     return (
       <div className="column">
+        {this._renderBoxHeader()}
         {this._renderRows()}
       </div>
     );
@@ -37,6 +47,7 @@ export default class VerticalBox extends Component {
 }
 
 VerticalBox.propTypes = {
+  name: React.PropTypes.string,
   rows: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,
 };
