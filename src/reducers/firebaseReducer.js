@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import buildMessage from '../utils/buildMessage';
 
 const updateLayout = (layout, task) => {
   const updateBoardSection = (section) => {
@@ -48,16 +49,7 @@ export const tasksReceived = (reduction, payload) => {
 
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout))
-    .setIn(['appState', 'tasks'], tasksArray)
-    .setIn(['appState', 'updatedTask'], null);
-};
-
-// TODO change name to something more meaninging full...
-export const saveTaskRequested = (reduction, payload) => {
-  if (!payload) {
-    return reduction
-      .setIn(['appState', 'task'], null);
-  }
+    .setIn(['appState', 'tasks'], tasksArray);
 };
 
 export const updateTaskSection = (reduction, payload) => {
@@ -71,5 +63,17 @@ export const updateTaskSection = (reduction, payload) => {
   };
 
   return reduction
-    .setIn(['appState', 'updatedTask'], updatedTask);
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage('FIREBASE_UPDATE_TASK', updatedTask)
+      ));
+};
+
+export const startSync = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'firebaseRef'], payload)
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage('FIREBASE_START_LISTENING', payload)
+      ));
 };

@@ -8,7 +8,6 @@ const Reduction = record({
     layout: null,
     loading: false,
     newTaskId: null,
-    updatedTask: null,
   }),
   effects: List.of(),
 });
@@ -35,29 +34,5 @@ describe('BoardReducer', () => {
 
     expect(newState.getIn(['appState', 'initialLayout']).toJS())
       .to.deep.equal(layout);
-  });
-
-  it('should add task', () => {
-    const task = {
-      id: 'abcd',
-      content: 'task content',
-      sectionId: 'some-section-id-10',
-    };
-
-    const newState = BoardReducer.saveTaskClicked(reduction, task);
-    expect(newState.getIn(['appState', 'task'])).to.equal(task);
-  });
-
-  it('should cancel task adding', () => {
-    const task = {
-      id: 'abcd',
-      content: 'task content',
-      sectionId: 'some-section-id-10',
-    };
-
-    let newState = BoardReducer.saveTaskClicked(reduction, task);
-    expect(newState.getIn(['appState', 'task'])).to.equal(task);
-    newState = BoardReducer.cancelSaveTaskClicked(newState, task);
-    expect(newState.getIn(['appState', 'task'])).to.equal(null);
   });
 });

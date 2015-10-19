@@ -16,10 +16,17 @@ export const layoutFetched = (reduction, payload) => {
     .setIn(['appState', 'initialLayout'], fromJS(payload));
 };
 
+export const addTaskClicked = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'task'], {sectionId: payload.sectionId});
+};
 
 export const saveTaskClicked = (reduction, payload) => {
-  return reduction
-    .setIn(['appState', 'task'], payload);
+  reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage('FIREBASE_SAVE_TASK', payload)
+      ));
 };
 
 export const cancelSaveTaskClicked = (reduction) => {
