@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BoardTask from './BoardTask';
 import { DropTarget } from 'react-dnd';
+import { fromJS } from 'immutable';
 import * as ActionTypes from '../constants/actionTypes';
 
 const sectionTarget = {
@@ -52,9 +53,46 @@ class BoardSection extends Component {
     if (!this.props.tasks) {
       return <p>No tasks</p>;
     }
-    return this.props.tasks.map((task, idx) => {
-      return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher} />;
-    });
+    const storyRegExp = new RegExp('\\[.*]');
+    return this.props.tasks
+        .map((task) => {
+          const taskWithStory = storyRegExp.exec(task.content);
+          if (taskWithStory) {
+            task.story = taskWithStory[0];
+          }
+          return task;
+        })
+        .map(task => task.story)
+        .reduce((p,c) => {
+          if(p.indexOf(c) > -1) {
+            return p
+          } else {
+            p.push(c)
+          }
+          return p;
+        },[]) // get array of unique stories
+        .map(story => {
+          return this.props.tasks.filter(ii => ii.story === story)
+            .reduce((p,c) => {
+              p.story = c.story;
+              p.tasks = p.tasks || [];
+              p.tasks.push({id: c.id, sectionId: c.sectionId, content: c.content});
+              return p;
+            }, {})
+        })
+        .map((story, idx) => {
+          console.log(story);
+          if (story.story) {
+            return <StoryLabel key={idx} story={story.story} />;
+          }
+          return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher} />;
+        });
+  }
+
+  _renderStory(story) {
+    if (story.story) {
+      return <StoryLabel key={idx} story={story.story} />;
+    }
   }
 
   _handleAddTaskClick() {
