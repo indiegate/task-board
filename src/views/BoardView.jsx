@@ -36,19 +36,19 @@ class BoardView extends PureComponent {
     });
   }
 
+  _closeModal() {
+    this.dispatchAction({
+      type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
+      payload: null,
+    });
+  }
+
   _renderTaskModal() {
     if (this.props.task) {
       return (
         <TaskModal task={this.props.task}
-            onSubmit={(task) => {
-              this._saveTask(task);
-            }}
-            onDismiss={() => {
-              this.dispatchAction({
-                type: ActionTypes.CANCEL_SAVE_TASK_CLICKED,
-                payload: null,
-              });
-            }}
+            onSubmit={this._saveTask.bind(this)}
+            onClose={this._closeModal.bind(this)}
             onArchive={this._archiveTask.bind(this)}
         />
       );

@@ -1,105 +1,7 @@
-import Firebase from 'firebase';
 import { Map as createMap } from 'immutable';
+import { FirebaseService } from '../services/FirebaseService';
 import * as APIService from '../services/APIService';
 import * as ActionTypes from '../constants/actionTypes';
-
-
-const FirebaseService = {
-  _ref: null,
-  _dispatcher: null,
-
-  createTask(task) {
-    this._ref
-      .child('teams/fwk-int/tasks/')
-      .push()
-      .set({
-        sectionId: task.sectionId,
-        content: task.content,
-      }, (err) => {
-        if (!err) {
-          this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_CREATED_OK',
-            payload: null,
-          });
-        }
-      });
-  },
-
-  updateTask({id, sectionId, content}) {
-    this._ref
-      .child('teams/fwk-int/tasks/')
-      .child(id)
-      .set({
-        sectionId,
-        content,
-      }, (err) => {
-        if (!err) {
-          this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_UPDATED_OK',
-            payload: null,
-          });
-        }
-      });
-  },
-  archiveTask(task) {
-    return new Promise((resolve, reject) => {
-      this._ref
-        .child('teams/fwk-int/archived-tasks/')
-        .push()
-        .set({
-          sectionId: task.sectionId,
-          content: task.content,
-        }, (err) => {
-          if (!err) {
-            resolve();
-          } else {
-            reject();
-          }
-        });
-    });
-  },
-  updateTasks(tasks) {
-    const updatedTasks = {};
-
-    tasks.forEach(task => {
-      updatedTasks[task.id] = {
-        content: task.content,
-        sectionId: task.sectionId,
-      };
-    });
-
-    return new Promise((resolve, reject) => {
-      this._ref
-        .child('teams/fwk-int/tasks/')
-        .set(updatedTasks, (err) => {
-          if (!err) {
-            resolve();
-          } else {
-            reject(err);
-          }
-        });
-    });
-  },
-  start(dispatcher) {
-    this._ref = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
-    this._dispatcher = dispatcher;
-
-    this._ref
-      .child('teams/fwk-int/tasks/')
-      .on('value', snapshot => {
-        setTimeout(() => {
-          this._dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASKS_RECEIVED,
-            payload: snapshot.val(),
-          });
-        }, 1);
-      });
-  },
-  stop() {
-    this._ref = null;
-    this._dispatcher = null;
-  },
-};
 
 const buildEffectHandler = (handlers) => {
   return (dispatcher, effect) => {
@@ -123,16 +25,14 @@ export default buildEffectHandler({
     FirebaseService
       .archiveTask(payload.task)
       .then(() => {
-        FirebaseService.updateTasks(payload.tasks).then((result) => {
-          dispatcher.dispatch({
-            type: 'FIREBASE_TASK_ARCHIVED_OK',
-            payload: result,
-          });
-        }, err => {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASK_ARCHIVE_FAILED,
-            payload: err,
-          });
+        dispatcher.dispatch({
+          type: 'FIREBASE_TASK_ARCHIVED_OK',
+          payload: null,
+        });
+      }, (err) => {
+        dispatcher.dispatch({
+          type: ActionTypes.FIREBASE_TASK_ARCHIVE_FAILED,
+          payload: err,
         });
       });
   },

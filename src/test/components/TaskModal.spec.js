@@ -7,7 +7,7 @@ function setup(propsOverrides) {
   const props = Object.assign({
     task: {},
     onSubmit() {},
-    onDismiss() {},
+    onClose() {},
   }, propsOverrides);
 
   const renderer = TestUtils.createRenderer();
@@ -66,7 +66,7 @@ describe('TaskModal component', () => {
     };
 
     const output = TestUtils.renderIntoDocument(<TaskModal
-      onDismiss={spy}/>);
+      onClose={spy}/>);
     const node = React.findDOMNode(output.refs.dismiss);
 
     TestUtils.Simulate.click(node);
