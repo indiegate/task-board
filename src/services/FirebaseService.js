@@ -43,23 +43,23 @@ export const FirebaseService = {
       this._ref
         .child('teams/fwk-int/tasks/')
         .child(task.id)
-        .set(null, (err) => {
-          if (!err) {
+        .set(null, (removeError) => {
+          if (!removeError) {
             this._ref
-              .child('teams/fwk-int/archived-tasks/')
+              .child('teams/fwk-int/archivedTasks/')
               .push()
               .set({
                 sectionId: task.sectionId,
                 content: task.content,
-              }, (err2) => {
-                if (!err2) {
+              }, (archiveError) => {
+                if (!archiveError) {
                   resolve();
                 } else {
-                  reject(err2);
+                  reject(archiveError);
                 }
               });
           } else {
-            reject(err);
+            reject(removeError);
           }
         });
     });
