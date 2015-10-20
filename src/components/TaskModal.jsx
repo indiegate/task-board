@@ -140,7 +140,7 @@ class TaskModal extends Component {
 }
 
 TaskModal.propTypes = {
-  task: PropTypes.object,
+  task: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onClose: PropTypes.func,
   onArchive: PropTypes.func,
