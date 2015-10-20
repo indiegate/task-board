@@ -82,6 +82,18 @@ describe('TaskModal component', () => {
     TestUtils.Simulate.click(submitButton);
     expect(output.state.errorText).to.equal('Cant\'t save empty task');
   });
+
+  it('shows archive button with existing task', () => {
+    const { output } = setup({task: {id: 123}});
+    expect(output.props.children[0].props.children.length).to.equal(2);
+    expect(output.props.children[0].props.children[1]).to.not.be.null;
+  });
+
+  it('do not show archive button on new task', () => {
+    const { output } = setup({task: {sectionId: 123}});
+    expect(output.props.children[0].props.children.length).to.equal(2);
+    expect(output.props.children[0].props.children[1]).to.be.null;
+  });
 });
 
 
