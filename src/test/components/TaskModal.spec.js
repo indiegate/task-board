@@ -7,7 +7,7 @@ function setup(propsOverrides) {
   const props = Object.assign({
     task: {},
     onSubmit() {},
-    onDismiss() {},
+    onClose() {},
   }, propsOverrides);
 
   const renderer = TestUtils.createRenderer();
@@ -26,20 +26,20 @@ describe('TaskModal component', () => {
   });
 
   it('has default initial state', () => {
-    const output = TestUtils.renderIntoDocument(<TaskModal/>);
+    const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
     expect(output.state.dialogContent).to.equal('');
     expect(output.state.errorText).to.equal('');
   });
 
   it('updates state based on props', () => {
-    const content = 'Some task text';
-    const output = TestUtils.renderIntoDocument(<TaskModal task={{content}}/>);
-    expect(output.state.dialogContent).to.equal(content);
+    const task = {id: 10, content: 'Some task text'};
+    const output = TestUtils.renderIntoDocument(<TaskModal task={task}/>);
+    expect(output.state.dialogContent).to.equal(task.content);
     expect(output.state.errorText).to.equal('');
   });
 
   it('calls `submitHandler` on click to okay', () => {
-    const content = 'Some task text';
+    const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
     const spy = (response) => {
       spyContent.called = true;
@@ -48,14 +48,14 @@ describe('TaskModal component', () => {
 
     const output = TestUtils.renderIntoDocument(<TaskModal
       onSubmit={spy}
-      task={{content}}/>);
+      task={task}/>);
     const node = React.findDOMNode(output.refs.submit);
     const input = React.findDOMNode(output.refs.dialogContent);
     input.value = 'Updated task text';
     TestUtils.Simulate.change(input);
     TestUtils.Simulate.click(node);
     expect(spyContent.called).to.be.true;
-    expect(spyContent.param).to.deep.equal({content: 'Updated task text'});
+    expect(spyContent.param).to.deep.equal({id: 10, content: 'Updated task text'});
   });
 
   it('calls `dismissHandler` on click to cancel', () => {
@@ -66,7 +66,8 @@ describe('TaskModal component', () => {
     };
 
     const output = TestUtils.renderIntoDocument(<TaskModal
-      onDismiss={spy}/>);
+      task={{id: 42}}
+      onClose={spy}/>);
     const node = React.findDOMNode(output.refs.dismiss);
 
     TestUtils.Simulate.click(node);
@@ -75,11 +76,23 @@ describe('TaskModal component', () => {
   });
 
   it('shows error when user tries to save empty task', () => {
-    const output = TestUtils.renderIntoDocument(<TaskModal/>);
+    const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
 
     const submitButton = React.findDOMNode(output.refs.submit);
     TestUtils.Simulate.click(submitButton);
     expect(output.state.errorText).to.equal('Cant\'t save empty task');
+  });
+
+  it('shows archive button with existing task', () => {
+    const { output } = setup({task: {id: 123}});
+    expect(output.props.children[0].props.children.length).to.equal(2);
+    expect(output.props.children[0].props.children[1]).to.not.be.null;
+  });
+
+  it('do not show archive button on new task', () => {
+    const { output } = setup({task: {sectionId: 123}});
+    expect(output.props.children[0].props.children.length).to.equal(2);
+    expect(output.props.children[0].props.children[1]).to.be.null;
   });
 });
 

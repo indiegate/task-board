@@ -13,7 +13,7 @@ const taskSource = {
     const { sectionId } = monitor.getDropResult();
     const { dispatcher, content, id} = component.props;
     dispatcher.dispatch({
-      type: 'TASK_SECTION_UPDATED',
+      type: ActionTypes.DRAGGED_TASK_TO_SECTION,
       payload: {
         id,
         content,
@@ -65,7 +65,11 @@ class BoardTask extends PureComponent {
   _handleEditTaskDblClick() {
     this.props.dispatcher.dispatch({
       type: ActionTypes.EDIT_TASK_CLICKED,
-      payload: {id: this.props.id, content: this.props.content},
+      payload: {
+        id: this.props.id,
+        content: this.props.content,
+        sectionId: this.props.sectionId,
+      },
     });
   }
 

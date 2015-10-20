@@ -66,3 +66,12 @@
 .yellow-target {
   border: 1px dashed #9A9A9A;
 }
+
+.archive {
+  color: rgba(0,0,0, .50);
+}
+
+.archive:hover {
+  cursor: pointer;
+  color: rgba(0,0,0, .99);
+}
