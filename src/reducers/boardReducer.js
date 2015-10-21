@@ -43,7 +43,7 @@ export const startSync = (reduction, payload) => {
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.SYNC_START_REQUESTED, payload)
-      ));
+    ));
 };
 
 export const tasksReceived = (reduction, payload) => {
@@ -82,7 +82,7 @@ export const saveTaskClicked = (reduction, payload) => {
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.TASK_SAVE_REQUESTED, payload)
-      ));
+    ));
 };
 
 export const cancelSaveTaskClicked = (reduction) => {
@@ -104,13 +104,37 @@ export const draggedTaskToSection = (reduction, payload) => {
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.TASK_UPDATE_REQUESTED, updatedTask)
-      ));
+    ));
 };
 
 export const archiveTaskClicked = (reduction, payload) => {
   return reduction
       .set('effects', reduction
-          .get('effects')
-          .push(buildMessage(EffectTypes.TASK_ARCHIVING_REQUESTED, payload)
+        .get('effects')
+        .push(buildMessage(EffectTypes.TASK_ARCHIVING_REQUESTED, payload)
       ));
+};
+
+export const loginSubmitted = (reduction, payload) => {
+  localStorage.setItem('task-board:firebaseId', payload.firebaseId);
+  return reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.AUTHENTICATION_REQUESTED, payload)
+    ));
+};
+
+export const authenticationOk = (reduction, payload) => {
+  localStorage.setItem('task-board:token', payload.token);
+  return reduction
+    .setIn(['appState', 'isLoggedIn'], true)
+    .setIn(['appState', 'authData'], payload);
+};
+
+export const authenticationFailed = (reduction, payload) => {
+  localStorage.setItem('task-board:token', null);
+  return reduction
+    .setIn(['appState', 'isLoggedIn'], false)
+    .setIn(['appState', 'authData'], null)
+    .setIn(['appState', 'authError'], payload);
 };

@@ -34,13 +34,17 @@ export default buildEffectHandler({
 
   [EffectTypes.TASK_SAVE_REQUESTED]: (dispatcher, payload) => {
     if (!payload.id ) {
-      FirebaseService.createTask(payload);
+      FirebaseService.createTask(dispatcher, payload);
     } else {
-      FirebaseService.updateTask(payload);
+      FirebaseService.updateTask(dispatcher, payload);
     }
   },
 
   [EffectTypes.TASK_UPDATE_REQUESTED]: (dispatcher, payload) => {
-    FirebaseService.updateTask(payload);
+    FirebaseService.updateTask(dispatcher, payload);
+  },
+
+  [EffectTypes.AUTHENTICATION_REQUESTED]: (dispatcher, payload) => {
+    FirebaseService.authenticate(dispatcher, payload);
   },
 });

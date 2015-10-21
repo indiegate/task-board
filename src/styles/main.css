@@ -1,3 +1,20 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.form-holder {
+  background: rgba(255,255,255,0.2);
+  margin-top: 10%;
+  border-radius: 3px;
+}
+
+.form-head {
+  font-size: 30px;
+  letter-spacing: 2px;
+  margin: 15px auto 30px auto;
+}
+
 .column {
     padding: 0.5em!important;
 }
