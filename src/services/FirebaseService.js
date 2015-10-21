@@ -7,7 +7,7 @@ export const FirebaseService = {
 
   createTask(task) {
     this._ref
-      .child('teams/fwk-int/tasks/')
+      .child('tasks')
       .push()
       .set({
         sectionId: task.sectionId,
@@ -15,7 +15,7 @@ export const FirebaseService = {
       }, (err) => {
         if (!err) {
           this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_CREATED_OK',
+            type: ActionTypes.FIREBASE_TASK_CREATED_OK,
             payload: null,
           });
         }
@@ -24,33 +24,31 @@ export const FirebaseService = {
 
   updateTask({id, sectionId, content}) {
     this._ref
-      .child('teams/fwk-int/tasks/')
-      .child(id)
+      .child(`tasks/${id}`)
       .set({
         sectionId,
         content,
       }, (err) => {
         if (!err) {
           this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_UPDATED_OK',
+            type: ActionTypes.FIREBASE_TASK_UPDATED_OK,
             payload: null,
           });
         }
       });
   },
-  archiveTask(task) {
+  archiveTask({id, sectionId, content}) {
     return new Promise((resolve, reject) => {
       this._ref
-        .child('teams/fwk-int/tasks/')
-        .child(task.id)
+        .child(`tasks/${id}`)
         .set(null, (removeError) => {
           if (!removeError) {
             this._ref
-              .child('teams/fwk-int/archivedTasks/')
+              .child('archivedTasks')
               .push()
               .set({
-                sectionId: task.sectionId,
-                content: task.content,
+                sectionId,
+                content,
               }, (archiveError) => {
                 if (!archiveError) {
                   resolve();
@@ -64,12 +62,13 @@ export const FirebaseService = {
         });
     });
   },
+
   start(dispatcher) {
     this._ref = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
     this._dispatcher = dispatcher;
 
     this._ref
-      .child('teams/fwk-int/tasks/')
+      .child('tasks')
       .on('value', snapshot => {
         setTimeout(() => {
           this._dispatcher.dispatch({
@@ -79,6 +78,7 @@ export const FirebaseService = {
         }, 1);
       });
   },
+
   stop() {
     this._ref = null;
     this._dispatcher = null;

@@ -2,6 +2,7 @@ import { Map as createMap } from 'immutable';
 import { FirebaseService } from '../services/FirebaseService';
 import * as APIService from '../services/APIService';
 import * as ActionTypes from '../constants/actionTypes';
+import * as EffectTypes from '../constants/effectTypes';
 
 const buildEffectHandler = (handlers) => {
   return (dispatcher, effect) => {
@@ -12,7 +13,7 @@ const buildEffectHandler = (handlers) => {
 };
 
 export default buildEffectHandler({
-  [ActionTypes.FETCH_LAYOUT_API_CALL]: (dispatcher, payload) => {
+  [EffectTypes.LAYOUT_REQUESTED]: (dispatcher, payload) => {
     APIService.fetchLayout(payload).then(layout => {
       dispatcher.dispatch({
         type: ActionTypes.LAYOUT_FETCHED_OK,
@@ -21,12 +22,12 @@ export default buildEffectHandler({
     });
   },
 
-  [ActionTypes.FIREBASE_ARCHIVE_TASK_REQUESTED]: (dispatcher, payload) => {
+  [EffectTypes.TASK_ARCHIVING_REQUESTED]: (dispatcher, task) => {
     FirebaseService
-      .archiveTask(payload.task)
+      .archiveTask(task)
       .then(() => {
         dispatcher.dispatch({
-          type: 'FIREBASE_TASK_ARCHIVED_OK',
+          type: ActionTypes.FIREBASE_TASK_ARCHIVED_OK,
           payload: null,
         });
       }, (err) => {
@@ -37,12 +38,11 @@ export default buildEffectHandler({
       });
   },
 
-  'FIREBASE_START_LISTENING': (dispatcher, payload) => {
-    console.log('FIREBASE_START_LISTENING', payload);
+  [EffectTypes.SYNC_START_REQUESTED]: (dispatcher) => {
     FirebaseService.start(dispatcher);
   },
 
-  'FIREBASE_SAVE_TASK': (dispatcher, payload) => {
+  [EffectTypes.TASK_SAVE_REQUESTED]: (dispatcher, payload) => {
     if (!payload.id ) {
       FirebaseService.createTask(payload);
     } else {
@@ -50,7 +50,7 @@ export default buildEffectHandler({
     }
   },
 
-  'FIREBASE_UPDATE_TASK': (dispatcher, payload) => {
+  [EffectTypes.TASK_UPDATE_REQUESTED]: (dispatcher, payload) => {
     FirebaseService.updateTask(payload);
   },
 });

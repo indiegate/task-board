@@ -1,15 +1,6 @@
 import { fromJS } from 'immutable';
-import * as ActionTypes from '../constants/actionTypes';
+import * as EffectTypes from '../constants/effectTypes';
 import buildMessage from '../utils/buildMessage';
-
-export const startSync = (reduction, payload) => {
-  return reduction
-    .setIn(['appState', 'firebaseRef'], payload)
-    .set('effects', reduction
-      .get('effects')
-      .push(buildMessage('FIREBASE_START_LISTENING', payload)
-      ));
-};
 
 const updateLayout = (layout, task) => {
   const updateBoardSection = (section) => {
@@ -46,6 +37,15 @@ const updateLayout = (layout, task) => {
   });
 };
 
+export const startSync = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'firebaseRef'], payload)
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.SYNC_START_REQUESTED, payload)
+      ));
+};
+
 export const tasksReceived = (reduction, payload) => {
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const tasksArray = [];
@@ -67,7 +67,7 @@ export const layoutFetchRequested = (reduction, payload) => {
     .setIn(['appState', 'loading'], true)
     .set('effects', reduction
       .get('effects')
-      .push(buildMessage(ActionTypes.FETCH_LAYOUT_API_CALL, payload)
+      .push(buildMessage(EffectTypes.LAYOUT_REQUESTED, payload)
     ));
 };
 
@@ -90,7 +90,7 @@ export const saveTaskClicked = (reduction, payload) => {
   reduction
     .set('effects', reduction
       .get('effects')
-      .push(buildMessage('FIREBASE_SAVE_TASK', payload)
+      .push(buildMessage(EffectTypes.TASK_SAVE_REQUESTED, payload)
       ));
 };
 
@@ -112,17 +112,14 @@ export const draggedTaskToSection = (reduction, payload) => {
   return reduction
     .set('effects', reduction
       .get('effects')
-      .push(buildMessage('FIREBASE_UPDATE_TASK', updatedTask)
+      .push(buildMessage(EffectTypes.TASK_UPDATE_REQUESTED, updatedTask)
       ));
 };
 
 export const archiveTaskClicked = (reduction, payload) => {
-  const tasks = reduction.getIn(['appState', 'tasks'])
-      .filter(task => task.id !== payload.id);
-  console.log('tasks', tasks);
   return reduction
       .set('effects', reduction
           .get('effects')
-          .push(buildMessage(ActionTypes.FIREBASE_ARCHIVE_TASK_REQUESTED, {task: payload, tasks})
+          .push(buildMessage(EffectTypes.TASK_ARCHIVING_REQUESTED, payload)
       ));
 };
