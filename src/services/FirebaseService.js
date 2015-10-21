@@ -15,7 +15,7 @@ export const FirebaseService = {
       }, (err) => {
         if (!err) {
           this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_CREATED_OK',
+            type: ActionTypes.FIREBASE_TASK_CREATED_OK,
             payload: null,
           });
         }
@@ -32,7 +32,7 @@ export const FirebaseService = {
       }, (err) => {
         if (!err) {
           this._dispatcher.dispatch({
-            type: 'FIREBASE_TASK_UPDATED_OK',
+            type: ActionTypes.FIREBASE_TASK_UPDATED_OK,
             payload: null,
           });
         }
@@ -64,6 +64,7 @@ export const FirebaseService = {
         });
     });
   },
+
   start(dispatcher) {
     this._ref = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
     this._dispatcher = dispatcher;
@@ -79,6 +80,7 @@ export const FirebaseService = {
         }, 1);
       });
   },
+
   stop() {
     this._ref = null;
     this._dispatcher = null;
