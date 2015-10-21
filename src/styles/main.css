@@ -7,6 +7,12 @@
   color: rgba(0,0,0,.7);
 }
 
+h5.ui.header {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  text-align: right;
+}
+
 .ui.header {
   margin-bottom: 0.5em;
 }
@@ -26,7 +32,7 @@
 }
 
 .ui.celled.grid .column {
-    border-bottom: 1px solid #d4d4d5;
+  border-bottom: 1px solid #d4d4d5;
 }
 
 .board-section button {
@@ -46,6 +52,11 @@
 .label.bug {
   background-color: #db2828!important;
   border-color: #db2828!important;
+  color: #fff!important;
+}
+.label.doc {
+  background-color: #2185d0!important;
+  border-color: #2185d0!important;
   color: #fff!important;
 }
 

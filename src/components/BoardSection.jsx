@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BoardTask from './BoardTask';
+import StoryLabel from './StoryLabel';
 import { DropTarget } from 'react-dnd';
-import { fromJS } from 'immutable';
 import * as ActionTypes from '../constants/actionTypes';
 
 const sectionTarget = {
@@ -54,45 +54,40 @@ class BoardSection extends Component {
       return <p>No tasks</p>;
     }
     const storyRegExp = new RegExp('\\[.*]');
-    return this.props.tasks
-        .map((task) => {
-          const taskWithStory = storyRegExp.exec(task.content);
-          if (taskWithStory) {
-            task.story = taskWithStory[0];
-          }
-          return task;
-        })
-        .map(task => task.story)
-        .reduce((p,c) => {
-          if(p.indexOf(c) > -1) {
-            return p
+    const storiesAndTasks = [];
+    this.props.tasks
+      .map((task) => {
+        const taskWithStory = storyRegExp.exec(task.content);
+        if (taskWithStory) {
+          task.story = taskWithStory[0];
+        }
+        return task;
+      })
+      .sort((taskA, taskB) => {
+        if (!taskA.story) {return -1; }
+        if (!taskB.story) {return 1; }
+        if (taskA.story < taskB.story) {return -1; }
+        if (taskA.story > taskB.story) {return 1; }
+        return 0;
+      })
+      .forEach((task) => {
+        if (!task.story) {
+          storiesAndTasks.push(task);
+        } else {
+          if (storiesAndTasks.some(entry => entry.story === task.story)) {
+            storiesAndTasks.push(task);
           } else {
-            p.push(c)
+            storiesAndTasks.push({story: task.story});
+            storiesAndTasks.push(task);
           }
-          return p;
-        },[]) // get array of unique stories
-        .map(story => {
-          return this.props.tasks.filter(ii => ii.story === story)
-            .reduce((p,c) => {
-              p.story = c.story;
-              p.tasks = p.tasks || [];
-              p.tasks.push({id: c.id, sectionId: c.sectionId, content: c.content});
-              return p;
-            }, {})
-        })
-        .map((story, idx) => {
-          console.log(story);
-          if (story.story) {
-            return <StoryLabel key={idx} story={story.story} />;
-          }
-          return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher} />;
-        });
-  }
-
-  _renderStory(story) {
-    if (story.story) {
-      return <StoryLabel key={idx} story={story.story} />;
-    }
+        }
+      });
+    return storiesAndTasks.map((entry, idx) => {
+      if (!entry.id) {
+        return <StoryLabel key={idx} story={entry.story}/>;
+      }
+      return <BoardTask key={idx} {...entry} dispatcher={this.props.dispatcher}/>;
+    });
   }
 
   _handleAddTaskClick() {
