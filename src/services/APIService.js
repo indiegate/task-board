@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 
 export const fetchLayout = () => {
-  return fetch(`https://${FIREBASE_ID}.firebaseio.com/teams/fwk-int/layout.json`)
+  return fetch(`https://${FIREBASE_ID}.firebaseio.com/layout.json`)
     .then(response => {
       if (response.status >= 400) {
         throw new Error('Bad response');
