@@ -7,7 +7,7 @@ export const FirebaseService = {
 
   createTask(task) {
     this._ref
-      .child('teams/fwk-int/tasks/')
+      .child('tasks')
       .push()
       .set({
         sectionId: task.sectionId,
@@ -24,8 +24,7 @@ export const FirebaseService = {
 
   updateTask({id, sectionId, content}) {
     this._ref
-      .child('teams/fwk-int/tasks/')
-      .child(id)
+      .child(`tasks/${id}`)
       .set({
         sectionId,
         content,
@@ -38,19 +37,18 @@ export const FirebaseService = {
         }
       });
   },
-  archiveTask(task) {
+  archiveTask({id, sectionId, content}) {
     return new Promise((resolve, reject) => {
       this._ref
-        .child('teams/fwk-int/tasks/')
-        .child(task.id)
+        .child(`tasks/${id}`)
         .set(null, (removeError) => {
           if (!removeError) {
             this._ref
-              .child('teams/fwk-int/archivedTasks/')
+              .child('archivedTasks')
               .push()
               .set({
-                sectionId: task.sectionId,
-                content: task.content,
+                sectionId,
+                content,
               }, (archiveError) => {
                 if (!archiveError) {
                   resolve();
@@ -70,7 +68,7 @@ export const FirebaseService = {
     this._dispatcher = dispatcher;
 
     this._ref
-      .child('teams/fwk-int/tasks/')
+      .child('tasks')
       .on('value', snapshot => {
         setTimeout(() => {
           this._dispatcher.dispatch({
