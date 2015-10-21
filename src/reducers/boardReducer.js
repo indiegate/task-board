@@ -62,16 +62,7 @@ export const tasksReceived = (reduction, payload) => {
     .setIn(['appState', 'tasks'], tasksArray);
 };
 
-export const layoutFetchRequested = (reduction, payload) => {
-  return reduction
-    .setIn(['appState', 'loading'], true)
-    .set('effects', reduction
-      .get('effects')
-      .push(buildMessage(EffectTypes.LAYOUT_REQUESTED, payload)
-    ));
-};
-
-export const layoutFetched = (reduction, payload) => {
+export const layoutReceivedOk = (reduction, payload) => {
   return reduction
     .setIn(['appState', 'initialLayout'], fromJS(payload));
 };

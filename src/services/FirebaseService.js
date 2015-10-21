@@ -68,14 +68,26 @@ export const FirebaseService = {
     this._dispatcher = dispatcher;
 
     this._ref
-      .child('tasks')
       .on('value', snapshot => {
-        setTimeout(() => {
-          this._dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASKS_RECEIVED,
-            payload: snapshot.val(),
-          });
-        }, 1);
+        const { layout, tasks } = snapshot.val();
+
+        if (layout) {
+          setTimeout(() => {
+            this._dispatcher.dispatch({
+              type: ActionTypes.LAYOUT_RECEIVED_OK,
+              payload: layout,
+            });
+          }, 1);
+        }
+
+        if (tasks) {
+          setTimeout(() => {
+            this._dispatcher.dispatch({
+              type: ActionTypes.FIREBASE_TASKS_RECEIVED,
+              payload: tasks,
+            });
+          }, 1);
+        }
       });
   },
 

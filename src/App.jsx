@@ -73,13 +73,8 @@ class App extends Component {
   }
 
   render() {
-    const initialLayout = this.state.reduction.getIn(['appState', 'initialLayout']);
-    const stateLayout = this.state.reduction.getIn(['appState', 'layout']);
-    const layout = stateLayout ? stateLayout : initialLayout;
-
-    if (this.state.reduction.getIn(['appState', 'loading']) && !layout) {
-      return <div className="ui large active loader"></div>;
-    }
+    const { reduction } = this.state;
+    const layout = reduction.getIn(['appState', 'layout']) || reduction.getIn(['appState', 'initialLayout']);
 
     return (
       <div>

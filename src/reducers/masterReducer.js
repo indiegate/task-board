@@ -10,13 +10,10 @@ export default (reduction, action) => {
   return reduction.withMutations(mutableReduction => {
     switch (type) {
     case ActionTypes.BOARD_MOUNTED:
-      mutableReduction.update(_r => {
-        BoardReducer.startSync(_r, payload);
-        return BoardReducer.layoutFetchRequested(_r, payload);
-      });
+      mutableReduction.update(_r => BoardReducer.startSync(_r, payload));
       break;
-    case ActionTypes.LAYOUT_FETCHED_OK:
-      mutableReduction.update(_r => BoardReducer.layoutFetched(_r, payload));
+    case ActionTypes.LAYOUT_RECEIVED_OK:
+      mutableReduction.update(_r => BoardReducer.layoutReceivedOk(_r, payload));
       break;
     case ActionTypes.FIREBASE_TASKS_RECEIVED:
       mutableReduction.update(_r => BoardReducer.tasksReceived(_r, payload));

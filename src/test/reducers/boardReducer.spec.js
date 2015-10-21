@@ -30,7 +30,7 @@ describe('BoardReducer', () => {
       section: 10,
     };
 
-    const newState = BoardReducer.layoutFetched(reduction, layout);
+    const newState = BoardReducer.layoutReceivedOk(reduction, layout);
 
     expect(newState.getIn(['appState', 'initialLayout']).toJS())
       .to.deep.equal(layout);
