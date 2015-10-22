@@ -39,23 +39,15 @@ class BoardTask extends PureComponent {
     return content.split(' ');
   }
 
-  _renderSentence(words) {
-    let sentence = '';
-    words.map((word) => {
-      if (!word.startsWith('#')) {
-        sentence += word + ' ';
-      }
-    });
-    return sentence;
+  _isWordStory(word) {
+    return (word.startsWith('[') && word.endsWith(']'));
   }
 
-  _renderTags(words) {
-    const tags = [];
-    words.map((word) => {
-      if (word.startsWith('#')) {
-        tags.push(word.substring(1, word.length));
-      }
-    });
+  _isWordTag(word) {
+    return word.startsWith('#');
+  }
+
+  _renderTags(tags) {
     return tags.map((tag, idx) => {
       const classes = 'ui mini horizontal label ' + tag;
       return <div className={classes} key={idx}>{tag}</div>;
@@ -76,13 +68,23 @@ class BoardTask extends PureComponent {
   render() {
     const { isDragging, connectDragSource, content} = this.props;
 
+    const words = this._splitToWords(content);
+    let sentence = '';
+    const tags = [];
+    words.map((word) => {
+      if (this._isWordTag(word)) {
+        tags.push(word.substring(1, word.length));
+      } else if (!this._isWordStory(word)) {
+        sentence += word + ' ';
+      }
+    });
     return (
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
             style={{ opacity: isDragging ? 0.5 : 1 }}>
-          {this._renderTags(this._splitToWords(content))}
-          {this._renderSentence(this._splitToWords(content))}
+          {this._renderTags(tags)}
+          {sentence}
         </div>
       )
     );
