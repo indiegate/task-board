@@ -65,6 +65,7 @@ export const FirebaseService = {
 
   start(dispatcher) {
     const firebaseId = localStorage.getItem('task-board:firebaseId');
+
     if (!firebaseId ) {
       setTimeout(() => {
         dispatcher.dispatch({
@@ -74,6 +75,7 @@ export const FirebaseService = {
       }, 1);
       return;
     }
+
     this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
 
     this._ref
@@ -103,7 +105,7 @@ export const FirebaseService = {
     this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
 
     this._ref.authWithPassword({
-      email: 'developer@y1kpqaz98v73z9bas2.com',
+      email: `developer@${firebaseId}.com`,
       password,
     }, (error, authData) => {
       if (error) {

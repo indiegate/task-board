@@ -6,19 +6,20 @@
 
 *  [node.js](https://nodejs.org)
 *  [nw.js](nwjs.io/)
+*  firebase instance, with an existing user in specific format `developer@${firebaseId}.com` [see more security](https://www.firebase.com/docs/security/guide/user-security.html)
 
 ## Install
 
-* be sure nw executalbe is on $PATH
+* be sure nw executable is on $PATH
 * git clone task-board
 * cd task-board
 * run command: `npm install`
-* run command: `FIREBASE_ID=${your-firebase-ID} npm  run build` *FIREBASE_ID as ENV variable will be used in the build process.*
+* run command: `npm run build`
 * run command: `nw .`
 
 ## Team Layout
 
-* example team can easily be added into your firebsae db by command: `curl -X PUT -d @json/create_team.json https://${your-firebase-ID}.firebaseio.com/teams.json`
+* example team can easily be added into your firebase db by command: `curl -X PUT -d @json/create_team.json https://${your-firebase-ID}.firebaseio.com/`
 
 ## License
 
