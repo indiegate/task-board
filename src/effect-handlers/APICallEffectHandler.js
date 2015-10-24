@@ -1,6 +1,5 @@
 import { Map as createMap } from 'immutable';
 import { FirebaseService } from '../services/FirebaseService';
-import * as APIService from '../services/APIService';
 import * as ActionTypes from '../constants/actionTypes';
 import * as EffectTypes from '../constants/effectTypes';
 
@@ -13,15 +12,6 @@ const buildEffectHandler = (handlers) => {
 };
 
 export default buildEffectHandler({
-  [EffectTypes.LAYOUT_REQUESTED]: (dispatcher, payload) => {
-    APIService.fetchLayout(payload).then(layout => {
-      dispatcher.dispatch({
-        type: ActionTypes.LAYOUT_FETCHED_OK,
-        payload: layout,
-      });
-    });
-  },
-
   [EffectTypes.TASK_ARCHIVING_REQUESTED]: (dispatcher, task) => {
     FirebaseService
       .archiveTask(task)
@@ -44,13 +34,17 @@ export default buildEffectHandler({
 
   [EffectTypes.TASK_SAVE_REQUESTED]: (dispatcher, payload) => {
     if (!payload.id ) {
-      FirebaseService.createTask(payload);
+      FirebaseService.createTask(dispatcher, payload);
     } else {
-      FirebaseService.updateTask(payload);
+      FirebaseService.updateTask(dispatcher, payload);
     }
   },
 
   [EffectTypes.TASK_UPDATE_REQUESTED]: (dispatcher, payload) => {
-    FirebaseService.updateTask(payload);
+    FirebaseService.updateTask(dispatcher, payload);
+  },
+
+  [EffectTypes.AUTHENTICATION_REQUESTED]: (dispatcher, payload) => {
+    FirebaseService.authenticate(dispatcher, payload);
   },
 });

@@ -6,10 +6,13 @@ import { DragDropContext } from 'react-dnd';
 
 import masterReducer from './reducers/masterReducer';
 
+import LoginForm from './components/LoginForm';
 import BoardView from './views/BoardView';
 
 // services
 import APICallEffectHandler from './effect-handlers/APICallEffectHandler';
+
+const isLoggedIn = localStorage.getItem('task-board:token');
 
 const Reduction = record({
   appState: fromJS({
@@ -17,6 +20,8 @@ const Reduction = record({
     layout: null,
     loading: false,
     task: null,
+    isLoggedIn,
+    auth: false,
   }),
   effects: List.of(),
 });
@@ -73,12 +78,14 @@ class App extends Component {
   }
 
   render() {
-    const initialLayout = this.state.reduction.getIn(['appState', 'initialLayout']);
-    const stateLayout = this.state.reduction.getIn(['appState', 'layout']);
-    const layout = stateLayout ? stateLayout : initialLayout;
+    const { reduction } = this.state;
+    const layout = reduction.getIn(['appState', 'layout']) || reduction.getIn(['appState', 'initialLayout']);
 
-    if (this.state.reduction.getIn(['appState', 'loading']) && !layout) {
-      return <div className="ui large active loader"></div>;
+    if (!reduction.getIn(['appState', 'isLoggedIn'])) {
+      return (
+        <LoginForm dispatcher={this.state.dispatcher}
+            error={this.state.reduction.getIn(['appState', 'authError'])}/>
+      );
     }
 
     return (

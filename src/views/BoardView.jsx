@@ -57,8 +57,9 @@ class BoardView extends PureComponent {
 
   render() {
     if (!this.props.layout) {
-      return <div>Nothing</div>;
+      return <div className="ui large active loader"></div>;
     }
+
     return (
       <div>
         {this._renderTaskModal()}

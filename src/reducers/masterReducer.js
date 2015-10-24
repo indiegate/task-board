@@ -9,14 +9,14 @@ export default (reduction, action) => {
   // mutate the global appState here
   return reduction.withMutations(mutableReduction => {
     switch (type) {
-    case ActionTypes.BOARD_MOUNTED:
-      mutableReduction.update(_r => {
-        BoardReducer.startSync(_r, payload);
-        return BoardReducer.layoutFetchRequested(_r, payload);
-      });
+    case ActionTypes.LOGIN_SUBMITTED:
+      mutableReduction.update(_r => BoardReducer.loginSubmitted(_r, payload));
       break;
-    case ActionTypes.LAYOUT_FETCHED_OK:
-      mutableReduction.update(_r => BoardReducer.layoutFetched(_r, payload));
+    case ActionTypes.BOARD_MOUNTED:
+      mutableReduction.update(_r => BoardReducer.startSync(_r, payload));
+      break;
+    case ActionTypes.LAYOUT_RECEIVED_OK:
+      mutableReduction.update(_r => BoardReducer.layoutReceivedOk(_r, payload));
       break;
     case ActionTypes.FIREBASE_TASKS_RECEIVED:
       mutableReduction.update(_r => BoardReducer.tasksReceived(_r, payload));
@@ -41,6 +41,12 @@ export default (reduction, action) => {
       break;
     case ActionTypes.DRAGGED_TASK_TO_SECTION:
       mutableReduction.update(_r => BoardReducer.draggedTaskToSection(_r, payload));
+      break;
+    case ActionTypes.AUTHENTICATION_OK:
+      mutableReduction.update(_r => BoardReducer.authenticationOk(_r, payload));
+      break;
+    case ActionTypes.AUTHENTICATION_FAILED:
+      mutableReduction.update(_r => BoardReducer.authenticationFailed(_r, payload));
       break;
     default:
       console.debug(`Unhandled action of type: ${type}`);

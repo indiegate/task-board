@@ -3,9 +3,8 @@ import * as ActionTypes from '../constants/actionTypes';
 
 export const FirebaseService = {
   _ref: null,
-  _dispatcher: null,
 
-  createTask(task) {
+  createTask(dispatcher, task) {
     this._ref
       .child('tasks')
       .push()
@@ -14,7 +13,7 @@ export const FirebaseService = {
         content: task.content,
       }, (err) => {
         if (!err) {
-          this._dispatcher.dispatch({
+          dispatcher.dispatch({
             type: ActionTypes.FIREBASE_TASK_CREATED_OK,
             payload: null,
           });
@@ -22,7 +21,7 @@ export const FirebaseService = {
       });
   },
 
-  updateTask({id, sectionId, content}) {
+  updateTask(dispatcher, {id, sectionId, content}) {
     this._ref
       .child(`tasks/${id}`)
       .set({
@@ -30,13 +29,14 @@ export const FirebaseService = {
         content,
       }, (err) => {
         if (!err) {
-          this._dispatcher.dispatch({
+          dispatcher.dispatch({
             type: ActionTypes.FIREBASE_TASK_UPDATED_OK,
             payload: null,
           });
         }
       });
   },
+
   archiveTask({id, sectionId, content}) {
     return new Promise((resolve, reject) => {
       this._ref
@@ -64,14 +64,36 @@ export const FirebaseService = {
   },
 
   start(dispatcher) {
-    this._ref = new Firebase(`https://${FIREBASE_ID}.firebaseio.com/`);
-    this._dispatcher = dispatcher;
+    const firebaseId = localStorage.getItem('task-board:firebaseId');
+
+    if (!firebaseId ) {
+      setTimeout(() => {
+        dispatcher.dispatch({
+          type: 'FIREBASE_ID_NOT_FOUND',
+          payload: 'FirebaseId could not be found in localStorage',
+        });
+      }, 1);
+      return;
+    }
+
+    this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
+
+    this._ref
+      .child('layout')
+      .once('value', snapshot => {
+        setTimeout(() => {
+          dispatcher.dispatch({
+            type: ActionTypes.LAYOUT_RECEIVED_OK,
+            payload: snapshot.val(),
+          });
+        }, 1);
+      });
 
     this._ref
       .child('tasks')
       .on('value', snapshot => {
         setTimeout(() => {
-          this._dispatcher.dispatch({
+          dispatcher.dispatch({
             type: ActionTypes.FIREBASE_TASKS_RECEIVED,
             payload: snapshot.val(),
           });
@@ -79,9 +101,25 @@ export const FirebaseService = {
       });
   },
 
-  stop() {
-    this._ref = null;
-    this._dispatcher = null;
+  authenticate(dispatcher, {firebaseId, password}) {
+    this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
+
+    this._ref.authWithPassword({
+      email: `developer@${firebaseId}.com`,
+      password,
+    }, (error, authData) => {
+      if (error) {
+        dispatcher.dispatch({
+          type: ActionTypes.AUTHENTICATION_FAILED,
+          payload: error,
+        });
+      } else {
+        dispatcher.dispatch({
+          type: ActionTypes.AUTHENTICATION_OK,
+          payload: authData,
+        });
+      }
+    });
   },
 };
 
