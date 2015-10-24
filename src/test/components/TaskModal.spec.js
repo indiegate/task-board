@@ -92,7 +92,7 @@ describe('TaskModal component', () => {
     const { output } = setup({task: {id: 123}});
     const removeButton = output.props.children[2].props.children[0];
     expect(removeButton).to.not.be.null;
-    expect(removeButton.props.className).to.equal('ui red button');
+    expect(removeButton.props.className).to.equal('ui left floated red button');
     expect(removeButton.props.children[0].type).to.equal('i');
     expect(removeButton.props.children[0].props.className).to.equal('trash outline icon');
     expect(removeButton.props.children[1]).to.equal('Remove');
