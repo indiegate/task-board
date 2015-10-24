@@ -83,7 +83,7 @@ class TaskModal extends Component {
       return null;
     }
     return (
-    <div className="ui red button"
+    <div className="ui left floated red button"
          ref="remove"
          onClick={() => {
            this.props.onArchive(this.props.task);

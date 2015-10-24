@@ -95,6 +95,6 @@ h5.ui.header {
   border: 1px dashed #9A9A9A;
 }
 
-.trash.outline {
-  margin-left: 10px;
+.ui.modal .actions > .button {
+  margin-left: .25em;
 }
