@@ -95,11 +95,16 @@ h5.ui.header {
   border: 1px dashed #9A9A9A;
 }
 
-.archive {
+.trash.outline {
+  margin-left: 10px;
   color: rgba(0,0,0, .50);
 }
 
-.archive:hover {
+.trash.outline:hover {
   cursor: pointer;
   color: rgba(0,0,0, .99);
+}
+
+.close {
+  cursor: pointer;
 }

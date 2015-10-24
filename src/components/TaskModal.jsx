@@ -83,13 +83,11 @@ class TaskModal extends Component {
       return null;
     }
     return (
-      <h3 className="ui right floated header">
-        <i className="archive icon"
-           onClick={() => {
-             this.props.onArchive(this.props.task);
-           }}
-           title="archive task"/>
-      </h3>
+      <i className="trash outline icon"
+         onClick={() => {
+           this.props.onArchive(this.props.task);
+         }}
+         title="remove task"/>
     );
   }
 
@@ -104,9 +102,15 @@ class TaskModal extends Component {
       <div className="ui modal" style={{display: displayModal}}>
         <div className="ui clearing segment">
           <h3 className="ui left floated header">
-            {dialogName}
+            <div className="content">
+              {dialogName}
+              {this._renderArchiveButton()}
+            </div>
           </h3>
-          {this._renderArchiveButton()}
+          <h3 className="ui right floated header">
+            <i className="close icon"
+                onClick={this._dismissHandler.bind(this)}/>
+          </h3>
         </div>
         <div className="ui fluid input">
           <input type="text"

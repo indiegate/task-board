@@ -83,16 +83,18 @@ describe('TaskModal component', () => {
     expect(output.state.errorText).to.equal('Cant\'t save empty task');
   });
 
-  it('shows archive button with existing task', () => {
+  it('shows `remove task` button with existing task', () => {
     const { output } = setup({task: {id: 123}});
+    const removeButton = output.props.children[0].props.children[0].props.children.props.children[1];
     expect(output.props.children[0].props.children.length).to.equal(2);
-    expect(output.props.children[0].props.children[1]).to.not.be.null;
+    expect(removeButton).to.not.be.null;
+    expect(removeButton.props.className).to.equal('trash outline icon');
   });
 
-  it('do not show archive button on new task', () => {
+  it('do not show `remove task` button on new task', () => {
     const { output } = setup({task: {sectionId: 123}});
     expect(output.props.children[0].props.children.length).to.equal(2);
-    expect(output.props.children[0].props.children[1]).to.be.null;
+    expect(output.props.children[0].props.children[0].props.children.props.children[1]).to.be.null;
   });
 });
 
