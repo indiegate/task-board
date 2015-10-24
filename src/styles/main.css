@@ -97,14 +97,4 @@ h5.ui.header {
 
 .trash.outline {
   margin-left: 10px;
-  color: rgba(0,0,0, .50);
-}
-
-.trash.outline:hover {
-  cursor: pointer;
-  color: rgba(0,0,0, .99);
-}
-
-.close {
-  cursor: pointer;
 }

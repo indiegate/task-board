@@ -83,11 +83,14 @@ class TaskModal extends Component {
       return null;
     }
     return (
-      <i className="trash outline icon"
+    <div className="ui red button"
+         ref="remove"
          onClick={() => {
            this.props.onArchive(this.props.task);
-         }}
-         title="remove task"/>
+         }}>
+      <i className="trash outline icon"
+         title="remove task"/>Remove
+    </div>
     );
   }
 
@@ -104,12 +107,7 @@ class TaskModal extends Component {
           <h3 className="ui left floated header">
             <div className="content">
               {dialogName}
-              {this._renderArchiveButton()}
             </div>
-          </h3>
-          <h3 className="ui right floated header">
-            <i className="close icon"
-                onClick={this._dismissHandler.bind(this)}/>
           </h3>
         </div>
         <div className="ui fluid input">
@@ -126,6 +124,7 @@ class TaskModal extends Component {
                  value={dialogContent}/>
         </div>
         <div className="actions">
+          {this._renderArchiveButton()}
           <div className="ui button"
                ref="dismiss"
                onClick={this._dismissHandler.bind(this)}
