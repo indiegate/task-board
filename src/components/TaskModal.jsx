@@ -60,14 +60,16 @@ class TaskModal extends Component {
   }
 
   _submitHandler() {
-    if (!this.state.dialogContent) {
+    const trimmedContent = this.state.dialogContent.trim();
+
+    if (!trimmedContent) {
       this.setState({
         errorText: `Cant't save empty task`,
       });
       return;
     }
     const res = this.props.task;
-    res.content = this.state.dialogContent;
+    res.content = trimmedContent;
     this.props.onSubmit(res);
   }
 

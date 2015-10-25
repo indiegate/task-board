@@ -75,7 +75,7 @@ describe('TaskModal component', () => {
     expect(spyContent.param).to.be.undefined;
   });
 
-  it('shows error when user tries to save empty task', () => {
+  it('displays error when saving empty task', () => {
     const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
 
     const submitButton = React.findDOMNode(output.refs.submit);
@@ -83,12 +83,12 @@ describe('TaskModal component', () => {
     expect(output.state.errorText).to.equal('Cant\'t save empty task');
   });
 
-  it('has an action bar with buttons', () => {
+  it('contains action bar with 3 buttons', () => {
     const { output } = setup({task: {id: 123}});
     expect(output.props.children[2].props.children.length).to.equal(3);
   });
 
-  it('shows `remove task` button with existing task', () => {
+  it('displays `remove task` btn when editing', () => {
     const { output } = setup({task: {id: 123}});
     const removeButton = output.props.children[2].props.children[0];
     expect(removeButton).to.not.be.null;
@@ -98,9 +98,53 @@ describe('TaskModal component', () => {
     expect(removeButton.props.children[1]).to.equal('Remove');
   });
 
-  it('do not show `remove task` button on new task', () => {
+  it('doesn\'t display `remove task` btn on new task', () => {
     const { output } = setup({task: {sectionId: 123}});
     expect(output.props.children[2].props.children[0]).to.be.null;
+  });
+
+  it('disallows to add empty task', () => {
+    let called = false;
+    let calledParam = null;
+
+    const spy = (param) => {
+      called = true;
+      calledParam = param;
+    };
+
+    const output = TestUtils.renderIntoDocument(<TaskModal
+      onSubmit={spy}
+      task={{id: 42}}/>);
+
+    const submit = React.findDOMNode(output.refs.submit);
+    const input = React.findDOMNode(output.refs.dialogContent);
+    input.value = '   ';
+    TestUtils.Simulate.change(input);
+    TestUtils.Simulate.click(submit);
+    expect(called).to.be.false;
+    expect(calledParam).to.be.null;
+  });
+
+  it('trims text before saving task', () => {
+    let called = false;
+    let calledParam = null;
+
+    const spy = (param) => {
+      called = true;
+      calledParam = param;
+    };
+
+    const output = TestUtils.renderIntoDocument(<TaskModal
+      onSubmit={spy}
+      task={{id: 42}}/>);
+
+    const submit = React.findDOMNode(output.refs.submit);
+    const input = React.findDOMNode(output.refs.dialogContent);
+    input.value = ' x b c  ';
+    TestUtils.Simulate.change(input);
+    TestUtils.Simulate.click(submit);
+    expect(called).to.be.true;
+    expect(calledParam.content).to.equal('x b c');
   });
 });
 
