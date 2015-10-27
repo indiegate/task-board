@@ -4,6 +4,15 @@ import * as ActionTypes from '../constants/actionTypes';
 export const FirebaseService = {
   _ref: null,
 
+  _handleError(error, dispatcher) {
+    if (error.code === 'PERMISSION_DENIED') {
+      dispatcher.dispatch({
+        type: ActionTypes.AUTHENTICATION_FAILED,
+        payload: error,
+      });
+    }
+  },
+
   createTask(dispatcher, task) {
     this._ref
       .child('tasks')
@@ -64,13 +73,17 @@ export const FirebaseService = {
   },
 
   start(dispatcher) {
+    // move this to a localStorage adapter
     const firebaseId = localStorage.getItem('task-board:firebaseId');
 
     if (!firebaseId ) {
       setTimeout(() => {
         dispatcher.dispatch({
-          type: 'FIREBASE_ID_NOT_FOUND',
-          payload: 'FirebaseId could not be found in localStorage',
+          type: ActionTypes.AUTHENTICATION_FAILED,
+          payload: {
+            code: 'FIREBASE_ID_NOT_IN_LS',
+            message: 'Firebase id not present locally',
+          },
         });
       }, 1);
       return;
@@ -80,28 +93,41 @@ export const FirebaseService = {
 
     this._ref
       .child('layout')
-      .once('value', snapshot => {
+      .once('value', layoutSnapshot => {
+        this._ref
+          .child('tasks')
+          .on('value', tasksSnapshot => {
+            setTimeout(() => {
+              dispatcher.dispatch({
+                type: ActionTypes.FIREBASE_TASKS_RECEIVED,
+                payload: tasksSnapshot.val(),
+              });
+            }, 1);
+          }, tasksError => this._handleError(tasksError, dispatcher));
+
         setTimeout(() => {
           dispatcher.dispatch({
             type: ActionTypes.LAYOUT_RECEIVED_OK,
-            payload: snapshot.val(),
+            payload: layoutSnapshot.val(),
           });
         }, 1);
-      });
-
-    this._ref
-      .child('tasks')
-      .on('value', snapshot => {
-        setTimeout(() => {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASKS_RECEIVED,
-            payload: snapshot.val(),
-          });
-        }, 1);
-      });
+      }, layoutError => this._handleError(layoutError, dispatcher));
   },
 
   authenticate(dispatcher, {firebaseId, password}) {
+    if (!firebaseId) {
+      setTimeout(() => {
+        dispatcher.dispatch({
+          type: ActionTypes.AUTHENTICATION_FAILED,
+          payload: {
+            code: 'INVALID_FIREBASE_ID',
+            message: 'Invalid firebase id',
+          },
+        });
+      }, 1);
+      return;
+    }
+
     this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
 
     this._ref.authWithPassword({

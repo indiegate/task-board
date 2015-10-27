@@ -39,7 +39,6 @@ const updateLayout = (layout, task) => {
 
 export const startSync = (reduction, payload) => {
   return reduction
-    .setIn(['appState', 'firebaseRef'], payload)
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.SYNC_START_REQUESTED, payload)
@@ -132,9 +131,22 @@ export const authenticationOk = (reduction, payload) => {
 };
 
 export const authenticationFailed = (reduction, payload) => {
-  localStorage.setItem('task-board:token', null);
+  // SIDE EFFECT!
+  const firebaseId = localStorage.getItem('task-board:firebaseId');
+  const newPayload = Object.assign({}, payload);
+
+  if (firebaseId && !localStorage.getItem(`firebase:session::${firebaseId}`)
+    && payload.code !== 'AUTHENTICATION_DISABLED') {
+    newPayload.message = 'Session expired';
+  } else {
+    newPayload.message = payload.message;
+  }
+
+  localStorage.removeItem('task-board:token');
+  localStorage.removeItem('task-board:firebaseId');
+
   return reduction
     .setIn(['appState', 'isLoggedIn'], false)
     .setIn(['appState', 'authData'], null)
-    .setIn(['appState', 'authError'], payload);
+    .setIn(['appState', 'authError'], newPayload);
 };
