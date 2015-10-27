@@ -135,8 +135,11 @@ export const authenticationFailed = (reduction, payload) => {
   const firebaseId = localStorage.getItem('task-board:firebaseId');
   const newPayload = Object.assign({}, payload);
 
-  if (firebaseId && !localStorage.getItem(`firebase:session::${firebaseId}`)) {
+  if (firebaseId && !localStorage.getItem(`firebase:session::${firebaseId}`)
+    && payload.code !== 'AUTHENTICATION_DISABLED') {
     newPayload.message = 'Session expired';
+  } else {
+    newPayload.message = payload.message;
   }
 
   localStorage.removeItem('task-board:token');
