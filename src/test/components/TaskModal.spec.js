@@ -1,7 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import TaskModal from '../../components/TaskModal';
-import React from 'react/addons';
-
-const { TestUtils } = React.addons;
+import TestUtils from 'react-addons-test-utils';
 
 function setup(propsOverrides) {
   const props = Object.assign({
@@ -49,8 +49,8 @@ describe('TaskModal component', () => {
     const output = TestUtils.renderIntoDocument(<TaskModal
       onSubmit={spy}
       task={task}/>);
-    const node = React.findDOMNode(output.refs.submit);
-    const input = React.findDOMNode(output.refs.dialogContent);
+    const node = ReactDOM.findDOMNode(output.refs.submit);
+    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
     input.value = 'Updated task text';
     TestUtils.Simulate.change(input);
     TestUtils.Simulate.click(node);
@@ -68,7 +68,7 @@ describe('TaskModal component', () => {
     const output = TestUtils.renderIntoDocument(<TaskModal
       task={{id: 42}}
       onClose={spy}/>);
-    const node = React.findDOMNode(output.refs.dismiss);
+    const node = ReactDOM.findDOMNode(output.refs.dismiss);
 
     TestUtils.Simulate.click(node);
     expect(spyContent.called).to.be.true;
@@ -78,7 +78,7 @@ describe('TaskModal component', () => {
   it('displays error when saving empty task', () => {
     const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
 
-    const submitButton = React.findDOMNode(output.refs.submit);
+    const submitButton = ReactDOM.findDOMNode(output.refs.submit);
     TestUtils.Simulate.click(submitButton);
     expect(output.state.errorText).to.equal('Cant\'t save empty task');
   });
@@ -116,8 +116,8 @@ describe('TaskModal component', () => {
       onSubmit={spy}
       task={{id: 42}}/>);
 
-    const submit = React.findDOMNode(output.refs.submit);
-    const input = React.findDOMNode(output.refs.dialogContent);
+    const submit = ReactDOM.findDOMNode(output.refs.submit);
+    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
     input.value = '   ';
     TestUtils.Simulate.change(input);
     TestUtils.Simulate.click(submit);
@@ -138,8 +138,8 @@ describe('TaskModal component', () => {
       onSubmit={spy}
       task={{id: 42}}/>);
 
-    const submit = React.findDOMNode(output.refs.submit);
-    const input = React.findDOMNode(output.refs.dialogContent);
+    const submit = ReactDOM.findDOMNode(output.refs.submit);
+    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
     input.value = ' x b c  ';
     TestUtils.Simulate.change(input);
     TestUtils.Simulate.click(submit);
