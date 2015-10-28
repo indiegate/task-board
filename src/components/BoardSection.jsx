@@ -122,7 +122,7 @@ class BoardSection extends Component {
     return connectDropTarget(
       <div className="column">
         <div className={sectionClass}>
-          <h4 className="ui header">
+          <h4 className="ui block header">
             <div className="content">
               {name}
             </div>

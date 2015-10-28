@@ -16,7 +16,7 @@ body {
 }
 
 .column {
-    padding: 0.5em!important;
+    padding: 0.3rem!important;
 }
 
 .ui.selection.list>.item {
@@ -42,6 +42,12 @@ h5.ui.header {
 .ui.header .button {
   display: none;
   padding: 0.4em;
+}
+
+.ui.block.header {
+  padding: .4rem .6rem;
+  box-shadow: none;
+  border: none;
 }
 
 .board-section:hover .ui.header .button {
