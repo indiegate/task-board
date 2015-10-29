@@ -48,8 +48,15 @@ class BoardTask extends PureComponent {
   }
 
   _renderTags(tags) {
+    const colors = {
+      'dev': 'green',
+      'qa': 'yellow',
+      'bug': 'red',
+      'doc': 'doc',
+    };
     return tags.map((tag, idx) => {
-      const classes = 'ui mini horizontal label ' + tag;
+      const color = colors[tag];
+      const classes = 'ui mini right floated basic horizontal ' + ((color) ? color : '') + ' label';
       return <div className={classes} key={idx}>{tag}</div>;
     });
   }
@@ -66,6 +73,18 @@ class BoardTask extends PureComponent {
   }
 
   render() {
+    const colors = [
+      'orange',
+      'green',
+      'yellow',
+      'olive',
+      'teal',
+      'violet',
+      'pink',
+      'brown',
+      'purple',
+      'red',
+    ];
     const { isDragging, connectDragSource, content} = this.props;
 
     const words = this._splitToWords(content);
@@ -78,13 +97,16 @@ class BoardTask extends PureComponent {
         sentence += word + ' ';
       }
     });
+    const classes = 'ui ' + ((this.props.storyGroup) ? colors[this.props.storyGroup] : '') + ' empty circular label';
     return (
+
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
             style={{ opacity: isDragging ? 0.5 : 1 }}>
-          {this._renderTags(tags)}
+          <a className={classes}> </a>
           {sentence}
+          {this._renderTags(tags)}
         </div>
       )
     );
@@ -97,6 +119,8 @@ BoardTask.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   dispatcher: React.PropTypes.object.isRequired,
   id: React.PropTypes.string.isRequired,
+  story: React.PropTypes.string,
+  storyGroup: React.PropTypes.number,
 };
 
 export default DragSource('task', taskSource, collect)(BoardTask);

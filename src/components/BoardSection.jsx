@@ -53,17 +53,8 @@ class BoardSection extends Component {
     if (!this.props.tasks) {
       return <p>No tasks</p>;
     }
-    const storyRegExp = new RegExp('\\[.*]');
     const storiesAndTasks = [];
-    this.props.tasks
-      .map((task) => {
-        const taskWithStory = storyRegExp.exec(task.content);
-        if (taskWithStory) {
-          task.story = taskWithStory[0];
-        }
-        return task;
-      })
-      .sort((taskA, taskB) => {
+    this.props.tasks.sort((taskA, taskB) => {
         if (!taskA.story) {return -1; }
         if (!taskB.story) {return 1; }
         if (taskA.story < taskB.story) {return -1; }
