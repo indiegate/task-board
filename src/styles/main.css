@@ -16,11 +16,11 @@ body {
 }
 
 .column {
-    padding: 0.3rem!important;
+  padding: 0.3rem!important;
 }
 
 .ui.selection.list>.item {
-  padding: .2em;
+  padding: .3rem;
   color: rgba(0,0,0,.7);
 }
 
@@ -61,8 +61,6 @@ h5.ui.header {
 .board-section button {
   float: right;
 }
-
-
 
 .board-section {
   border: 1px solid rgba(0, 0, 0, 0.0);
