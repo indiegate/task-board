@@ -30,7 +30,7 @@ export default class VerticalBox extends Component {
   _renderBoxHeader() {
     if (this.props.name) {
       return (<div className="column">
-        <div className="ui small header">{this.props.name}</div>
+        <div className="ui small block header">{this.props.name}</div>
       </div>);
     }
   }

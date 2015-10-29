@@ -16,7 +16,7 @@ body {
 }
 
 .column {
-    padding: 0.5em!important;
+    padding: 0.3rem!important;
 }
 
 .ui.selection.list>.item {
@@ -25,9 +25,9 @@ body {
 }
 
 h5.ui.header {
-  margin-top: 0.5em;
-  margin-bottom: 0;
-  text-align: right;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  padding: 0.2rem;
 }
 
 .ui.header {
@@ -44,6 +44,12 @@ h5.ui.header {
   padding: 0.4em;
 }
 
+.ui.block.header {
+  padding: .4rem .6rem;
+  box-shadow: none;
+  border: none;
+}
+
 .board-section:hover .ui.header .button {
   display: block;
 }
@@ -56,26 +62,7 @@ h5.ui.header {
   float: right;
 }
 
-.label.dev {
-  background-color: #21ba45!important;
-  border-color: #21ba45!important;
-  color: #fff!important;
-}
-.label.qa {
-  background-color: #fbbd08!important;
-  border-color: #fbbd08!important;
-  color: #fff!important;
-}
-.label.bug {
-  background-color: #db2828!important;
-  border-color: #db2828!important;
-  color: #fff!important;
-}
-.label.doc {
-  background-color: #2185d0!important;
-  border-color: #2185d0!important;
-  color: #fff!important;
-}
+
 
 .board-section {
   border: 1px solid rgba(0, 0, 0, 0.0);
@@ -97,4 +84,8 @@ h5.ui.header {
 
 .ui.modal .actions > .button {
   margin-left: .25em;
+}
+
+.ui.empty.circular.label {
+  margin-right: 0.25rem;
 }

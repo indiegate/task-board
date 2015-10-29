@@ -48,14 +48,28 @@ export const startSync = (reduction, payload) => {
 export const tasksReceived = (reduction, payload) => {
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const tasksArray = [];
+  const groupsDict = {};
+  let group = 0;
+  const storyRegExp = new RegExp('\\[.*]');
   // put tasks into initialLayout
   Object.keys(payload).forEach(key => {
     const task = payload[key];
     task.id = key;
+    const story = storyRegExp.exec(task.content);
+    if (story) {
+      task.story = story[0];
+      const num = groupsDict[task.story];
+      if (num) {
+        task.storyGroup = num;
+      } else {
+        group++;
+        groupsDict[task.story] = group;
+        task.storyGroup = group;
+      }
+    }
     updateLayout(layout, task);
     tasksArray.push(task);
   });
-
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout))
     .setIn(['appState', 'tasks'], tasksArray);
