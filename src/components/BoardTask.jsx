@@ -55,7 +55,7 @@ class BoardTask extends PureComponent {
       'doc': 'doc',
     };
     return tags.map((tag, idx) => {
-      const color = colors[tag];
+      const color = colors[tag.toLowerCase()];
       const classes = 'ui mini right floated basic horizontal ' + ((color) ? color : '') + ' label';
       return <div className={classes} key={idx}>{tag}</div>;
     });
@@ -74,17 +74,18 @@ class BoardTask extends PureComponent {
 
   render() {
     const colors = [
-      'orange',
-      'green',
-      'yellow',
-      'olive',
-      'teal',
-      'violet',
-      'pink',
-      'brown',
-      'purple',
-      'red',
+      [219, 40, 40],// red
+      [242, 113, 28], // orange
+      [251, 189, 8], // yellow
+      [181, 204, 24], // olive
+      [33, 186, 69], // green
+      [0, 181, 173], // teal
+      [33, 133, 208], // blue
+      [163, 51, 200], // purple
+      [224, 57, 151], // pink
+      [165, 103, 63], // brown
     ];
+
     const { isDragging, connectDragSource, content} = this.props;
 
     const words = this._splitToWords(content);
@@ -97,14 +98,16 @@ class BoardTask extends PureComponent {
         sentence += word + ' ';
       }
     });
-    const classes = 'ui ' + ((this.props.storyGroup) ? colors[this.props.storyGroup] : '') + ' empty circular label';
+    const color = ((this.props.storyGroup) ? colors[this.props.storyGroup] : '');
+    const classes = 'ui empty circular label';
+    const rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+    const rgba = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',0.04)';
     return (
-
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
-            style={{ opacity: isDragging ? 0.5 : 1 }}>
-          <a className={classes}> </a>
+            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: rgba }}>
+          <a className={classes} style={{backgroundColor: rgb}}> </a>
           {sentence}
           {this._renderTags(tags)}
         </div>
