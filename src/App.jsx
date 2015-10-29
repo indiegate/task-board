@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dispatcher } from 'flux';
 import { Record as record, fromJS, List } from 'immutable';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
 import masterReducer from './reducers/masterReducer';
