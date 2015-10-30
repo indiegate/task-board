@@ -20,6 +20,7 @@ export const FirebaseService = {
       .set({
         sectionId: task.sectionId,
         content: task.content,
+        createdTs: Date.now(),
       }, (err) => {
         if (!err) {
           dispatcher.dispatch({
