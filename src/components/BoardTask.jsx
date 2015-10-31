@@ -68,6 +68,7 @@ class BoardTask extends PureComponent {
         id: this.props.id,
         content: this.props.content,
         sectionId: this.props.sectionId,
+        story: this.props.story,
       },
     });
   }

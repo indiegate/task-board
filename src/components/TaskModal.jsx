@@ -6,6 +6,7 @@ class TaskModal extends Component {
     super(props);
     this.state = {
       dialogContent: this.props.task.content || '',
+      storyContent: this.props.task.story || '',
       errorText: '',
     };
   }
@@ -50,8 +51,16 @@ class TaskModal extends Component {
     });
   }
 
+  _handleStoryInputChange(event) {
+    this.setState({
+      errorText: '',
+      storyContent: event.target.value,
+    });
+  }
+
   _submitHandler() {
     const trimmedContent = this.state.dialogContent.trim();
+    const trimmedStoryContent = this.state.storyContent.trim();
 
     if (!trimmedContent) {
       this.setState({
@@ -59,9 +68,11 @@ class TaskModal extends Component {
       });
       return;
     }
-    const res = this.props.task;
-    res.content = trimmedContent;
-    this.props.onSubmit(res);
+
+    this.props.onSubmit(Object.assign({}, this.props.task, {
+      content: trimmedContent,
+      story: trimmedStoryContent,
+    }));
   }
 
   _dismissHandler() {
@@ -87,13 +98,6 @@ class TaskModal extends Component {
     );
   }
 
-  _handleStoryInputChange(event) {
-    this.setState({
-      errorText: '',
-      storyContent: event.target.value,
-    });
-  }
-
   render() {
     const { task } = this.props;
     const dialogName = task && task.id ? 'Edit task' : 'Add new task';
@@ -110,7 +114,7 @@ class TaskModal extends Component {
         </div>
         <div className="ui form task-form">
           <div className="fields">
-            <div className="fourteen wide field">
+            <div className="thirteen wide field">
               <label>Task</label>
               <input type="text"
                      ref="dialogContent"
@@ -124,7 +128,7 @@ class TaskModal extends Component {
                      onChange={this._handleTaskInputChange.bind(this)}
                      value={this.state.dialogContent}/>
             </div>
-            <div className="two wide field">
+            <div className="three wide field">
               <label>Story</label>
               <input type="text"
                      ref="storyContent"

@@ -44,7 +44,7 @@ describe('TaskModal component', () => {
     expect(rendered.state.errorText).to.equal('');
   });
 
-  it('calls `onSubmit` by clicking OK', () => {
+  it.only('calls `onSubmit` by clicking OK', () => {
     const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
     const { rendered } = setup({
@@ -55,14 +55,17 @@ describe('TaskModal component', () => {
       },
     });
     const taskInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
+    const storyInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[1];
     const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[2];
 
     taskInput.value = 'Updated task text';
     TestUtils.Simulate.change(taskInput);
+    storyInput.value = 'STY-123';
+    TestUtils.Simulate.change(storyInput);
     TestUtils.Simulate.click(submitButton);
 
     expect(spyContent.called).to.be.true;
-    expect(spyContent.param).to.eql({id: 10, content: 'Updated task text'});
+    expect(spyContent.param).to.eql({id: 10, story: 'STY-123', content: 'Updated task text'});
   });
 
   it('calls `onClose` by clicking Cancel button', () => {

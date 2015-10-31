@@ -20,6 +20,7 @@ export const FirebaseService = {
       .set({
         sectionId: task.sectionId,
         content: task.content,
+        story: task.story,
         createdTs: Date.now(),
       }, (err) => {
         if (!err) {
