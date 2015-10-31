@@ -89,6 +89,12 @@ h5.ui.header {
   margin-right: 0.25rem;
 }
 
+/* TOP MENU */
+.ui.secondary.menu {
+  background: #f5f5f5;
+  padding: 0.3rem;
+  margin-bottom: 0rem;
+}
 .ui.modal > .ui.form {
   padding: 0 15px 20px;
 }
