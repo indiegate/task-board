@@ -10,10 +10,14 @@ function setup(propsOverrides) {
     onClose() {},
   }, propsOverrides);
 
+  const rendered = TestUtils.renderIntoDocument(<TaskModal {...props}/>);
   const renderer = TestUtils.createRenderer();
   renderer.render(<TaskModal {...props} />);
+
   const output = renderer.getRenderOutput();
+
   return {
+    rendered,
     output,
   };
 }
@@ -25,37 +29,40 @@ describe('TaskModal component', () => {
     expect(output.props.className).to.equal('ui modal');
   });
 
-  it('has default initial state', () => {
-    const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
-    expect(output.state.dialogContent).to.equal('');
-    expect(output.state.errorText).to.equal('');
+  it('has initial state', () => {
+    const { rendered } = setup({task: {id: 42}});
+
+    expect(rendered.props.task.id).to.equal(42);
+    expect(rendered.state.dialogContent).to.equal('');
+    expect(rendered.state.errorText).to.equal('');
   });
 
-  it('updates state based on props', () => {
-    const task = {id: 10, content: 'Some task text'};
-    const output = TestUtils.renderIntoDocument(<TaskModal task={task}/>);
-    expect(output.state.dialogContent).to.equal(task.content);
-    expect(output.state.errorText).to.equal('');
+  it('set state based on `task` prop', () => {
+    const content = 'Some task text';
+    const { rendered } = setup({task: {id: 10, content}});
+
+    expect(rendered.state.dialogContent).to.equal(content);
+    expect(rendered.state.errorText).to.equal('');
   });
 
-  it('calls `submitHandler` on click to okay', () => {
+  it.only('calls `submitHandler` on click to okay', () => {
     const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
-    const spy = (response) => {
-      spyContent.called = true;
-      spyContent.param = response;
-    };
+    const { rendered } = setup({
+      task,
+      onSubmit(response) {
+        spyContent.called = true;
+        spyContent.param = response;
+      },
+    });
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input');
 
-    const output = TestUtils.renderIntoDocument(<TaskModal
-      onSubmit={spy}
-      task={task}/>);
-    const node = ReactDOM.findDOMNode(output.refs.submit);
-    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
-    input.value = 'Updated task text';
-    TestUtils.Simulate.change(input);
-    TestUtils.Simulate.click(node);
+    inputs[0].value = 'Updated task text';
+    TestUtils.Simulate.change(inputs[0]);
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(rendered.refs.submit));
+
     expect(spyContent.called).to.be.true;
-    expect(spyContent.param).to.deep.equal({id: 10, content: 'Updated task text'});
+    expect(spyContent.param).to.eql({id: 10, content: 'Updated task text'});
   });
 
   it('calls `dismissHandler` on click to cancel', () => {

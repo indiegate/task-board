@@ -5,21 +5,12 @@ class TaskModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dialogContent: '',
+      dialogContent: this.props.task.content || '',
       errorText: '',
     };
   }
 
   componentWillMount() {
-    const { task } = this.props;
-
-    if (task && task.content) {
-      const dialogContent = this.props.task.content ? this.props.task.content : '';
-      this.setState({
-        dialogContent,
-      });
-    }
-
     this._activateKeyListeners();
   }
 
@@ -52,7 +43,7 @@ class TaskModal extends Component {
     }
   }
 
-  _handleInputChange(event) {
+  _handleTaskInputChange(event) {
     this.setState({
       errorText: '',
       dialogContent: event.target.value,
@@ -96,15 +87,20 @@ class TaskModal extends Component {
     );
   }
 
+  _handleStoryInputChange(event) {
+    this.setState({
+      errorText: '',
+      storyContent: event.target.value,
+    });
+  }
+
   render() {
-    const { dialogContent } = this.state;
     const { task } = this.props;
-    const displayModal = task ? 'block' : '';
     const dialogName = task && task.id ? 'Edit task' : 'Add new task';
     const displayError = this.state.errorText ? 'block' : 'none';
 
     return (
-      <div className="ui modal" style={{display: displayModal}}>
+      <div className="ui modal" style={{display: 'block'}}>
         <div className="ui clearing segment">
           <h3 className="ui left floated header">
             <div className="content">
@@ -112,31 +108,39 @@ class TaskModal extends Component {
             </div>
           </h3>
         </div>
-        <div className="ui fluid input">
-          <input type="text"
-                 ref="dialogContent"
-                 autoFocus
-                 onFocus={(event) => {
-                   event.persist();
-                   const node = event.target;
-                   node.selectionStart = node.value.length;
-                   node.selectionEnd = node.value.length;
-                 }}
-                 onChange={this._handleInputChange.bind(this)}
-                 value={dialogContent}/>
+        <div className="ui form task-form">
+          <div className="fields">
+            <div className="fourteen wide field">
+              <label>Task</label>
+              <input type="text"
+                     ref="dialogContent"
+                     autoFocus
+                     onFocus={(event) => {
+                       event.persist();
+                       const node = event.target;
+                       node.selectionStart = node.value.length;
+                       node.selectionEnd = node.value.length;
+                     }}
+                     onChange={this._handleTaskInputChange.bind(this)}
+                     value={this.state.dialogContent}/>
+            </div>
+            <div className="two wide field">
+              <label>Story</label>
+              <input type="text"
+                     ref="storyContent"
+                     onChange={this._handleStoryInputChange.bind(this)}
+                     value={this.state.storyContent}/>
+            </div>
+          </div>
         </div>
         <div className="actions">
           {this._renderArchiveButton()}
           <div className="ui button"
                ref="dismiss"
-               onClick={this._dismissHandler.bind(this)}
-               >Cancel
-          </div>
+               onClick={this._dismissHandler.bind(this)}>Cancel</div>
           <div className="ui button"
                ref="submit"
-               onClick={this._submitHandler.bind(this)}>
-            OK
-          </div>
+               onClick={this._submitHandler.bind(this)}>OK</div>
         </div>
         <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
       </div>
