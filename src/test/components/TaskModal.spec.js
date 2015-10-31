@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TaskModal from '../../components/TaskModal';
 import TestUtils from 'react-addons-test-utils';
 
@@ -45,7 +44,7 @@ describe('TaskModal component', () => {
     expect(rendered.state.errorText).to.equal('');
   });
 
-  it.only('calls `submitHandler` on click to okay', () => {
+  it('calls `onSubmit` by clicking OK', () => {
     const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
     const { rendered } = setup({
@@ -55,39 +54,43 @@ describe('TaskModal component', () => {
         spyContent.param = response;
       },
     });
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input');
+    const taskInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
+    const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[2];
 
-    inputs[0].value = 'Updated task text';
-    TestUtils.Simulate.change(inputs[0]);
-    TestUtils.Simulate.click(ReactDOM.findDOMNode(rendered.refs.submit));
+    taskInput.value = 'Updated task text';
+    TestUtils.Simulate.change(taskInput);
+    TestUtils.Simulate.click(submitButton);
 
     expect(spyContent.called).to.be.true;
     expect(spyContent.param).to.eql({id: 10, content: 'Updated task text'});
   });
 
-  it('calls `dismissHandler` on click to cancel', () => {
+  it('calls `onClose` by clicking Cancel button', () => {
+    const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
-    const spy = (response) => {
-      spyContent.called = true;
-      spyContent.param = response;
-    };
+    const { rendered } = setup({
+      task,
+      onClose(response) {
+        spyContent.called = true;
+        spyContent.param = response;
+      },
+    });
 
-    const output = TestUtils.renderIntoDocument(<TaskModal
-      task={{id: 42}}
-      onClose={spy}/>);
-    const node = ReactDOM.findDOMNode(output.refs.dismiss);
+    const closeButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[1];
 
-    TestUtils.Simulate.click(node);
+    TestUtils.Simulate.click(closeButton);
+
     expect(spyContent.called).to.be.true;
     expect(spyContent.param).to.be.undefined;
   });
 
-  it('displays error when saving empty task', () => {
-    const output = TestUtils.renderIntoDocument(<TaskModal task={{id: 42}}/>);
+  it('displays error when try save empty task', () => {
+    const { rendered } = setup({task: {sectionId: 10}});
 
-    const submitButton = ReactDOM.findDOMNode(output.refs.submit);
+    const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[1];
+
     TestUtils.Simulate.click(submitButton);
-    expect(output.state.errorText).to.equal('Cant\'t save empty task');
+    expect(rendered.state.errorText).to.equal('Cant\'t save empty task');
   });
 
   it('contains action bar with 3 buttons', () => {
@@ -105,53 +108,50 @@ describe('TaskModal component', () => {
     expect(removeButton.props.children[1]).to.equal('Remove');
   });
 
-  it('doesn\'t display `remove task` btn on new task', () => {
-    const { output } = setup({task: {sectionId: 123}});
-    expect(output.props.children[2].props.children[0]).to.be.null;
-  });
-
   it('disallows to add empty task', () => {
-    let called = false;
-    let calledParam = null;
+    const task = {sectionId: 10};
+    const spyContent = {called: false, param: null};
+    const { rendered } = setup({
+      task,
+      onSubmit(response) {
+        spyContent.called = true;
+        spyContent.param = response;
+      },
+    });
+    const taskInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
+    const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[1];
 
-    const spy = (param) => {
-      called = true;
-      calledParam = param;
-    };
+    taskInput.value = '         ';
+    TestUtils.Simulate.change(taskInput);
+    TestUtils.Simulate.click(submitButton);
 
-    const output = TestUtils.renderIntoDocument(<TaskModal
-      onSubmit={spy}
-      task={{id: 42}}/>);
-
-    const submit = ReactDOM.findDOMNode(output.refs.submit);
-    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
-    input.value = '   ';
-    TestUtils.Simulate.change(input);
-    TestUtils.Simulate.click(submit);
-    expect(called).to.be.false;
-    expect(calledParam).to.be.null;
+    expect(spyContent.called).to.be.false;
+    expect(spyContent.param).to.be.null;
   });
 
   it('trims text before saving task', () => {
-    let called = false;
-    let calledParam = null;
-
-    const spy = (param) => {
-      called = true;
-      calledParam = param;
-    };
-
-    const output = TestUtils.renderIntoDocument(<TaskModal
-      onSubmit={spy}
-      task={{id: 42}}/>);
-
-    const submit = ReactDOM.findDOMNode(output.refs.submit);
-    const input = ReactDOM.findDOMNode(output.refs.dialogContent);
+    const task = {sectionId: 10};
+    const spyContent = {called: false, param: null};
+    const { rendered } = setup({
+      task,
+      onSubmit(response) {
+        spyContent.called = true;
+        spyContent.param = response;
+      },
+    });
+    const input = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
+    const submit = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[1];
     input.value = ' x b c  ';
+
     TestUtils.Simulate.change(input);
     TestUtils.Simulate.click(submit);
-    expect(called).to.be.true;
-    expect(calledParam.content).to.equal('x b c');
+    expect(spyContent.called).to.be.true;
+    expect(spyContent.param.content).to.equal('x b c');
+  });
+
+  it('should not display `Remove` button when creating new task', () => {
+    const { output } = setup({task: {sectionId: 123}});
+    expect(output.props.children[2].props.children[0]).to.be.null;
   });
 });
 
