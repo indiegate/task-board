@@ -20,6 +20,7 @@ export const FirebaseService = {
       .set({
         sectionId: task.sectionId,
         content: task.content,
+        story: task.story,
         createdTs: Date.now(),
       }, (err) => {
         if (!err) {
@@ -31,12 +32,13 @@ export const FirebaseService = {
       });
   },
 
-  updateTask(dispatcher, {id, sectionId, content}) {
+  updateTask(dispatcher, {id, sectionId, content, story}) {
     this._ref
       .child(`tasks/${id}`)
       .set({
         sectionId,
         content,
+        story,
       }, (err) => {
         if (!err) {
           dispatcher.dispatch({

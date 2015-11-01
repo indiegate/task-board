@@ -39,14 +39,6 @@ class BoardTask extends PureComponent {
     return content.split(' ');
   }
 
-  _isWordStory(word) {
-    return (word.startsWith('[') && word.endsWith(']'));
-  }
-
-  _isWordTag(word) {
-    return word.startsWith('#');
-  }
-
   _renderTags(tags) {
     const colors = {
       'dev': 'green',
@@ -68,11 +60,12 @@ class BoardTask extends PureComponent {
         id: this.props.id,
         content: this.props.content,
         sectionId: this.props.sectionId,
+        story: this.props.story,
       },
     });
   }
 
-  render() {
+  _getColorForStory() {
     const colors = [
       [219, 40, 40],// red
       [242, 113, 28], // orange
@@ -86,28 +79,43 @@ class BoardTask extends PureComponent {
       [165, 103, 63], // brown
     ];
 
+    const { storyGroup } = this.props;
+    return `${colors[storyGroup][0]}, ${colors[storyGroup][1]}, ${colors[storyGroup][2]}`; // the inner of RGB
+  }
+
+  _getBackgroundColorFor(type) {
+    const DEFAULT_ITEM_BACKGROUND = '#FFF';
+    const DEFAULT_DOT_BACKGROUND = '#e8e8e8';
+    const { storyGroup } = this.props;
+    if (type === 'dot') {
+      return storyGroup ? `rgb(${this._getColorForStory()})` : DEFAULT_DOT_BACKGROUND;
+    }
+
+    if (type === 'item') {
+      return storyGroup ? `rgba(${this._getColorForStory()}, 0.04)` : DEFAULT_ITEM_BACKGROUND;
+    }
+  }
+
+  render() {
     const { isDragging, connectDragSource, content} = this.props;
 
     const words = this._splitToWords(content);
-    let sentence = '';
-    const tags = [];
-    words.map((word) => {
-      if (this._isWordTag(word)) {
-        tags.push(word.substring(1, word.length));
-      } else if (!this._isWordStory(word)) {
-        sentence += word + ' ';
-      }
-    });
-    const color = ((this.props.storyGroup) ? colors[this.props.storyGroup] : '');
+    const tags = words
+      .filter(word => word.startsWith('#'))
+      .map(word => word.substring(1, word.length));
+
+    const sentence = words
+      .filter(word => !word.startsWith('#'))
+      .join(' ');
+
     const classes = 'ui empty circular label';
-    const rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
-    const rgba = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',0.04)';
+
     return (
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
-            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: rgba }}>
-          <a className={classes} style={{backgroundColor: rgb}}> </a>
+            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: this._getBackgroundColorFor('item')}}>
+          <a className={classes} style={{backgroundColor: this._getBackgroundColorFor('dot')}}> </a>
           {sentence}
           {this._renderTags(tags)}
         </div>

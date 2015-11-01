@@ -50,14 +50,11 @@ export const tasksReceived = (reduction, payload) => {
   const tasksArray = [];
   const groupsDict = {};
   let group = 0;
-  const storyRegExp = new RegExp('\\[.*]');
   // put tasks into initialLayout
   Object.keys(payload).forEach(key => {
     const task = payload[key];
     task.id = key;
-    const story = storyRegExp.exec(task.content);
-    if (story) {
-      task.story = story[0];
+    if (task.story) {
       const num = groupsDict[task.story];
       if (num) {
         task.storyGroup = num;

@@ -87,3 +87,7 @@ h5.ui.header {
 .ui.empty.circular.label {
   margin-right: 0.25rem;
 }
+
+.ui.modal > .ui.form {
+  padding: 0 15px 20px;
+}
