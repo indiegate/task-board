@@ -71,7 +71,7 @@ class TaskModal extends Component {
 
     this.props.onSubmit(Object.assign({}, this.props.task, {
       content: trimmedContent,
-      story: trimmedStoryContent,
+      story: trimmedStoryContent !== '' ? trimmedStoryContent : null,
     }));
   }
 

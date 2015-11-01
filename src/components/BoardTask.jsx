@@ -65,7 +65,7 @@ class BoardTask extends PureComponent {
     });
   }
 
-  render() {
+  _getColorForStory() {
     const colors = [
       [219, 40, 40],// red
       [242, 113, 28], // orange
@@ -79,6 +79,24 @@ class BoardTask extends PureComponent {
       [165, 103, 63], // brown
     ];
 
+    const { storyGroup } = this.props;
+    return `${colors[storyGroup][0]}, ${colors[storyGroup][1]}, ${colors[storyGroup][2]}`; // the inner of RGB
+  }
+
+  _getBackgroundColorFor(type) {
+    const DEFAULT_ITEM_BACKGROUND = '#FFF';
+    const DEFAULT_DOT_BACKGROUND = '#e8e8e8';
+    const { storyGroup } = this.props;
+    if (type === 'dot') {
+      return storyGroup ? `rgb(${this._getColorForStory()})` : DEFAULT_DOT_BACKGROUND;
+    }
+
+    if (type === 'item') {
+      return storyGroup ? `rgba(${this._getColorForStory()}, 0.04)` : DEFAULT_ITEM_BACKGROUND;
+    }
+  }
+
+  render() {
     const { isDragging, connectDragSource, content} = this.props;
 
     const words = this._splitToWords(content);
@@ -90,16 +108,14 @@ class BoardTask extends PureComponent {
       .filter(word => !word.startsWith('#'))
       .join(' ');
 
-    const color = ((this.props.storyGroup) ? colors[this.props.storyGroup] : '');
     const classes = 'ui empty circular label';
-    const rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
-    const rgba = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',0.04)';
+
     return (
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
-            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: rgba }}>
-          <a className={classes} style={{backgroundColor: rgb}}> </a>
+            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: this._getBackgroundColorFor('item')}}>
+          <a className={classes} style={{backgroundColor: this._getBackgroundColorFor('dot')}}> </a>
           {sentence}
           {this._renderTags(tags)}
         </div>
