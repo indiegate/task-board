@@ -86,6 +86,10 @@ class BoardTask extends PureComponent {
       .filter(word => word.startsWith('#'))
       .map(word => word.substring(1, word.length));
 
+    const sentence = words
+      .filter(word => !word.startsWith('#'))
+      .join(' ');
+
     const color = ((this.props.storyGroup) ? colors[this.props.storyGroup] : '');
     const classes = 'ui empty circular label';
     const rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
@@ -96,6 +100,7 @@ class BoardTask extends PureComponent {
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
             style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: rgba }}>
           <a className={classes} style={{backgroundColor: rgb}}> </a>
+          {sentence}
           {this._renderTags(tags)}
         </div>
       )
