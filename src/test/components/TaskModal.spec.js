@@ -44,7 +44,7 @@ describe('TaskModal component', () => {
     expect(rendered.state.errorText).to.equal('');
   });
 
-  it.only('calls `onSubmit` by clicking OK', () => {
+  it('calls `onSubmit` by clicking OK', () => {
     const task = {id: 10, content: 'Some task text'};
     const spyContent = {called: false, param: null};
     const { rendered } = setup({

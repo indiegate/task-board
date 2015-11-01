@@ -39,14 +39,6 @@ class BoardTask extends PureComponent {
     return content.split(' ');
   }
 
-  _isWordStory(word) {
-    return (word.startsWith('[') && word.endsWith(']'));
-  }
-
-  _isWordTag(word) {
-    return word.startsWith('#');
-  }
-
   _renderTags(tags) {
     const colors = {
       'dev': 'green',
@@ -90,15 +82,10 @@ class BoardTask extends PureComponent {
     const { isDragging, connectDragSource, content} = this.props;
 
     const words = this._splitToWords(content);
-    let sentence = '';
-    const tags = [];
-    words.map((word) => {
-      if (this._isWordTag(word)) {
-        tags.push(word.substring(1, word.length));
-      } else if (!this._isWordStory(word)) {
-        sentence += word + ' ';
-      }
-    });
+    const tags = words
+      .filter(word => word.startsWith('#'))
+      .map(word => word.substring(1, word.length));
+
     const color = ((this.props.storyGroup) ? colors[this.props.storyGroup] : '');
     const classes = 'ui empty circular label';
     const rgb = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
@@ -109,7 +96,6 @@ class BoardTask extends PureComponent {
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
             style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: rgba }}>
           <a className={classes} style={{backgroundColor: rgb}}> </a>
-          {sentence}
           {this._renderTags(tags)}
         </div>
       )
