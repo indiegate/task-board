@@ -44,7 +44,7 @@ class BoardTask extends PureComponent {
       'dev': 'green',
       'qa': 'yellow',
       'bug': 'red',
-      'doc': 'doc',
+      'doc': 'blue',
     };
     return tags.map((tag, idx) => {
       const color = colors[tag.toLowerCase()];
