@@ -32,14 +32,17 @@ export const FirebaseService = {
       });
   },
 
-  updateTask(dispatcher, {id, sectionId, content, story = ''}) {
+  updateTask(dispatcher, {id, sectionId, content, story}) {
+    const task = {
+      sectionId,
+      content,
+    };
+    if (!story) task.story = null;
     this._ref
       .child(`tasks/${id}`)
-      .set({
-        sectionId,
-        content,
-        story,
-      }, (err) => {
+      .set(
+        task,
+        (err) => {
         if (!err) {
           dispatcher.dispatch({
             type: ActionTypes.FIREBASE_TASK_UPDATED_OK,
