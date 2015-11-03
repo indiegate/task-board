@@ -8,6 +8,7 @@ function setup(overrideProps) {
 
   const props = Object.assign({
     id: '42',
+    sectionId: '101',
     content: '',
     dispatcher: {},
     isDragging: false,
@@ -38,10 +39,6 @@ describe('BoardTask', () => {
     // const tags= component.props.children[2];
   });
 
-  it('should render tags extracted from content');
-  it('should color `dot` and `content` based on storyGroup prop');
-  it('should have style when isDragging:true');
-  it('should not style when isDragging:false');
   it('should handle doubleClick - fire action', () => {
     const spyContent = {called: false, param: null};
 
@@ -74,4 +71,46 @@ describe('BoardTask', () => {
       },
     });
   });
+
+  it('should render custom tags extracted from content', () => {
+    const { component } = setup({
+      id: '456',
+      content: '#tomato #tuna #cheese',
+      sectionId: '101',
+      story: 'TEST',
+    });
+
+    // TODO remove double space from BoardTask.renderTags implementation !
+    const className = 'ui mini right floated basic horizontal  label';
+    const tags = component.props.children[2];
+
+    expect(tags[0]).to.eql(<div key={0} className={className}>tomato</div>);
+    expect(tags[1]).to.eql(<div key={1} className={className}>tuna</div>);
+    expect(tags[2]).to.eql(<div key={2} className={className}>cheese</div>);
+  });
+
+  it('should render default tags extracted from content', () => {
+    const { component } = setup({
+      id: '456',
+      content: '#dev #qa #bug #doc',
+      sectionId: '101',
+      story: 'TEST',
+    });
+
+    const tags = component.props.children[2];
+
+    expect(tags[0]).to.eql(
+      <div key={0} className={'ui mini right floated basic horizontal green label'}>dev</div>);
+    expect(tags[1]).to.eql(
+      <div key={1} className={'ui mini right floated basic horizontal yellow label'}>qa</div>);
+    expect(tags[2]).to.eql(
+      <div key={2} className={'ui mini right floated basic horizontal red label'}>bug</div>);
+    expect(tags[3]).to.eql(
+      <div key={3} className={'ui mini right floated basic horizontal doc label'}>doc</div>);
+  });
+
+  it('should color `dot` and `content` based on storyGroup prop');
+  it('should have style when isDragging:true');
+  it('should not style when isDragging:false');
+  it('should be draggable to another destination');
 });
