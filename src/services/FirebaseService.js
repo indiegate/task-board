@@ -32,7 +32,7 @@ export const FirebaseService = {
       });
   },
 
-  updateTask(dispatcher, {id, sectionId, content, story}) {
+  updateTask(dispatcher, {id, sectionId, content, story = null}) {
     this._ref
       .child(`tasks/${id}`)
       .set({

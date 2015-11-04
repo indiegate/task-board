@@ -11,13 +11,14 @@ const taskSource = {
   },
   endDrag(props, monitor, component) {
     const { sectionId } = monitor.getDropResult();
-    const { dispatcher, content, id} = component.props;
+    const { dispatcher, content, id, story} = component.props;
     dispatcher.dispatch({
       type: ActionTypes.DRAGGED_TASK_TO_SECTION,
       payload: {
         id,
         content,
         sectionId,
+        story,
       },
     });
   },
