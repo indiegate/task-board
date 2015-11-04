@@ -1,6 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import BoardTask from '../../components/BoardTask';
+import intToRGB from '../../utils/colors-helper';
 
 function setup(overrideProps) {
   const renderer = TestUtils.createRenderer();
@@ -23,6 +24,8 @@ function setup(overrideProps) {
   const rendered = TestUtils.renderIntoDocument(<OriginalBoardTask {...props}/>);
 
   return {
+    defaultDotBackground: '#e8e8e8',
+    defaultContentBackground: '#FFF',
     component,
     rendered,
     props,
@@ -33,10 +36,6 @@ describe('BoardTask', () => {
   it('should render some markup', () => {
     const { component } = setup();
     expect(component.type).to.equal('div');
-
-    // const dot = component.props.children[0];
-    // const content = component.props.children[1];
-    // const tags= component.props.children[2];
   });
 
   it('should handle doubleClick - fire action', () => {
@@ -109,7 +108,51 @@ describe('BoardTask', () => {
       <div key={3} className={'ui mini right floated basic horizontal doc label'}>doc</div>);
   });
 
-  it('should color `dot` and `content` based on storyGroup prop');
+  it('should use default style for `dot` and `content` without storyGroup', () => {
+    const {
+      component,
+      defaultDotBackground,
+      defaultContentBackground,
+      } = setup({
+        id: '456',
+        content: 'Buy carrots!',
+        sectionId: '101',
+        story: '',
+      });
+    const dot = component.props.children[0];
+    const contentProps = component.props;
+
+    expect(dot.type).to.equal('a');
+    expect(dot.props.className).to.equal('ui empty circular label');
+
+    expect(dot.props.style.backgroundColor).to.equal(defaultDotBackground);
+
+    expect(contentProps.style.backgroundColor).to.equal(defaultContentBackground);
+  });
+
+  it.only('should use style for `dot` and `content` based on storyGroup', () => {
+    for (let iter = 0; iter < 10; iter++) {
+      const { component, defaultDotBackground, defaultContentBackground } = setup({
+        id: '456',
+        content: 'Buy carrots!',
+        sectionId: '101',
+        story: '',
+        storyGroup: iter,
+      });
+
+      const dot = component.props.children[0];
+      const contentProps = component.props;
+      expect(dot.type).to.equal('a');
+      expect(dot.props.className).to.equal('ui empty circular label');
+
+      expect(dot.props.style.backgroundColor).to.not.equal(defaultDotBackground);
+      expect(dot.props.style.backgroundColor).to.equal(`rgb(${intToRGB(iter)})`);
+
+      expect(contentProps.style.backgroundColor).to.not.equal(defaultContentBackground);
+      expect(contentProps.style.backgroundColor).to.equal(`rgba(${intToRGB(iter, 0.04)})`);
+    }
+  });
+
   it('should have style when isDragging:true');
   it('should not style when isDragging:false');
   it('should be draggable to another destination');
