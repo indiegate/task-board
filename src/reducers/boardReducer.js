@@ -177,3 +177,11 @@ export const authenticationFailed = (reduction, payload) => {
     .setIn(['appState', 'authData'], null)
     .setIn(['appState', 'authError'], newPayload);
 };
+
+export const logout = (reduction) => {
+  localStorage.removeItem('task-board:token');
+  localStorage.removeItem('task-board:firebaseId');
+  return reduction
+    .setIn(['appState', 'isLoggedIn'], false)
+    .setIn(['appState', 'authData'], null);
+};
