@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import PureComponent from './PureComponent';
 import * as ActionTypes from '../constants/actionTypes';
+import intToRGB from '../utils/colors-helper';
 
 const taskSource = {
   beginDrag(props) {
@@ -47,6 +48,7 @@ class BoardTask extends PureComponent {
       'bug': 'red',
       'doc': 'doc',
     };
+
     return tags.map((tag, idx) => {
       const color = colors[tag.toLowerCase()];
       const classes = 'ui mini right floated basic horizontal ' + ((color) ? color : '') + ' label';
@@ -66,34 +68,16 @@ class BoardTask extends PureComponent {
     });
   }
 
-  _getColorForStory() {
-    const colors = [
-      [219, 40, 40],// red
-      [242, 113, 28], // orange
-      [251, 189, 8], // yellow
-      [181, 204, 24], // olive
-      [33, 186, 69], // green
-      [0, 181, 173], // teal
-      [33, 133, 208], // blue
-      [163, 51, 200], // purple
-      [224, 57, 151], // pink
-      [165, 103, 63], // brown
-    ];
-
-    const { storyGroup } = this.props;
-    return `${colors[storyGroup][0]}, ${colors[storyGroup][1]}, ${colors[storyGroup][2]}`; // the inner of RGB
-  }
-
   _getBackgroundColorFor(type) {
     const DEFAULT_ITEM_BACKGROUND = '#FFF';
     const DEFAULT_DOT_BACKGROUND = '#e8e8e8';
     const { storyGroup } = this.props;
     if (type === 'dot') {
-      return storyGroup ? `rgb(${this._getColorForStory()})` : DEFAULT_DOT_BACKGROUND;
+      return typeof storyGroup === 'number' ? `rgb(${intToRGB(storyGroup)})` : DEFAULT_DOT_BACKGROUND;
     }
 
     if (type === 'item') {
-      return storyGroup ? `rgba(${this._getColorForStory()}, 0.04)` : DEFAULT_ITEM_BACKGROUND;
+      return typeof storyGroup === 'number' ? `rgba(${intToRGB(storyGroup, 0.04)})` : DEFAULT_ITEM_BACKGROUND;
     }
   }
 
@@ -109,16 +93,20 @@ class BoardTask extends PureComponent {
       .filter(word => !word.startsWith('#'))
       .join(' ');
 
-    const classes = 'ui empty circular label';
+    const dotStyle = {
+      opacity: isDragging ? 0.5 : 1,
+      backgroundColor: this._getBackgroundColorFor('item'),
+    };
 
     return (
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
-            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: this._getBackgroundColorFor('item')}}>
-          <a className={classes} style={{backgroundColor: this._getBackgroundColorFor('dot')}}> </a>
-          {sentence}
-          {this._renderTags(tags)}
+            style={dotStyle}>
+            <a className={"ui empty circular label"}
+                style={{backgroundColor: this._getBackgroundColorFor('dot')}}/>
+            {sentence}
+            {this._renderTags(tags)}
         </div>
       )
     );
