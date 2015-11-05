@@ -48,6 +48,7 @@ class BoardTask extends PureComponent {
       'bug': 'red',
       'doc': 'doc',
     };
+
     return tags.map((tag, idx) => {
       const color = colors[tag.toLowerCase()];
       const classes = 'ui mini right floated basic horizontal ' + ((color) ? color : '') + ' label';
@@ -92,16 +93,20 @@ class BoardTask extends PureComponent {
       .filter(word => !word.startsWith('#'))
       .join(' ');
 
-    const classes = 'ui empty circular label';
+    const dotStyle = {
+      opacity: isDragging ? 0.5 : 1,
+      backgroundColor: this._getBackgroundColorFor('item'),
+    };
 
     return (
       connectDragSource(
         <div className="item"
             onDoubleClick={this._handleEditTaskDblClick.bind(this)}
-            style={{ opacity: isDragging ? 0.5 : 1, backgroundColor: this._getBackgroundColorFor('item')}}>
-          <a className={classes} style={{backgroundColor: this._getBackgroundColorFor('dot')}}> </a>
-          {sentence}
-          {this._renderTags(tags)}
+            style={dotStyle}>
+            <a className={"ui empty circular label"}
+                style={{backgroundColor: this._getBackgroundColorFor('dot')}}/>
+            {sentence}
+            {this._renderTags(tags)}
         </div>
       )
     );

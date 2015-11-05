@@ -130,7 +130,7 @@ describe('BoardTask', () => {
     expect(contentProps.style.backgroundColor).to.equal(defaultContentBackground);
   });
 
-  it.only('should use style for `dot` and `content` based on storyGroup', () => {
+  it('should use style for `dot` and `content` based on storyGroup', () => {
     for (let iter = 0; iter < 10; iter++) {
       const { component, defaultDotBackground, defaultContentBackground } = setup({
         id: '456',
@@ -153,7 +153,22 @@ describe('BoardTask', () => {
     }
   });
 
-  it('should have style when isDragging:true');
-  it('should not style when isDragging:false');
-  it('should be draggable to another destination');
+  it('should style opacity based on `isDragging` prop', () => {
+    const notDraggedComponent = setup({
+      id: '456',
+      content: 'Buy carrots!',
+      sectionId: '101',
+      story: '',
+    }).component;
+    expect(notDraggedComponent.props.style.opacity).to.equal(1);
+
+    const draggedComponent = setup({
+      id: '456',
+      content: 'Buy carrots!',
+      sectionId: '101',
+      story: '',
+      isDragging: true,
+    }).component;
+    expect(draggedComponent.props.style.opacity).to.equal(0.5);
+  });
 });
