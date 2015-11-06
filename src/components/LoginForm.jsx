@@ -34,8 +34,8 @@ class LoginForm extends PureComponent {
 
   render() {
     return (
-      <div className="ui one column center aligned grid">
-        <div className="column four wide form-holder">
+      <div className="ui middle aligned center aligned grid">
+        <div className="column three wide">
           <form className="ui form" onSubmit={this._handleLoginSubmit.bind(this)}>
             <h2 className="center aligned header form-head">Log In</h2>
             <div className="field">
