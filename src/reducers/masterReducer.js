@@ -13,7 +13,7 @@ export default (reduction, action) => {
       mutableReduction.update(_r => BoardReducer.loginSubmitted(_r, payload));
       break;
     case ActionTypes.BOARD_MOUNTED:
-      mutableReduction.update(_r => BoardReducer.startSync(_r, payload));
+      mutableReduction.update(_r => BoardReducer.startSync(_r));
       break;
     case ActionTypes.LAYOUT_RECEIVED_OK:
       mutableReduction.update(_r => BoardReducer.layoutReceivedOk(_r, payload));

@@ -8,9 +8,12 @@ class LoginForm extends PureComponent {
   _handleLoginSubmit(event) {
     event.preventDefault();
     const payload = {
-      firebaseId: ReactDOM.findDOMNode(this.refs.firebaseId).value,
       password: ReactDOM.findDOMNode(this.refs.password).value,
     };
+
+    if (this.props.showFirebaseIdInput) {
+      payload.firebaseId = ReactDOM.findDOMNode(this.refs.firebaseId).value;
+    }
 
     this.dispatchAction({
       type: LOGIN_SUBMITTED,
@@ -32,15 +35,24 @@ class LoginForm extends PureComponent {
     );
   }
 
+  _renderUsernameInput() {
+    if (!this.props.showFirebaseIdInput) {
+      return null;
+    }
+    return (
+      <div className="field">
+        <input type="text" ref="firebaseId" placeholder="firebase_id"/>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="ui middle aligned center aligned grid">
         <div className="column three wide">
           <form className="ui form" onSubmit={this._handleLoginSubmit.bind(this)}>
             <h2 className="center aligned header form-head">Log In</h2>
-            <div className="field">
-              <input type="text" ref="firebaseId" placeholder="firebase_id"/>
-            </div>
+            {this._renderUsernameInput()}
             <div className="field">
               <input type="password" ref="password" placeholder="password"/>
             </div>
@@ -57,6 +69,7 @@ class LoginForm extends PureComponent {
 
 LoginForm.propTypes = {
   error: PropTypes.object,
+  showFirebaseIdInput: PropTypes.bool.isRequired,
 };
 
 export default LoginForm;

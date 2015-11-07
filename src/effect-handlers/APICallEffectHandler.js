@@ -28,8 +28,8 @@ export default buildEffectHandler({
       });
   },
 
-  [EffectTypes.SYNC_START_REQUESTED]: (dispatcher) => {
-    FirebaseService.start(dispatcher);
+  [EffectTypes.SYNC_START_REQUESTED]: (dispatcher, payload) => {
+    FirebaseService.start(dispatcher, payload);
   },
 
   [EffectTypes.TASK_SAVE_REQUESTED]: (dispatcher, payload) => {

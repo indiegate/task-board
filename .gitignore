@@ -19,3 +19,5 @@ npm-debug.log
 dist/app*
 dist/*.svg
 dist/*.ttf
+
+firebase.json

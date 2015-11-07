@@ -13,7 +13,9 @@ import BoardView from './views/BoardView';
 // services
 import APICallEffectHandler from './effect-handlers/APICallEffectHandler';
 
-const isLoggedIn = localStorage.getItem('task-board:token');
+const firebaseId = localStorage.getItem('task-board:firebaseId') || window.location.host.split('.')[0];
+const isLoggedIn = localStorage.getItem(`firebase:session::${firebaseId}`);
+const username = `developer@${firebaseId}.com`;
 
 const Reduction = record({
   appState: fromJS({
@@ -21,7 +23,10 @@ const Reduction = record({
     layout: null,
     loading: false,
     task: null,
+    firebaseId,
+    username,
     isLoggedIn,
+    showFirebaseIdInput: !firebaseId,
     auth: false,
   }),
   effects: List.of(),
@@ -79,13 +84,14 @@ class App extends Component {
   }
 
   render() {
-    const { reduction } = this.state;
+    const { dispatcher, reduction } = this.state;
     const layout = reduction.getIn(['appState', 'layout']) || reduction.getIn(['appState', 'initialLayout']);
 
     if (!reduction.getIn(['appState', 'isLoggedIn'])) {
       return (
-        <LoginForm dispatcher={this.state.dispatcher}
-            error={this.state.reduction.getIn(['appState', 'authError'])}/>
+        <LoginForm dispatcher={dispatcher}
+            showFirebaseIdInput={reduction.getIn(['appState', 'showFirebaseIdInput'])}
+            error={reduction.getIn(['appState', 'authError'])}/>
       );
     }
 
