@@ -178,10 +178,17 @@ export const authenticationFailed = (reduction, payload) => {
     .setIn(['appState', 'authError'], newPayload);
 };
 
-export const logout = (reduction) => {
+export const logout = (reduction, payload) => {
+  const firebaseId = localStorage.getItem('task-board:firebaseId');
+  localStorage.removeItem(`firebase:session::${firebaseId}`);
+  localStorage.removeItem(`firebase:host:${firebaseId}.firebaseio.com`);
   localStorage.removeItem('task-board:token');
   localStorage.removeItem('task-board:firebaseId');
   return reduction
     .setIn(['appState', 'isLoggedIn'], false)
-    .setIn(['appState', 'authData'], null);
+    .setIn(['appState', 'authData'], null)
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.UNAUTHENTICATION_REQUESTED, payload)
+      ));
 };
