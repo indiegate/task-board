@@ -13,9 +13,9 @@ import BoardView from './views/BoardView';
 // services
 import APICallEffectHandler from './effect-handlers/APICallEffectHandler';
 
-const firebaseId = localStorage.getItem('task-board:firebaseId') || window.location.host.split('.')[0];
+const firebaseId = localStorage.getItem('task-board:firebaseId')
+  || (window.location.host.indexOf('firebaseapp') > 0 ? window.location.host.split('.')[0] : null);
 const isLoggedIn = localStorage.getItem(`firebase:session::${firebaseId}`);
-const username = `developer@${firebaseId}.com`;
 
 const Reduction = record({
   appState: fromJS({
@@ -24,7 +24,6 @@ const Reduction = record({
     loading: false,
     task: null,
     firebaseId,
-    username,
     isLoggedIn,
     showFirebaseIdInput: !firebaseId,
     auth: false,

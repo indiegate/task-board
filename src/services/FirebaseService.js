@@ -114,7 +114,7 @@ export const FirebaseService = {
       }, layoutError => this._handleError(layoutError, dispatcher));
   },
 
-  authenticate(dispatcher, {firebaseId, password, username}) {
+  authenticate(dispatcher, {firebaseId, password}) {
     if (!firebaseId) {
       setTimeout(() => {
         dispatcher.dispatch({
@@ -128,10 +128,12 @@ export const FirebaseService = {
       return;
     }
 
+    // TODO make email/username configurable
+    const email = `developer@${firebaseId}.com`;
     this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
 
     this._ref.authWithPassword({
-      email: username,
+      email,
       password,
     }, (error, authData) => {
       if (error) {
@@ -142,7 +144,10 @@ export const FirebaseService = {
       } else {
         dispatcher.dispatch({
           type: ActionTypes.AUTHENTICATION_OK,
-          payload: authData,
+          payload: {
+            authData,
+            firebaseId,
+          },
         });
       }
     });

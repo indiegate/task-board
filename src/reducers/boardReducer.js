@@ -129,21 +129,27 @@ export const archiveTaskClicked = (reduction, payload) => {
       ));
 };
 
-export const loginSubmitted = (reduction, payload) => {
+export const loginSubmitted = (reduction, {firebaseId, password }) => {
+  const requestFirebaseId = firebaseId ? firebaseId : reduction.getIn(['appState', 'firebaseId']);
+
   return reduction
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.AUTHENTICATION_REQUESTED, {
-        firebaseId: reduction.getIn(['appState', 'firebaseId']),
-        username: reduction.getIn(['appState', 'username']),
-        password: payload.password})
+        firebaseId: requestFirebaseId,
+        password,
+      })
     ));
 };
 
-export const authenticationOk = (reduction, payload) => {
+export const authenticationOk = (reduction, {authData, firebaseId}) => {
+  // SIDE EFFECT
+  localStorage.setItem('task-board:firebaseId', firebaseId);
+
   return reduction
+    .setIn(['appState', 'firebaseId'], firebaseId)
     .setIn(['appState', 'isLoggedIn'], true)
-    .setIn(['appState', 'authData'], payload);
+    .setIn(['appState', 'authData'], authData);
 };
 
 export const authenticationFailed = (reduction, payload) => {
@@ -155,7 +161,10 @@ export const authenticationFailed = (reduction, payload) => {
     newPayload.message = 'Session expired';
   } else {
     // #2 payload.code === "INVALID_FIREBASE"
-    // #3 WRONG USERNAME
+    if (payload.code === 'INVALID_FIREBASE') {
+      localStorage.removeItem('task-board:firebaseId');
+    }
+    // #3 WRONG USERNAME / FOR NOW IGNORED
     // #4 payload.code === "INVALID_PASSWORD"
     newPayload.message = payload.message;
   }
