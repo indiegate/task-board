@@ -75,10 +75,7 @@ export const FirebaseService = {
     });
   },
 
-  start(dispatcher) {
-    // move this to a localStorage adapter
-    const firebaseId = localStorage.getItem('task-board:firebaseId');
-
+  start(dispatcher, {firebaseId}) {
     if (!firebaseId ) {
       setTimeout(() => {
         dispatcher.dispatch({
@@ -131,10 +128,12 @@ export const FirebaseService = {
       return;
     }
 
+    // TODO make email/username configurable
+    const email = `developer@${firebaseId}.com`;
     this._ref = new Firebase(`https://${firebaseId}.firebaseio.com/`);
 
     this._ref.authWithPassword({
-      email: `developer@${firebaseId}.com`,
+      email,
       password,
     }, (error, authData) => {
       if (error) {
@@ -145,7 +144,10 @@ export const FirebaseService = {
       } else {
         dispatcher.dispatch({
           type: ActionTypes.AUTHENTICATION_OK,
-          payload: authData,
+          payload: {
+            authData,
+            firebaseId,
+          },
         });
       }
     });

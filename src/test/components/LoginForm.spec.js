@@ -16,7 +16,10 @@ function setup(ComponentClass, propsForOverride) {
     dispatch: spy.clickHandler.bind(spy),
   };
 
-  const props = Object.assign({dispatcher}, propsForOverride);
+  const props = Object.assign({
+    showFirebaseIdInput: false,
+    dispatcher,
+  }, propsForOverride);
 
   const renderer = TestUtils.createRenderer();
   renderer.render(<ComponentClass {...props} />);
@@ -33,15 +36,28 @@ function setup(ComponentClass, propsForOverride) {
 }
 
 describe('LoginForm', () => {
-  it('should contain input for firebaseId and password', () => {
-    const { component } = setup(LoginForm, {});
+  it('should not display `firebaseId` input when `showFirebaseIdInput` false', () => {
+    const componentWith = setup(LoginForm, {}).component;
 
+    const [formWith] = componentWith.props.children.props.children;
+    expect(formWith.props.children[1]).to.be.null;
+  });
+
+  it('should display `firebaseId` input when `showFirebaseIdInput`', () => {
+    const componentWith = setup(LoginForm, {
+      showFirebaseIdInput: true,
+    }).component;
+    const [formWith] = componentWith.props.children.props.children;
+    expect(formWith.props.children[1].props.children).to.deep.equal(
+      <input type="text" ref="firebaseId" placeholder="firebase_id"/>
+    );
+  });
+
+  it('should display `password` input', () => {
+    const { component } = setup(LoginForm, {});
     const [form] = component.props.children.props.children;
 
     expect(form.type).to.equal('form');
-    expect(form.props.children[1].props.children).to.deep.equal(
-      <input type="text" ref="firebaseId" placeholder="firebase_id"/>
-    );
     expect(form.props.children[2].props.children).to.deep.equal(
       <input type="password" ref="password" placeholder="password"/>);
   });
@@ -67,8 +83,10 @@ describe('LoginForm', () => {
     );
   });
 
-  it('should dispatch by submiting the form', () => {
-    const { rendered, spy } = setup(LoginForm, {});
+  it('should dispatch by submitting the form', () => {
+    const { rendered, spy } = setup(LoginForm, {
+      showFirebaseIdInput: true,
+    });
     const [form] = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'form');
 
     TestUtils.Simulate.submit(form);

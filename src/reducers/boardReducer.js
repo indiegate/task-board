@@ -37,11 +37,15 @@ const updateLayout = (layout, task) => {
   });
 };
 
-export const startSync = (reduction, payload) => {
+export const startSync = (reduction) => {
+  const firebaseId = reduction.getIn(['appState', 'firebaseId']);
+
   return reduction
     .set('effects', reduction
       .get('effects')
-      .push(buildMessage(EffectTypes.SYNC_START_REQUESTED, payload)
+      .push(buildMessage(EffectTypes.SYNC_START_REQUESTED, {
+        firebaseId,
+      })
     ));
 };
 
@@ -125,36 +129,45 @@ export const archiveTaskClicked = (reduction, payload) => {
       ));
 };
 
-export const loginSubmitted = (reduction, payload) => {
-  localStorage.setItem('task-board:firebaseId', payload.firebaseId);
+export const loginSubmitted = (reduction, {firebaseId, password }) => {
+  const requestFirebaseId = firebaseId ? firebaseId : reduction.getIn(['appState', 'firebaseId']);
+
   return reduction
     .set('effects', reduction
       .get('effects')
-      .push(buildMessage(EffectTypes.AUTHENTICATION_REQUESTED, payload)
+      .push(buildMessage(EffectTypes.AUTHENTICATION_REQUESTED, {
+        firebaseId: requestFirebaseId,
+        password,
+      })
     ));
 };
 
-export const authenticationOk = (reduction, payload) => {
-  localStorage.setItem('task-board:token', payload.token);
+export const authenticationOk = (reduction, {authData, firebaseId}) => {
+  // SIDE EFFECT
+  localStorage.setItem('task-board:firebaseId', firebaseId);
+
   return reduction
+    .setIn(['appState', 'firebaseId'], firebaseId)
     .setIn(['appState', 'isLoggedIn'], true)
-    .setIn(['appState', 'authData'], payload);
+    .setIn(['appState', 'authData'], authData);
 };
 
 export const authenticationFailed = (reduction, payload) => {
   // SIDE EFFECT!
-  const firebaseId = localStorage.getItem('task-board:firebaseId');
   const newPayload = Object.assign({}, payload);
 
-  if (firebaseId && !localStorage.getItem(`firebase:session::${firebaseId}`)
-    && payload.code !== 'AUTHENTICATION_DISABLED') {
+  if (payload.code === 'PERMISSION_DENIED') {
+    // #1 SESSION EXPIRED === 'PERMISSION_DENIED'
     newPayload.message = 'Session expired';
   } else {
+    // #2 payload.code === "INVALID_FIREBASE"
+    if (payload.code === 'INVALID_FIREBASE') {
+      localStorage.removeItem('task-board:firebaseId');
+    }
+    // #3 WRONG USERNAME / FOR NOW IGNORED
+    // #4 payload.code === "INVALID_PASSWORD"
     newPayload.message = payload.message;
   }
-
-  localStorage.removeItem('task-board:token');
-  localStorage.removeItem('task-board:firebaseId');
 
   return reduction
     .setIn(['appState', 'isLoggedIn'], false)
