@@ -3,6 +3,7 @@ import { DragSource } from 'react-dnd';
 import PureComponent from './PureComponent';
 import * as ActionTypes from '../constants/actionTypes';
 import intToRGB from '../utils/colors-helper';
+import classNames from 'classnames';
 
 const taskSource = {
   beginDrag(props) {
@@ -51,8 +52,8 @@ class BoardTask extends PureComponent {
 
     return tags.map((tag, idx) => {
       const color = colors[tag.toLowerCase()];
-      const classes = 'ui mini right floated basic horizontal ' + ((color) ? color : '') + ' label';
-      return <div className={classes} key={idx}>{tag}</div>;
+      const className = classNames('ui mini right floated basic horizontal', {[color]: color}, 'label');
+      return <div className={className} key={idx}>{tag}</div>;
     });
   }
 

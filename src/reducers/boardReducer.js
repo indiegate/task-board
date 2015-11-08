@@ -133,6 +133,7 @@ export const loginSubmitted = (reduction, {firebaseId, password }) => {
   const requestFirebaseId = firebaseId ? firebaseId : reduction.getIn(['appState', 'firebaseId']);
 
   return reduction
+    .setIn(['appState', 'isAuthenticating'], true)
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.AUTHENTICATION_REQUESTED, {
@@ -148,6 +149,7 @@ export const authenticationOk = (reduction, {authData, firebaseId}) => {
 
   return reduction
     .setIn(['appState', 'firebaseId'], firebaseId)
+    .setIn(['appState', 'isAuthenticating'], false)
     .setIn(['appState', 'isLoggedIn'], true)
     .setIn(['appState', 'authData'], authData);
 };
@@ -170,6 +172,7 @@ export const authenticationFailed = (reduction, payload) => {
   }
 
   return reduction
+    .setIn(['appState', 'isAuthenticating'], false)
     .setIn(['appState', 'isLoggedIn'], false)
     .setIn(['appState', 'authData'], null)
     .setIn(['appState', 'authError'], newPayload);
