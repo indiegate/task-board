@@ -27,6 +27,7 @@ const Reduction = record({
     isLoggedIn,
     showFirebaseIdInput: !firebaseId,
     auth: false,
+    isAuthenticating: false,
   }),
   effects: List.of(),
 });
@@ -89,6 +90,7 @@ class App extends Component {
     if (!reduction.getIn(['appState', 'isLoggedIn'])) {
       return (
         <LoginForm dispatcher={dispatcher}
+            isAuthenticating={reduction.getIn(['appState', 'isAuthenticating'])}
             showFirebaseIdInput={reduction.getIn(['appState', 'showFirebaseIdInput'])}
             error={reduction.getIn(['appState', 'authError'])}/>
       );

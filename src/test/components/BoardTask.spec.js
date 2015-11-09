@@ -79,8 +79,7 @@ describe('BoardTask', () => {
       story: 'TEST',
     });
 
-    // TODO remove double space from BoardTask.renderTags implementation !
-    const className = 'ui mini right floated basic horizontal  label';
+    const className = 'ui mini right floated basic horizontal label';
     const tags = component.props.children[2];
 
     expect(tags[0]).to.eql(<div key={0} className={className}>tomato</div>);

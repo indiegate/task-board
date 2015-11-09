@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import PureComponent from './PureComponent';
 import { LOGIN_SUBMITTED } from '../constants/actionTypes';
+import classNames from 'classnames';
 
 class LoginForm extends PureComponent {
 
@@ -35,7 +36,7 @@ class LoginForm extends PureComponent {
     );
   }
 
-  _renderUsernameInput() {
+  _renderFirebaseIdInput() {
     if (!this.props.showFirebaseIdInput) {
       return null;
     }
@@ -47,17 +48,20 @@ class LoginForm extends PureComponent {
   }
 
   render() {
+    const { isAuthenticating } = this.props;
+    const buttonClassName = classNames('ui', { loading: isAuthenticating }, 'button primary large fluid');
+
     return (
-      <div className="ui middle aligned center aligned grid">
+      <div className="ui middle aligned center aligned stackable grid">
         <div className="column three wide">
           <form className="ui form" onSubmit={this._handleLoginSubmit.bind(this)}>
             <h2 className="center aligned header form-head">Log In</h2>
-            {this._renderUsernameInput()}
+            {this._renderFirebaseIdInput()}
             <div className="field">
               <input type="password" ref="password" placeholder="password"/>
             </div>
             <div className="field">
-              <input type="submit" value="Log in" className="ui button large fluid"/>
+              <button className={buttonClassName}>Log in</button>
             </div>
           </form>
           {this._renderErrorMsg()}
@@ -69,6 +73,7 @@ class LoginForm extends PureComponent {
 
 LoginForm.propTypes = {
   error: PropTypes.object,
+  isAuthenticating: PropTypes.bool.isRequired,
   showFirebaseIdInput: PropTypes.bool.isRequired,
 };
 
