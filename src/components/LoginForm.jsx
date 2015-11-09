@@ -49,10 +49,10 @@ class LoginForm extends PureComponent {
 
   render() {
     const { isAuthenticating } = this.props;
-    const buttonClassName = classNames('ui', { loading: isAuthenticating }, 'button', 'large', 'fluid');
+    const buttonClassName = classNames('ui', { loading: isAuthenticating }, 'button primary large fluid');
 
     return (
-      <div className="ui middle aligned center aligned grid">
+      <div className="ui middle aligned center aligned stackable grid">
         <div className="column three wide">
           <form className="ui form" onSubmit={this._handleLoginSubmit.bind(this)}>
             <h2 className="center aligned header form-head">Log In</h2>

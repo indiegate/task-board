@@ -66,7 +66,7 @@ describe('LoginForm', () => {
   it('should contain submit button', () => {
     const { component } = setup(LoginForm, {});
     const [,,, submitWrapper] = component.props.children.props.children[0].props.children;
-    const expected = <button className="ui button large fluid">Log in</button>;
+    const expected = <button className="ui button primary large fluid">Log in</button>;
     expect(submitWrapper.props.children).to.deep.equal(
       expected
     );
@@ -78,7 +78,7 @@ describe('LoginForm', () => {
     });
     const [,,, submitWrapper] = component.props.children.props.children[0].props.children;
     expect(submitWrapper.props.children).to.deep.equal(
-      <button className="ui loading button large fluid">Log in</button>
+      <button className="ui loading button primary large fluid">Log in</button>
     );
   });
 
