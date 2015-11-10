@@ -104,5 +104,19 @@ describe('BoardSection', () => {
     expect(calledArgs.type).to.eql('ADD_TASK_CLICKED');
     expect(calledArgs.payload).to.eql({sectionId: '1234'});
   });
-  it('should render tasks into content');
+
+  it('should render message about no tasks into content wrapper', () => {
+    const { component } = setup(BoardSection, {
+      name: 'TestBestSection',
+    });
+    const content = component.props.children.props.children[1];
+    expect(content.type).to.equal('div');
+    expect(content.props.className).to.equal('content');
+    expect(content.props.children.type).to.equal('div');
+    expect(content.props.children.props.className).to.equal('ui selection list');
+    expect(content.props.children.props.children.type).to.equal('p');
+    expect(content.props.children.props.children.props.children).to.equal('no tasks');
+  });
+
+  it('should sort and render tasks into content wrapper');
 });
