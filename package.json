@@ -45,6 +45,7 @@
     "phantomjs-polyfill": "0.0.1",
     "react": "0.14.0",
     "react-addons-test-utils": "0.14.0",
+    "react-dnd-test-backend": "^1.0.0",
     "react-dom": "0.14.0",
     "react-pure-render": "1.0.2",
     "semantic-ui-css": "2.1.4",
