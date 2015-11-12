@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import TestUtils from 'react-addons-test-utils';
 import BoardSection from '../../components/BoardSection';
+import TestBackend from 'react-dnd-test-backend';
+import { DragDropContext } from 'react-dnd';
+
+
+/**
+ * Wraps a component into a DragDropContext that uses the TestBackend.
+ */
+function wrapInTestContext(DecoratedComponent) {
+  return DragDropContext(TestBackend)(
+    class TestContextContainer extends Component {
+      render() {
+        return <DecoratedComponent {...this.props} />;
+      }
+    }
+  );
+}
 
 function setup(ComponentClass, propsForOverride) {
   const identity = el => el;
@@ -118,5 +134,30 @@ describe('BoardSection', () => {
     expect(content.props.children.props.children.props.children).to.equal('no tasks');
   });
 
-  it('should sort and render tasks into content wrapper');
+  it('should sort and render tasks into content wrapper', () => {
+    const tasks = [
+      {
+        id: 'some-guid-1',
+        content: 'Foo',
+        sectionId: '1',
+
+      }, {
+        id: 'some-guid-2',
+        content: 'Bar',
+        sectionId: '1',
+      },
+    ];
+
+    const propsForOverride = {
+      id: '100',
+      dispatcher: {},
+      name: 'TestBestSection',
+      tasks,
+    };
+    const BoxContext = wrapInTestContext(BoardSection);
+    const root = TestUtils.renderIntoDocument(<BoxContext {...propsForOverride} />);
+    const items = TestUtils.scryRenderedDOMComponentsWithClass(root, 'item');
+    expect(items[0].textContent).to.equal('Foo');
+    expect(items[1].textContent).to.equal('Bar');
+  });
 });
