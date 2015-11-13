@@ -117,6 +117,11 @@ export const cancelSaveTaskClicked = (reduction) => {
     .setIn(['appState', 'task'], null);
 };
 
+export const addStoryClicked = (reduction) => {
+  return reduction
+    .setIn(['appState', 'story'], {});
+};
+
 export const draggedTaskToSection = (reduction, payload) => {
   const foundTask = reduction
     .getIn(['appState', 'tasks'])

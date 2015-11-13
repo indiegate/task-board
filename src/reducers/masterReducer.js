@@ -51,6 +51,9 @@ export default (reduction, action) => {
     case ActionTypes.AUTHENTICATION_FAILED:
       mutableReduction.update(_r => BoardReducer.authenticationFailed(_r, payload));
       break;
+    case ActionTypes.ADD_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.addStoryClicked(_r));
+      break;
     default:
       console.debug(`Unhandled action of type: ${type}`);
     }

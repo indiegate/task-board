@@ -1,10 +1,18 @@
 import React from 'react';
 import PureComponent from './PureComponent';
 import intToRGB from '../utils/colors-helper';
+import * as ActionTypes from '../constants/actionTypes';
 
 class Bar extends PureComponent {
   constructor(props) {
     super(props);
+  }
+
+  _handleAddStoryClick() {
+    this.props.dispatcher.dispatch({
+      type: ActionTypes.ADD_STORY_CLICKED,
+      payload: null,
+    });
   }
 
   _renderStoryItems() {
@@ -29,6 +37,10 @@ class Bar extends PureComponent {
     return (<div className="ui vertical inverted menu fixed top" style={{height: '100%'}}>
       <div className="item">
         <h4>Stories</h4>
+        <button className="ui icon button"
+                onClick={this._handleAddStoryClick.bind(this)}>
+          <i className="plus icon"/>
+        </button>
         <div className="ui inverted relaxed divided selection list">
           {this._renderStoryItems()}
         </div>
