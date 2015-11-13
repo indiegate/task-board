@@ -76,6 +76,19 @@ export const tasksReceived = (reduction, payload) => {
     .setIn(['appState', 'tasks'], tasksArray);
 };
 
+export const storiesReceived = (reduction, payload) => {
+  const storiesArray = [];
+  Object.keys(payload).forEach(key => {
+    const story = payload[key];
+    story.id = key;
+    storiesArray.push(story);
+  });
+
+  console.log(storiesArray); // TODO remove
+  return reduction
+    .setIn(['appState', 'stories'], storiesArray);
+};
+
 export const layoutReceivedOk = (reduction, payload) => {
   return reduction
     .setIn(['appState', 'initialLayout'], fromJS(payload));

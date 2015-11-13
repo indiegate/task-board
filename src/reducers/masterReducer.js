@@ -21,6 +21,9 @@ export default (reduction, action) => {
     case ActionTypes.FIREBASE_TASKS_RECEIVED:
       mutableReduction.update(_r => BoardReducer.tasksReceived(_r, payload));
       break;
+    case ActionTypes.FIREBASE_STORIES_RECEIVED:
+      mutableReduction.update(_r => BoardReducer.storiesReceived(_r, payload));
+      break;
     case ActionTypes.ADD_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
       break;

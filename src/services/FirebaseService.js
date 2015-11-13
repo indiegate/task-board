@@ -104,7 +104,16 @@ export const FirebaseService = {
               });
             }, 1);
           }, tasksError => this._handleError(tasksError, dispatcher));
-
+        this._ref
+          .child('stories')
+          .on('value', storiesSnapshot => {
+            setTimeout(() => {
+              dispatcher.dispatch({
+                type: ActionTypes.FIREBASE_STORIES_RECEIVED,
+                payload: storiesSnapshot.val(),
+              });
+            }, 1);
+          }, tasksError => this._handleError(tasksError, dispatcher));// TODO separate error handling
         setTimeout(() => {
           dispatcher.dispatch({
             type: ActionTypes.LAYOUT_RECEIVED_OK,
