@@ -159,6 +159,11 @@ export const authenticationFailed = (reduction, payload) => {
   const newPayload = Object.assign({}, payload);
 
   if (payload.code === 'PERMISSION_DENIED') {
+    // TODO handle properly firebase.ref.off();
+    // this case happens after un-auth when connection to firebase still persists.
+    if (!reduction.getIn(['appState', 'isLoggedIn'])) {
+      return null;
+    }
     // #1 SESSION EXPIRED === 'PERMISSION_DENIED'
     newPayload.message = 'Session expired';
   } else {
@@ -179,12 +184,11 @@ export const authenticationFailed = (reduction, payload) => {
 };
 
 export const logout = (reduction, payload) => {
-  const firebaseId = localStorage.getItem('task-board:firebaseId');
-  localStorage.removeItem(`firebase:session::${firebaseId}`);
-  localStorage.removeItem(`firebase:host:${firebaseId}.firebaseio.com`);
-  localStorage.removeItem('task-board:token');
   localStorage.removeItem('task-board:firebaseId');
+
   return reduction
+    .setIn(['appState', 'firebaseId'], null)
+    .setIn(['appState', 'isAuthenticating'], false)
     .setIn(['appState', 'isLoggedIn'], false)
     .setIn(['appState', 'authData'], null)
     .set('effects', reduction
