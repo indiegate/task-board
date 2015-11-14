@@ -187,10 +187,13 @@ export const logout = (reduction, payload) => {
   localStorage.removeItem('task-board:firebaseId');
 
   return reduction
+    .setIn(['appState', 'initialLayout'], null)
+    .setIn(['appState', 'layout'], null)
     .setIn(['appState', 'firebaseId'], null)
     .setIn(['appState', 'isAuthenticating'], false)
     .setIn(['appState', 'isLoggedIn'], false)
     .setIn(['appState', 'authData'], null)
+    .setIn(['appState', 'showFirebaseIdInput'], true)
     .set('effects', reduction
       .get('effects')
       .push(buildMessage(EffectTypes.UNAUTHENTICATION_REQUESTED, payload)
