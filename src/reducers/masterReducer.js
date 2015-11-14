@@ -54,6 +54,9 @@ export default (reduction, action) => {
     case ActionTypes.ADD_STORY_CLICKED:
       mutableReduction.update(_r => BoardReducer.addStoryClicked(_r));
       break;
+    case ActionTypes.LOGOUT_CLICKED:
+      mutableReduction.update(_r => BoardReducer.logout(_r, payload));
+      break;
     default:
       console.debug(`Unhandled action of type: ${type}`);
     }

@@ -60,7 +60,7 @@ describe('LoginForm', () => {
 
     expect(form.type).to.equal('form');
     expect(form.props.children[2].props.children).to.deep.equal(
-      <input type="password" ref="password" placeholder="password"/>);
+      <input type="password" name="password" ref="password" placeholder="password"/>);
   });
 
   it('should contain submit button', () => {

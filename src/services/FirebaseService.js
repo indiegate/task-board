@@ -93,7 +93,13 @@ export const FirebaseService = {
 
     this._ref
       .child('layout')
-      .once('value', layoutSnapshot => {
+      .on('value', layoutSnapshot => {
+        setTimeout(() => {
+          dispatcher.dispatch({
+            type: ActionTypes.LAYOUT_RECEIVED_OK,
+            payload: layoutSnapshot.val(),
+          });
+        }, 1);
         this._ref
           .child('tasks')
           .on('value', tasksSnapshot => {
@@ -113,13 +119,7 @@ export const FirebaseService = {
                 payload: storiesSnapshot.val(),
               });
             }, 1);
-          }, tasksError => this._handleError(tasksError, dispatcher));// TODO separate error handling
-        setTimeout(() => {
-          dispatcher.dispatch({
-            type: ActionTypes.LAYOUT_RECEIVED_OK,
-            payload: layoutSnapshot.val(),
-          });
-        }, 1);
+          }, tasksError => this._handleError(tasksError, dispatcher));
       }, layoutError => this._handleError(layoutError, dispatcher));
   },
 

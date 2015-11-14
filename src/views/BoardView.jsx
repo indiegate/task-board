@@ -45,6 +45,13 @@ class BoardView extends PureComponent {
     });
   }
 
+  _logout() {
+    this.dispatchAction({
+      type: ActionTypes.LOGOUT_CLICKED,
+      payload: null,
+    });
+  }
+
   _renderTaskModal() {
     if (this.props.task) {
       return (
@@ -68,6 +75,8 @@ class BoardView extends PureComponent {
       );
     }
   }
+
+
 
   render() {
     if (!this.props.layout) {

@@ -47,4 +47,8 @@ export default buildEffectHandler({
   [EffectTypes.AUTHENTICATION_REQUESTED]: (dispatcher, payload) => {
     FirebaseService.authenticate(dispatcher, payload);
   },
+
+  [EffectTypes.UNAUTHENTICATION_REQUESTED]: (dispatcher, payload) => {
+    FirebaseService.unauthenticate(dispatcher, payload);
+  },
 });
