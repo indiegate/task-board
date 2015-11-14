@@ -36,7 +36,6 @@ class Bar extends PureComponent {
   }
 
   render() {
-    console.log(this.props.stories);
     if (!this.props.stories) {
       return <h1>no stories</h1>;
     }

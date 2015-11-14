@@ -83,8 +83,6 @@ export const storiesReceived = (reduction, payload) => {
     story.id = key;
     storiesArray.push(story);
   });
-
-  console.log(storiesArray); // TODO remove
   return reduction
     .setIn(['appState', 'stories'], storiesArray);
 };
