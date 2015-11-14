@@ -15,6 +15,13 @@ class Bar extends PureComponent {
     });
   }
 
+  _logout() {
+    this.dispatchAction({
+      type: ActionTypes.LOGOUT_CLICKED,
+      payload: null,
+    });
+  }
+
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
       return (
@@ -35,6 +42,10 @@ class Bar extends PureComponent {
     }
 
     return (<div className="ui vertical inverted menu fixed top" style={{height: '100%'}}>
+      <button className="ui icon button"
+              onClick={this._logout.bind(this)}>
+        Log out
+      </button>
       <div className="item">
         <h4>Stories</h4>
         <button className="ui icon button"

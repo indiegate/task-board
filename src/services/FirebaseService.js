@@ -161,6 +161,10 @@ export const FirebaseService = {
       }
     });
   },
+
+  unauthenticate() {
+    this._ref.unauth();
+  },
 };
 
 
