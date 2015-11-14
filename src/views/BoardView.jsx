@@ -43,6 +43,13 @@ class BoardView extends PureComponent {
     });
   }
 
+  _logout() {
+    this.dispatchAction({
+      type: ActionTypes.LOGOUT_CLICKED,
+      payload: null,
+    });
+  }
+
   _renderTaskModal() {
     if (this.props.task) {
       return (
@@ -55,6 +62,18 @@ class BoardView extends PureComponent {
     }
   }
 
+  _renderTopMenu() {
+    return (
+      <div className="ui secondary menu">
+        <div className="right menu">
+          <div className="item">
+            <div className="ui button" onClick={this._logout.bind(this)}>Log out</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     if (!this.props.layout) {
       return <div className="ui large active loader"></div>;
@@ -62,6 +81,7 @@ class BoardView extends PureComponent {
 
     return (
       <div>
+        {this._renderTopMenu()}
         {this._renderTaskModal()}
         <HorizontalBox columns={this.props.layout.toJS().columns}
             dispatcher={this.props.dispatcher}/>

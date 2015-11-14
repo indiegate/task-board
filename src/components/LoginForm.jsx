@@ -58,7 +58,7 @@ class LoginForm extends PureComponent {
             <h2 className="center aligned header form-head">Log In</h2>
             {this._renderFirebaseIdInput()}
             <div className="field">
-              <input type="password" ref="password" placeholder="password"/>
+              <input name="password" type="password" ref="password" placeholder="password"/>
             </div>
             <div className="field">
               <button className={buttonClassName}>Log in</button>
