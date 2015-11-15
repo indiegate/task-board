@@ -7,6 +7,7 @@ class TaskModal extends Component {
     this.state = {
       dialogContent: this.props.task.content || '',
       storyContent: this.props.task.story || '',
+      priorityContent: this.props.task.priority || '',
       errorText: '',
     };
   }
@@ -58,9 +59,17 @@ class TaskModal extends Component {
     });
   }
 
+  _handlePriorityInputChange(event) {
+    this.setState({
+      errorText: '',
+      priorityContent: event.target.value,
+    });
+  }
+
   _submitHandler() {
     const trimmedContent = this.state.dialogContent.trim();
     const trimmedStoryContent = this.state.storyContent.trim();
+    const parsedPriority = parseInt(this.state.priorityContent, 10);
 
     if (!trimmedContent) {
       this.setState({
@@ -72,6 +81,7 @@ class TaskModal extends Component {
     this.props.onSubmit(Object.assign({}, this.props.task, {
       content: trimmedContent,
       story: trimmedStoryContent !== '' ? trimmedStoryContent : null,
+      priority: parsedPriority ? parsedPriority : null,
     }));
   }
 
@@ -113,8 +123,9 @@ class TaskModal extends Component {
           </h3>
         </div>
         <div className="ui form task-form">
+
           <div className="fields">
-            <div className="thirteen wide field">
+            <div className="twelve wide field">
               <label>Task</label>
               <input type="text"
                      ref="dialogContent"
@@ -134,6 +145,14 @@ class TaskModal extends Component {
                      ref="storyContent"
                      onChange={this._handleStoryInputChange.bind(this)}
                      value={this.state.storyContent}/>
+            </div>
+            <div className="one wide field">
+              <label>Priority</label>
+              <input type="text"
+                     maxLength="1"
+                     ref="storyPriority"
+                     onChange={this._handlePriorityInputChange.bind(this)}
+                     value={this.state.priorityContent}/>
             </div>
           </div>
         </div>

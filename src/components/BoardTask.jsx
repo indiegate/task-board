@@ -13,7 +13,7 @@ const taskSource = {
   },
   endDrag(props, monitor, component) {
     const { sectionId } = monitor.getDropResult();
-    const { dispatcher, content, id, story} = component.props;
+    const { dispatcher, content, id, story, priority} = component.props;
     dispatcher.dispatch({
       type: ActionTypes.DRAGGED_TASK_TO_SECTION,
       payload: {
@@ -21,6 +21,7 @@ const taskSource = {
         content,
         sectionId,
         story,
+        priority,
       },
     });
   },
@@ -65,6 +66,7 @@ class BoardTask extends PureComponent {
         content: this.props.content,
         sectionId: this.props.sectionId,
         story: this.props.story,
+        priority: this.props.priority,
       },
     });
   }
