@@ -22,6 +22,27 @@ class Bar extends PureComponent {
     });
   }
 
+  _saveStory(story) {
+    this.dispatchAction({
+      type: ActionTypes.SAVE_STORY_CLICKED,
+      payload: story,
+    });
+  }
+
+  _removeStory(story) {
+    this.dispatchAction({
+      type: ActionTypes.REMOVE_STORY_CLICKED,
+      payload: story,
+    });
+  }
+
+  _closeModal() {
+    this.dispatchAction({
+      type: ActionTypes.CANCEL_SAVE_STORY_CLICKED,
+      payload: null,
+    });
+  }
+
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
       return (
