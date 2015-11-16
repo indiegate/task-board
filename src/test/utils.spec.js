@@ -23,7 +23,7 @@ describe.skip('Priorities', () => {
 describe('Tasks', () => {
   it('are sorted by story(A-Z), priority(Z-A), id(A-Z)', () => {
     expect(sortTasks([{story: 'B'}, {story: 'A'}]))
-      .to.deep.equal([{story: 'A'},{story: 'B'}]);
+      .to.deep.equal([{story: 'A'}, {story: 'B'}]);
 
     expect(sortTasks([{story: 'B', priority: 4}, {story: 'B', priority: 5}]))
       .to.deep.equal([{story: 'B', priority: 5}, {story: 'B', priority: 4}]);
@@ -31,6 +31,13 @@ describe('Tasks', () => {
     expect(sortTasks([{story: 'B', priority: 4, id: 'Z'}, {story: 'B', priority: 4, id: 'A'}]))
       .to.deep.equal([{story: 'B', priority: 4, id: 'A'}, {story: 'B', priority: 4, id: 'Z' }]);
   });
+
+  it('compare specific', () => {
+    console.log([{priority: 4, id: 'Z'}, {priority: 9, id: 'A'}])
+    expect(sortTasks([{priority: 4, id: 'Z'}, {priority: 9, id: 'A'}]))
+      .to.deep.equal([{priority: 9, id: 'A'}, {priority: 4, id: 'Z' }]);
+  });
+
   it('are sorted story (ASC), priority(DESC), id(ASC)', () => {
     const tasks = [
       {

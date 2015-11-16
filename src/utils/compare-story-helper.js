@@ -1,9 +1,9 @@
 export const comparePriorities = (taskA, taskB) => {
-  if (typeof taskA.priority === 'undefined') {
+  if (typeof taskA.priority === 'undefined' && typeof taskB.priority !== 'undefined') {
     return 1;
   }
 
-  if (typeof taskA.priority === 'undefined') {
+  if (typeof taskA.priority !== 'undefined' && typeof taskB.priority === 'undefined') {
     return -1;
   }
 
@@ -19,11 +19,11 @@ export const comparePriorities = (taskA, taskB) => {
 };
 
 export const compareStories = (taskA, taskB) => {
-  if (typeof taskA.story === 'undefined') {
+  if (typeof taskA.story === 'undefined' && typeof taskB.story !== 'undefined') {
     return 1;
   }
 
-  if (typeof taskA.story === 'undefined') {
+  if (typeof taskA.story !== 'undefined' && typeof taskB.story === 'undefined') {
     return -1;
   }
 
@@ -39,12 +39,12 @@ export const compareStories = (taskA, taskB) => {
 };
 
 export const compareTaskIDs = (taskA, taskB) => {
-  if (typeof taskA.id === 'undefined') {
-    return 1;
+  if (typeof taskA.id === 'undefined' && typeof taskB.id !== 'undefined') {
+    return -1;
   }
 
-  if (typeof taskA.id === 'undefined') {
-    return -1;
+  if (typeof taskA.id !== 'undefined' && typeof taskB.id === 'undefined') {
+    return 1;
   }
 
   if (taskA.id < taskB.id ) {
