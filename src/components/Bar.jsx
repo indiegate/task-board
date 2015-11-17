@@ -32,12 +32,13 @@ class Bar extends PureComponent {
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
       return (
-        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
-          <content>
-            <a className="ui small inverted label"
-               style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}>{story.id}</a>
-            <p>{story.title}</p>
-          </content>
+        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}
+             style={{padding: '6px 13px 6px 13px'}}>
+          <h4 className="ui header">
+            <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
+            {story.id}
+          </h4>
+          <span>{story.title}</span>
         </div>);
     });
   }
@@ -47,17 +48,18 @@ class Bar extends PureComponent {
       return <h1>no stories</h1>;
     }
 
-    return (<div className="ui vertical inverted menu fixed top" style={{height: '100%'}}>
+    return (<div className="ui vertical menu fixed top" style={{height: '100%', backgroundColor: '#ebebeb'}}>
       <button className="ui icon button"
               onClick={this._logout.bind(this)}>
         Log out
       </button>
-      <div className="item">
-        <h4>Stories</h4>
-        <button className="ui icon button" onClick={this._handleAddStoryClick.bind(this)}>
-          <i className="plus icon"/>
-        </button>
-        <div className="ui inverted relaxed divided selection list">
+      <div className="item" style={{paddingLeft: 0, paddingRight: 0}}>
+        <h4 style={{paddingLeft: 13, paddingRight: 13}}>Stories
+          <button className="ui adapted icon button" onClick={this._handleAddStoryClick.bind(this)}>
+            <i className="plus icon"/>
+          </button>
+        </h4>
+        <div className="ui relaxed divided selection list">
           {this._renderStoryItems()}
         </div>
       </div>
