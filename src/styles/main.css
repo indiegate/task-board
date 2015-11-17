@@ -106,3 +106,17 @@ h5.ui.header {
   font-size: 0.8em;
   margin-right: 0px!important;
 }
+
+.ui.vertical.menu>.item {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.ui.vertical.menu>.item>h4 {
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.ui.vertical.menu .list>.item {
+  padding: 6px 13px 6px 13px;
+}

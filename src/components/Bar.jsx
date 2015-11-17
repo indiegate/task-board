@@ -32,8 +32,7 @@ class Bar extends PureComponent {
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
       return (
-        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}
-             style={{padding: '6px 13px 6px 13px'}}>
+        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
           <h4 className="ui header">
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}
@@ -53,8 +52,8 @@ class Bar extends PureComponent {
               onClick={this._logout.bind(this)}>
         Log out
       </button>
-      <div className="item" style={{paddingLeft: 0, paddingRight: 0}}>
-        <h4 style={{paddingLeft: 13, paddingRight: 13}}>Stories
+      <div className="item">
+        <h4>Stories
           <button className="ui adapted icon button" onClick={this._handleAddStoryClick.bind(this)}>
             <i className="plus icon"/>
           </button>
