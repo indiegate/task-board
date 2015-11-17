@@ -100,7 +100,7 @@ class StoryModal extends Component {
          onClick={() => {
            this._dispatch(ActionTypes.REMOVE_STORY_CLICKED, this.props.story);
          }}>
-      <i className="trash outline icon" title="remove story"/>
+      <i className="trash outline icon" title="remove story"/>Remove
     </div>
     );
   }
@@ -109,7 +109,7 @@ class StoryModal extends Component {
     const story = this.props.story;
     const dialogName = story && story.id ? 'Edit story' : 'Add new story';
     const displayError = this.state.errorText ? 'block' : 'none';
-
+    const idFieldClasses = 'six wide' + (story && story.id ? ' disabled ' : ' ') + 'field';
     return (
       <div className="ui modal" style={{display: 'block'}}>
         <div className="ui clearing segment">
@@ -121,7 +121,7 @@ class StoryModal extends Component {
         </div>
         <div className="ui form task-form">
           <div className="fields">
-            <div className="six wide field">
+            <div className={idFieldClasses}>
               <label>Id</label>
               <input type="text"
                      ref="storyIdContent"
