@@ -51,6 +51,7 @@ describe('BoardTask', () => {
       content: 'Blah',
       sectionId: '101',
       story: 'TEST',
+      priority: 1,
       dispatcher: {
         dispatch,
       },
@@ -67,6 +68,7 @@ describe('BoardTask', () => {
         content: 'Blah',
         sectionId: '101',
         story: 'TEST',
+        priority: 1,
       },
     });
   });

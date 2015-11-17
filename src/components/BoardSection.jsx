@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BoardTask from './BoardTask';
 import { DropTarget } from 'react-dnd';
 import * as ActionTypes from '../constants/actionTypes';
+import { sortTasks }from '../utils/compare-story-helper';
 
 const sectionTarget = {
   canDrop() {
@@ -52,14 +53,7 @@ class BoardSection extends Component {
     if (!this.props.tasks) {
       return <p style={{ textAlign: 'center', color: 'lightgrey'}}>no tasks</p>;
     }
-    return this.props.tasks
-      .sort((taskA, taskB) => {
-        if (!taskA.story) {return -1; }
-        if (!taskB.story) {return 1; }
-        if (taskA.story < taskB.story) {return -1; }
-        if (taskA.story > taskB.story) {return 1; }
-        return 0;
-      })
+    return sortTasks(this.props.tasks)
       .map((task, idx) => {
         return <BoardTask key={idx} {...task} dispatcher={this.props.dispatcher}/>;
       });

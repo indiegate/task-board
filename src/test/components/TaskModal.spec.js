@@ -56,16 +56,22 @@ describe('TaskModal component', () => {
     });
     const taskInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
     const storyInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[1];
+    const priorityInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[2];
     const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[2];
 
     taskInput.value = 'Updated task text';
     TestUtils.Simulate.change(taskInput);
+
     storyInput.value = 'STY-123';
     TestUtils.Simulate.change(storyInput);
+
+    priorityInput.value = '1';
+    TestUtils.Simulate.change(priorityInput);
+
     TestUtils.Simulate.click(submitButton);
 
     expect(spyContent.called).to.be.true;
-    expect(spyContent.param).to.eql({id: 10, story: 'STY-123', content: 'Updated task text'});
+    expect(spyContent.param).to.eql({id: 10, story: 'STY-123', content: 'Updated task text', priority: 1});
   });
 
   it('calls `onClose` by clicking Cancel button', () => {
