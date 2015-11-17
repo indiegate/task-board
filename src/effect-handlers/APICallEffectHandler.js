@@ -53,7 +53,7 @@ export default buildEffectHandler({
   },
 
   [EffectTypes.STORY_SAVE_REQUESTED]: (dispatcher, payload) => {
-    if (!payload.color) {
+    if (payload.color === undefined) {
       FirebaseService.createStory(dispatcher, payload);
     } else {
       FirebaseService.updateStory(dispatcher, payload);
