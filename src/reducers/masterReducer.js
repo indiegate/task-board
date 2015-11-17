@@ -66,6 +66,7 @@ export default (reduction, action) => {
     case ActionTypes.CLOSE_STORY_MODAL_CLICKED:
     case ActionTypes.FIREBASE_STORY_CREATED_OK:
     case ActionTypes.FIREBASE_STORY_UPDATED_OK:
+    case ActionTypes.FIREBASE_STORY_REMOVED_OK:
       mutableReduction.update(_r => BoardReducer.closeStoryModalClicked(_r));
       break;
     case ActionTypes.LOGOUT_CLICKED:

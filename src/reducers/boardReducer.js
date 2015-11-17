@@ -78,11 +78,13 @@ export const tasksReceived = (reduction, payload) => {
 
 export const storiesReceived = (reduction, payload) => {
   const storiesArray = [];
-  Object.keys(payload).forEach(key => {
-    const story = payload[key];
-    story.id = key;
-    storiesArray.push(story);
-  });
+  if (payload) {
+    Object.keys(payload).forEach(key => {
+      const story = payload[key];
+      story.id = key;
+      storiesArray.push(story);
+    });
+  }
   return reduction
     .setIn(['appState', 'stories'], storiesArray);
 };

@@ -77,11 +77,29 @@ export const FirebaseService = {
 
   createStory(dispatcher, {id, title}) {
     this._ref
-      .child(`stories/${id}`)
-      .set({
-        title,
-      }, (err) => {
-        if (!err) {
+      .child(`stories`)
+      .transaction((object) => {
+        const currentStories = (object) ? object : {};
+        let color = 0;
+        if (currentStories) {
+          const colorDict = {};
+          Object.keys(currentStories).forEach((key) => {
+            const currentStory = currentStories[key];
+            if (currentStory.color !== undefined) {
+              colorDict[currentStory.color] = true;
+            }
+          });
+          while (color in colorDict) {
+            color++;
+          }
+        }
+        if (!(id in currentStories)) {
+          currentStories[id] = {title, color};
+          return currentStories;
+        }
+        return undefined;
+      }, (error, committed) => {
+        if (!error && committed) {
           dispatcher.dispatch({
             type: ActionTypes.FIREBASE_STORY_CREATED_OK,
             payload: null,
@@ -92,13 +110,24 @@ export const FirebaseService = {
 
   updateStory(dispatcher, {id, title}) {
     this._ref
-      .child(`stories/${id}`)
-      .set({
-        title,
-      }, (err) => {
+      .child(`stories/${id}/title`)
+      .set(title, (err) => {
         if (!err) {
           dispatcher.dispatch({
             type: ActionTypes.FIREBASE_STORY_UPDATED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
+  removeStory(dispatcher, {id}) {
+    this._ref
+      .child(`stories/${id}`)
+      .set(null, (err) => {
+        if (!err) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_REMOVED_OK,
             payload: null,
           });
         }

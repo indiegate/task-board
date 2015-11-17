@@ -62,7 +62,7 @@ export default buildEffectHandler({
 
   [EffectTypes.STORY_REMOVE_REQUESTED]: (dispatcher, payload) => {
     if (payload.id ) {
-      FirebaseService.saveStory(dispatcher, payload);
+      FirebaseService.removeStory(dispatcher, payload);
     }
   },
 
