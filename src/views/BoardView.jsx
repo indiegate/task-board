@@ -60,11 +60,7 @@ class BoardView extends PureComponent {
   _renderStoryModal() {
     if (this.props.story) {
       return (
-        <StoryModal story={this.props.story}
-                   onSubmit={this._saveTask.bind(this)}
-                   onClose={this._closeModal.bind(this)}
-                   onArchive={this._archiveTask.bind(this)}
-        />
+        <StoryModal story={this.props.story} dispatcher={this.props.dispatcher}/>
       );
     }
   }

@@ -120,6 +120,32 @@ export const addStoryClicked = (reduction) => {
     .setIn(['appState', 'story'], {});
 };
 
+export const editStoryClicked = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'story'], payload);
+};
+
+export const closeStoryModalClicked = (reduction) => {
+  return reduction
+    .setIn(['appState', 'story'], null);
+};
+
+export const saveStoryClicked = (reduction, payload) => {
+  reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.STORY_SAVE_REQUESTED, payload)
+      ));
+};
+
+export const removeStoryClicked = (reduction, payload) => {
+  reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.STORY_REMOVE_REQUESTED, payload)
+      ));
+};
+
 export const draggedTaskToSection = (reduction, payload) => {
   const foundTask = reduction
     .getIn(['appState', 'tasks'])

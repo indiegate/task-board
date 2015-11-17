@@ -54,6 +54,20 @@ export default (reduction, action) => {
     case ActionTypes.ADD_STORY_CLICKED:
       mutableReduction.update(_r => BoardReducer.addStoryClicked(_r));
       break;
+    case ActionTypes.EDIT_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.editStoryClicked(_r, payload));
+      break;
+    case ActionTypes.SAVE_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.saveStoryClicked(_r, payload));
+      break;
+    case ActionTypes.REMOVE_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.removeStoryClicked(_r, payload));
+      break;
+    case ActionTypes.CLOSE_STORY_MODAL_CLICKED:
+    case ActionTypes.FIREBASE_STORY_CREATED_OK:
+    case ActionTypes.FIREBASE_STORY_UPDATED_OK:
+      mutableReduction.update(_r => BoardReducer.closeStoryModalClicked(_r));
+      break;
     case ActionTypes.LOGOUT_CLICKED:
       mutableReduction.update(_r => BoardReducer.logout(_r, payload));
       break;

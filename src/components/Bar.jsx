@@ -9,9 +9,16 @@ class Bar extends PureComponent {
   }
 
   _handleAddStoryClick() {
-    this.props.dispatcher.dispatch({
+    this.dispatchAction({
       type: ActionTypes.ADD_STORY_CLICKED,
       payload: null,
+    });
+  }
+
+  _handleEditStoryClick(story) {
+    this.dispatchAction({
+      type: ActionTypes.EDIT_STORY_CLICKED,
+      payload: story,
     });
   }
 
@@ -22,31 +29,10 @@ class Bar extends PureComponent {
     });
   }
 
-  _saveStory(story) {
-    this.dispatchAction({
-      type: ActionTypes.SAVE_STORY_CLICKED,
-      payload: story,
-    });
-  }
-
-  _removeStory(story) {
-    this.dispatchAction({
-      type: ActionTypes.REMOVE_STORY_CLICKED,
-      payload: story,
-    });
-  }
-
-  _closeModal() {
-    this.dispatchAction({
-      type: ActionTypes.CANCEL_SAVE_STORY_CLICKED,
-      payload: null,
-    });
-  }
-
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
       return (
-        <div className="item" key={idx}>
+        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
           <content>
             <a className="ui small inverted label"
                style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}>{story.id}</a>
@@ -68,8 +54,7 @@ class Bar extends PureComponent {
       </button>
       <div className="item">
         <h4>Stories</h4>
-        <button className="ui icon button"
-                onClick={this._handleAddStoryClick.bind(this)}>
+        <button className="ui icon button" onClick={this._handleAddStoryClick.bind(this)}>
           <i className="plus icon"/>
         </button>
         <div className="ui inverted relaxed divided selection list">

@@ -75,6 +75,36 @@ export const FirebaseService = {
     });
   },
 
+  createStory(dispatcher, {id, title}) {
+    this._ref
+      .child(`stories/${id}`)
+      .set({
+        title,
+      }, (err) => {
+        if (!err) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_CREATED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
+  updateStory(dispatcher, {id, title}) {
+    this._ref
+      .child(`stories/${id}`)
+      .set({
+        title,
+      }, (err) => {
+        if (!err) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_UPDATED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
   start(dispatcher, {firebaseId}) {
     if (!firebaseId ) {
       setTimeout(() => {

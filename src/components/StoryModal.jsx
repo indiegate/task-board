@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import * as ActionTypes from '../constants/actionTypes';
 
 class StoryModal extends Component {
 
@@ -17,6 +18,13 @@ class StoryModal extends Component {
 
   componentWillUnmount() {
     this._deactivateKeyListeners();
+  }
+
+  _dispatch(actionType, payload) {
+    this.props.dispatcher.dispatch({
+      type: actionType,
+      payload: payload,
+    });
   }
 
   _keyUpHandler(event) {
@@ -69,7 +77,7 @@ class StoryModal extends Component {
       return;
     }
 
-    this.props.onSubmit(Object.assign({}, this.props.story, {
+    this._dispatch(ActionTypes.SAVE_STORY_CLICKED, Object.assign({}, this.props.story, {
       id: trimmedIdContent,
       title: trimmedTitleContent !== '' ? trimmedTitleContent : null,
     }));
@@ -79,7 +87,7 @@ class StoryModal extends Component {
     this.setState({
       errorText: '',
     });
-    this.props.onClose();
+    this._dispatch(ActionTypes.CLOSE_STORY_MODAL_CLICKED, null);
   }
 
   _renderRemoveButton() {
@@ -90,7 +98,7 @@ class StoryModal extends Component {
     <div className="ui left floated red button"
          ref="remove"
          onClick={() => {
-           this.props.onRemove(this.props.story);
+           this._dispatch(ActionTypes.REMOVE_STORY_CLICKED, this.props.story);
          }}>
       <i className="trash outline icon" title="remove story"/>
     </div>
@@ -138,10 +146,8 @@ class StoryModal extends Component {
         </div>
         <div className="actions">
           {this._renderRemoveButton()}
-          <div className="ui button" ref="dismiss"
-               onClick={this._dismissHandler.bind(this)}>Cancel</div>
-          <div className="ui button" ref="submit"
-               onClick={this._submitHandler.bind(this)}>OK</div>
+          <div className="ui button" ref="dismiss" onClick={this._dismissHandler.bind(this)}>Cancel</div>
+          <div className="ui button" ref="submit" onClick={this._submitHandler.bind(this)}>OK</div>
         </div>
         <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
       </div>
@@ -150,6 +156,7 @@ class StoryModal extends Component {
 }
 
 StoryModal.propTypes = {
+  dispatcher: PropTypes.object.isRequired,
   story: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onClose: PropTypes.func,
