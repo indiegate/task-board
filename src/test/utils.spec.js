@@ -1,24 +1,4 @@
-import {sortTasks, compareStories, comparePriorities, compareTaskIDs }from '../utils/compare-story-helper';
-
-describe.skip('Priorities', () => {
-  it('are sorter from higher to lower', () => {
-    expect([{priority: 1}, {priority: 2}].sort(comparePriorities)
-    ).to.deep.equal([{priority: 2}, {priority: 1}]);
-  });
-
-  it('are sorter from defined to undefined', () => {
-    expect([{priority: 1}, {}].sort(comparePriorities)
-    ).to.deep.equal([{priority: 1 }, {}]);
-
-    expect([{}, {priority: 1}].sort(comparePriorities)
-    ).to.deep.equal([{priority: 1 }, {}]);
-  });
-
-  it('equal are not sorted', () => {
-    expect([{priority: 9, a: 1}, {priority: 9, a: 2}])
-      .to.deep.equal([{priority: 9, a: 1}, {priority: 9, a: 2}]);
-  });
-});
+import { sortTasks } from '../utils/compare-story-helper';
 
 describe('Tasks', () => {
   it('are sorted by story(A-Z), priority(Z-A), id(A-Z)', () => {
@@ -33,7 +13,6 @@ describe('Tasks', () => {
   });
 
   it('compare specific', () => {
-    console.log([{priority: 4, id: 'Z'}, {priority: 9, id: 'A'}])
     expect(sortTasks([{priority: 4, id: 'Z'}, {priority: 9, id: 'A'}]))
       .to.deep.equal([{priority: 9, id: 'A'}, {priority: 4, id: 'Z' }]);
   });
@@ -78,43 +57,5 @@ describe('Tasks', () => {
         priority: 7,
       },
     ]);
-  });
-});
-
-describe.skip('Stories', () => {
-  it('are sorted A-Z', () => {
-    expect([{story: 'B'}, {story: 'A'}].sort(compareStories))
-      .to.deep.equal([{story: 'A'}, {story: 'B'}]);
-  });
-
-  it('are sorter from defined to undefined', () => {
-    expect([{}, {story: 'A'}].sort(compareStories))
-      .to.deep.equal([{story: 'A'}, {}]);
-    expect([{story: 'A'}, {}].sort(compareStories))
-      .to.deep.equal([{story: 'A'}, {}]);
-  });
-
-  it('equal are not sorted', () => {
-    expect([{story: 'A', anotherKey: 'B'}, {story: 'A', anotherKey: 'A'}].sort(compareStories))
-      .to.deep.equal([{story: 'A', anotherKey: 'B'}, {story: 'A', anotherKey: 'A'}]);
-  });
-});
-
-describe.skip('IDs', () => {
-  it('are sorted A-Z', () => {
-    expect([{id: 'B'}, {id: 'A'}].sort(compareTaskIDs))
-      .to.deep.equal([{id: 'A'}, {id: 'B'}]);
-  });
-
-  it('are sorter from defined to undefined', () => {
-    expect([{}, {id: 'A'}].sort(compareTaskIDs))
-      .to.deep.equal([{id: 'A'}, {}]);
-    expect([{id: 'A'}, {}].sort(compareTaskIDs))
-      .to.deep.equal([{id: 'A'}, {}]);
-  });
-
-  it('equal are not sorted', () => {
-    expect([{id: 'A', anotherKey: 'B'}, {id: 'A', anotherKey: 'A'}].sort(compareTaskIDs))
-      .to.deep.equal([{id: 'A', anotherKey: 'B'}, {id: 'A', anotherKey: 'A'}]);
   });
 });

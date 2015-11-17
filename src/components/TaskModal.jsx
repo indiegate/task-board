@@ -7,7 +7,7 @@ class TaskModal extends Component {
     this.state = {
       dialogContent: this.props.task.content || '',
       storyContent: this.props.task.story || '',
-      priorityContent: this.props.task.priority || '',
+      priorityContent: this.props.task.priority || 0,
       errorText: '',
     };
   }
