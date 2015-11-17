@@ -1,7 +1,7 @@
 import { sortTasks } from '../utils/compare-story-helper';
 
 describe('Tasks', () => {
-  it('are sorted by story(A-Z), priority(Z-A), id(A-Z)', () => {
+  it('should be sorted first by story(A-Z), then priority(Z-A), then id(A-Z)', () => {
     expect(sortTasks([{story: 'B'}, {story: 'A'}]))
       .to.deep.equal([{story: 'A'}, {story: 'B'}]);
 
@@ -12,12 +12,12 @@ describe('Tasks', () => {
       .to.deep.equal([{story: 'B', priority: 4, id: 'A'}, {story: 'B', priority: 4, id: 'Z' }]);
   });
 
-  it('compare specific', () => {
+  it('should be sorted without `Task.story` specified at all', () => {
     expect(sortTasks([{priority: 4, id: 'Z'}, {priority: 9, id: 'A'}]))
       .to.deep.equal([{priority: 9, id: 'A'}, {priority: 4, id: 'Z' }]);
   });
 
-  it('are sorted story (ASC), priority(DESC), id(ASC)', () => {
+  it('should be sorted respecting all rules', () => {
     const tasks = [
       {
         id: '4',

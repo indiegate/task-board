@@ -60,12 +60,14 @@ const compareTaskIDs = (taskA, taskB) => {
 
 export const sortTasks = (tasks) => {
   return tasks.sort((taskA, taskB) => {
-    if (compareStories(taskA, taskB) !== 0) {
-      return compareStories(taskA, taskB); // -1 or 1
+    const comparedStories = compareStories(taskA, taskB);
+    if (comparedStories !== 0) {
+      return comparedStories; // -1 or 1
     }
 
-    if (comparePriorities(taskA, taskB) !== 0 ) {
-      return comparePriorities(taskA, taskB);
+    const comparedPriorities = comparePriorities(taskA, taskB);
+    if (comparedPriorities !== 0 ) {
+      return comparedPriorities;
     }
 
     return compareTaskIDs(taskA, taskB);
