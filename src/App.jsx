@@ -1,4 +1,4 @@
-import 'babel-core/polyfill';
+
 import React, { Component } from 'react';
 import { Dispatcher } from 'flux';
 import { Record as record, fromJS, List } from 'immutable';
