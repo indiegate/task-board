@@ -2,6 +2,8 @@ import React from 'react';
 import PureComponent from '../components/PureComponent';
 import HorizontalBox from '../components/HorizontalBox';
 import TaskModal from '../components/TaskModal';
+import StoryModal from '../components/StoryModal';
+import Bar from '../components/Bar';
 import * as ActionTypes from '../constants/actionTypes';
 
 class BoardView extends PureComponent {
@@ -43,13 +45,6 @@ class BoardView extends PureComponent {
     });
   }
 
-  _logout() {
-    this.dispatchAction({
-      type: ActionTypes.LOGOUT_CLICKED,
-      payload: null,
-    });
-  }
-
   _renderTaskModal() {
     if (this.props.task) {
       return (
@@ -62,16 +57,12 @@ class BoardView extends PureComponent {
     }
   }
 
-  _renderTopMenu() {
-    return (
-      <div className="ui secondary menu">
-        <div className="right menu">
-          <div className="item">
-            <div className="ui button" onClick={this._logout.bind(this)}>Log out</div>
-          </div>
-        </div>
-      </div>
-    );
+  _renderStoryModal() {
+    if (this.props.story) {
+      return (
+        <StoryModal story={this.props.story} dispatcher={this.props.dispatcher}/>
+      );
+    }
   }
 
   render() {
@@ -81,10 +72,16 @@ class BoardView extends PureComponent {
 
     return (
       <div>
-        {this._renderTopMenu()}
         {this._renderTaskModal()}
-        <HorizontalBox columns={this.props.layout.toJS().columns}
-            dispatcher={this.props.dispatcher}/>
+        {this._renderStoryModal()}
+        <div style={{flexFlow: 'row', display: 'flex'}}>
+          <div style={{flex: '0 0 200px', order: 0}}>
+            <Bar stories={this.props.stories} dispatcher={this.props.dispatcher}/>
+          </div>
+          <div style={{flex: '3 1', order: 1}}>
+            <HorizontalBox columns={this.props.layout.toJS().columns} dispatcher={this.props.dispatcher}/>
+          </div>
+        </div>
       </div>
     );
   }
@@ -94,6 +91,8 @@ BoardView.propTypes = {
   dispatcher: React.PropTypes.object.isRequired,
   layout: React.PropTypes.object,
   task: React.PropTypes.object,
+  story: React.PropTypes.object,
+  stories: React.PropTypes.array,
 };
 
 export default BoardView;

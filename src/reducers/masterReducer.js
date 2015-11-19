@@ -21,6 +21,9 @@ export default (reduction, action) => {
     case ActionTypes.FIREBASE_TASKS_RECEIVED:
       mutableReduction.update(_r => BoardReducer.tasksReceived(_r, payload));
       break;
+    case ActionTypes.FIREBASE_STORIES_RECEIVED:
+      mutableReduction.update(_r => BoardReducer.storiesReceived(_r, payload));
+      break;
     case ActionTypes.ADD_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
       break;
@@ -47,6 +50,24 @@ export default (reduction, action) => {
       break;
     case ActionTypes.AUTHENTICATION_FAILED:
       mutableReduction.update(_r => BoardReducer.authenticationFailed(_r, payload));
+      break;
+    case ActionTypes.ADD_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.addStoryClicked(_r));
+      break;
+    case ActionTypes.EDIT_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.editStoryClicked(_r, payload));
+      break;
+    case ActionTypes.SAVE_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.saveStoryClicked(_r, payload));
+      break;
+    case ActionTypes.REMOVE_STORY_CLICKED:
+      mutableReduction.update(_r => BoardReducer.removeStoryClicked(_r, payload));
+      break;
+    case ActionTypes.CLOSE_STORY_MODAL_CLICKED:
+    case ActionTypes.FIREBASE_STORY_CREATED_OK:
+    case ActionTypes.FIREBASE_STORY_UPDATED_OK:
+    case ActionTypes.FIREBASE_STORY_REMOVED_OK:
+      mutableReduction.update(_r => BoardReducer.closeStoryModalClicked(_r));
       break;
     case ActionTypes.LOGOUT_CLICKED:
       mutableReduction.update(_r => BoardReducer.logout(_r, payload));

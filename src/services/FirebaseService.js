@@ -77,6 +77,65 @@ export const FirebaseService = {
     });
   },
 
+  createStory(dispatcher, {id, title}) {
+    this._ref
+      .child(`stories`)
+      .transaction((object) => {
+        const currentStories = (object) ? object : {};
+        let color = 0;
+        if (currentStories) {
+          const colorDict = {};
+          Object.keys(currentStories).forEach((key) => {
+            const currentStory = currentStories[key];
+            if (currentStory.color !== undefined) {
+              colorDict[currentStory.color] = true;
+            }
+          });
+          while (color in colorDict) {
+            color++;
+          }
+        }
+        if (!(id in currentStories)) {
+          currentStories[id] = {title, color};
+          return currentStories;
+        }
+        return undefined;
+      }, (error, committed) => {
+        if (!error && committed) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_CREATED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
+  updateStory(dispatcher, {id, title}) {
+    this._ref
+      .child(`stories/${id}/title`)
+      .set(title, (err) => {
+        if (!err) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_UPDATED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
+  removeStory(dispatcher, {id}) {
+    this._ref
+      .child(`stories/${id}`)
+      .set(null, (err) => {
+        if (!err) {
+          dispatcher.dispatch({
+            type: ActionTypes.FIREBASE_STORY_REMOVED_OK,
+            payload: null,
+          });
+        }
+      });
+  },
+
   start(dispatcher, {firebaseId}) {
     if (!firebaseId ) {
       setTimeout(() => {
@@ -102,7 +161,6 @@ export const FirebaseService = {
             payload: layoutSnapshot.val(),
           });
         }, 1);
-
         this._ref
           .child('tasks')
           .on('value', tasksSnapshot => {
@@ -110,6 +168,17 @@ export const FirebaseService = {
               dispatcher.dispatch({
                 type: ActionTypes.FIREBASE_TASKS_RECEIVED,
                 payload: tasksSnapshot.val(),
+              });
+            }, 1);
+          }, tasksError => this._handleError(tasksError, dispatcher));
+        this._ref
+          .child('stories')
+          .on('value', storiesSnapshot => {
+            const payload = storiesSnapshot.val() ? storiesSnapshot.val() : [];
+            setTimeout(() => {
+              dispatcher.dispatch({
+                type: ActionTypes.FIREBASE_STORIES_RECEIVED,
+                payload,
               });
             }, 1);
           }, tasksError => this._handleError(tasksError, dispatcher));

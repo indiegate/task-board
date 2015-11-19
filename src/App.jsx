@@ -28,6 +28,8 @@ const Reduction = record({
     showFirebaseIdInput: !firebaseId,
     auth: false,
     isAuthenticating: false,
+    stories: null,
+    story: null,
   }),
   effects: List.of(),
 });
@@ -86,6 +88,8 @@ class App extends Component {
   render() {
     const { dispatcher, reduction } = this.state;
     const layout = reduction.getIn(['appState', 'layout']) || reduction.getIn(['appState', 'initialLayout']);
+    const stories = reduction.getIn(['appState', 'stories']);
+    const story = reduction.getIn(['appState', 'story']);
 
     if (!reduction.getIn(['appState', 'isLoggedIn'])) {
       return (
@@ -100,7 +104,9 @@ class App extends Component {
       <div>
         <BoardView dispatcher={this.state.dispatcher}
             task={this.state.reduction.getIn(['appState', 'task'])}
-            layout={layout}/>
+            story={story}
+            layout={layout}
+            stories={stories}/>
       </div>
     );
   }

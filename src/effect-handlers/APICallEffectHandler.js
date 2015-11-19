@@ -51,4 +51,19 @@ export default buildEffectHandler({
   [EffectTypes.UNAUTHENTICATION_REQUESTED]: (dispatcher, payload) => {
     FirebaseService.unauthenticate(dispatcher, payload);
   },
+
+  [EffectTypes.STORY_SAVE_REQUESTED]: (dispatcher, payload) => {
+    if (payload.color === undefined) {
+      FirebaseService.createStory(dispatcher, payload);
+    } else {
+      FirebaseService.updateStory(dispatcher, payload);
+    }
+  },
+
+  [EffectTypes.STORY_REMOVE_REQUESTED]: (dispatcher, payload) => {
+    if (payload.id ) {
+      FirebaseService.removeStory(dispatcher, payload);
+    }
+  },
+
 });

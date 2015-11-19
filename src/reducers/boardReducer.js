@@ -76,6 +76,19 @@ export const tasksReceived = (reduction, payload) => {
     .setIn(['appState', 'tasks'], tasksArray);
 };
 
+export const storiesReceived = (reduction, payload) => {
+  const stories = Object.keys(payload).map(key => {
+    const value = payload[key];
+    return {
+      id: key,
+      title: value.title,
+      color: value.color,
+    };
+  });
+  return reduction
+    .setIn(['appState', 'stories'], stories);
+};
+
 export const layoutReceivedOk = (reduction, payload) => {
   return reduction
     .setIn(['appState', 'initialLayout'], fromJS(payload));
@@ -102,6 +115,37 @@ export const saveTaskClicked = (reduction, payload) => {
 export const cancelSaveTaskClicked = (reduction) => {
   return reduction
     .setIn(['appState', 'task'], null);
+};
+
+export const addStoryClicked = (reduction) => {
+  return reduction
+    .setIn(['appState', 'story'], {});
+};
+
+export const editStoryClicked = (reduction, payload) => {
+  return reduction
+    .setIn(['appState', 'story'], payload);
+};
+
+export const closeStoryModalClicked = (reduction) => {
+  return reduction
+    .setIn(['appState', 'story'], null);
+};
+
+export const saveStoryClicked = (reduction, payload) => {
+  reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.STORY_SAVE_REQUESTED, payload)
+      ));
+};
+
+export const removeStoryClicked = (reduction, payload) => {
+  reduction
+    .set('effects', reduction
+      .get('effects')
+      .push(buildMessage(EffectTypes.STORY_REMOVE_REQUESTED, payload)
+      ));
 };
 
 export const draggedTaskToSection = (reduction, payload) => {
