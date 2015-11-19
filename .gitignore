@@ -19,5 +19,8 @@ npm-debug.log
 dist/app*
 dist/*.svg
 dist/*.ttf
+dist/*.hot-update.js
+dist/*.hot-update.js.map
+dist/*.hot-update.json
 
 firebase.json

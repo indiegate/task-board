@@ -7,19 +7,26 @@ var host = '0.0.0.0';
 var port = '3000';
 
 var config = {
-  entry: './src/index.js',
+  entry: [
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
+    './src/index.js'
+  ],
   devtool: 'source-map',
   output: {
     path: __dirname + '/dist',
     filename: appName + '.js',
-    publicPath: __dirname + '/public'
+    publicPath: '/static',
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
         test: /(\.jsx|\.js)$/,
-        loader: 'babel',
-        exclude: /(node_modules|bower_components)/
+        loaders: ['react-hot', 'babel'],
+        exclude: /(node_modules|bower_components)/,
       },
       {
         test: /(\.jsx|\.js)$/,
@@ -48,6 +55,7 @@ var config = {
 if (env === 'dev') {
   new WebpackDevServer(webpack(config), {
     contentBase: './dist',
+    publicPath: config.output.publicPath,
     hot: true,
     debug: true
   }).listen(port, host, function (err, result) {
