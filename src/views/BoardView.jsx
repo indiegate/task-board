@@ -75,7 +75,7 @@ class BoardView extends PureComponent {
         {this._renderTaskModal()}
         {this._renderStoryModal()}
         <div style={{flexFlow: 'row', display: 'flex'}}>
-          <div style={{flex: '0 0 200px', order: 0}}>
+          <div style={{flex: '0 0 20rem', order: 0}}>
             <Bar stories={this.props.stories} dispatcher={this.props.dispatcher}/>
           </div>
           <div style={{flex: '3 1', order: 1}}>

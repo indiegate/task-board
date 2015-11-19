@@ -110,6 +110,7 @@ h5.ui.header {
 .ui.vertical.menu>.item {
   padding-left: 0;
   padding-right: 0;
+  word-wrap: break-word;
 }
 
 .ui.vertical.menu>.item>h4 {
@@ -119,4 +120,8 @@ h5.ui.header {
 
 .ui.vertical.menu .list>.item {
   padding: 6px 13px 6px 13px;
+}
+
+.ui.vertical.menu {
+  width: 20rem;
 }
