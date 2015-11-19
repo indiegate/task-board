@@ -107,9 +107,11 @@ class StoryModal extends Component {
 
   render() {
     const story = this.props.story;
-    const dialogName = story && story.id ? 'Edit story' : 'Add new story';
+    const editMode = story && story.id;
+    const dialogName = editMode ? 'Edit story' : 'Add new story';
     const displayError = this.state.errorText ? 'block' : 'none';
-    const idFieldClasses = 'six wide' + (story && story.id ? ' disabled ' : ' ') + 'field';
+    const idFieldClasses = 'six wide' + (editMode ? ' disabled ' : ' ') + 'field';
+
     return (
       <div className="ui modal" style={{display: 'block'}}>
         <div className="ui clearing segment">
@@ -125,7 +127,7 @@ class StoryModal extends Component {
               <label>Id</label>
               <input type="text"
                      ref="storyIdContent"
-                     autoFocus
+                     autoFocus={!editMode}
                      onFocus={(event) => {
                        event.persist();
                        const node = event.target;
@@ -139,6 +141,7 @@ class StoryModal extends Component {
               <label>Title</label>
               <input type="text"
                      ref="storyContent"
+                     autoFocus={editMode}
                      onChange={this._handleTitleInputChange.bind(this)}
                      value={this.state.titleContent}/>
             </div>

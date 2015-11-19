@@ -174,10 +174,11 @@ export const FirebaseService = {
         this._ref
           .child('stories')
           .on('value', storiesSnapshot => {
+            const payload = storiesSnapshot.val() ? storiesSnapshot.val() : [];
             setTimeout(() => {
               dispatcher.dispatch({
                 type: ActionTypes.FIREBASE_STORIES_RECEIVED,
-                payload: storiesSnapshot.val(),
+                payload,
               });
             }, 1);
           }, tasksError => this._handleError(tasksError, dispatcher));

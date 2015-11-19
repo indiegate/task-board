@@ -77,16 +77,16 @@ export const tasksReceived = (reduction, payload) => {
 };
 
 export const storiesReceived = (reduction, payload) => {
-  const storiesArray = [];
-  if (payload) {
-    Object.keys(payload).forEach(key => {
-      const story = payload[key];
-      story.id = key;
-      storiesArray.push(story);
-    });
-  }
+  const stories = Object.keys(payload).map(key => {
+    const value = payload[key];
+    return {
+      id: key,
+      title: value.title,
+      color: value.color,
+    };
+  });
   return reduction
-    .setIn(['appState', 'stories'], storiesArray);
+    .setIn(['appState', 'stories'], stories);
 };
 
 export const layoutReceivedOk = (reduction, payload) => {
