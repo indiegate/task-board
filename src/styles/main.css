@@ -55,16 +55,8 @@ h5.ui.header {
   display: block;
 }
 
-.ui.celled.grid .column {
-  border-bottom: 1px solid #d4d4d5;
-}
-
 .board-section button {
   float: right;
-}
-
-.board-section {
-  border: 1px solid rgba(0, 0, 0, 0.0);
 }
 
 .red-target {
@@ -124,4 +116,8 @@ h5.ui.header {
 
 .ui.vertical.menu {
   width: 20rem;
+}
+
+.ui.divider {
+  text-transform: none;
 }

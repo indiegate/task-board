@@ -79,7 +79,7 @@ class BoardView extends PureComponent {
             <Bar stories={this.props.stories} firebaseId={this.props.firebaseId} dispatcher={this.props.dispatcher}/>
           </div>
           <div style={{flex: '3 1', order: 1}}>
-            <HorizontalBox columns={this.props.layout.toJS().columns} dispatcher={this.props.dispatcher}/>
+            <HorizontalBox columns={this.props.layout.toJS().columns} dispatcher={this.props.dispatcher} parents={[]}/>
           </div>
         </div>
       </div>
