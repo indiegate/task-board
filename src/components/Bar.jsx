@@ -46,11 +46,19 @@ class Bar extends PureComponent {
     if (!this.props.stories) {
       return <h1>no stories</h1>;
     }
-
     return (<div className="ui vertical menu fixed top" style={{height: '100%', backgroundColor: '#ebebeb'}}>
-      <button className="ui icon button"
-              onClick={this._logout.bind(this)}>
-        Log out
+      <h2 className="ui header"
+          style={{
+            margin: '1rem',
+            display: 'inline-block',
+            width: '10rem',
+            wordWrap: 'break-word',
+          }}>
+        {this.props.firebaseId}
+      </h2>
+      <button className="ui compact button" onClick={this._logout.bind(this)}
+              style={{display: 'inline-block', float: 'right', margin: '1rem'}}>
+          logout
       </button>
       <div className="item">
         <h4>Stories
@@ -67,6 +75,7 @@ class Bar extends PureComponent {
 }
 
 Bar.propTypes = {
+  firebaseId: React.PropTypes.string.isRequired,
   stories: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,
 };
