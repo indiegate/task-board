@@ -1,6 +1,7 @@
+var path = require('path');
 var webpack = require('webpack');
-var env = process.env.WEBPACK_ENV;
 var WebpackDevServer = require('webpack-dev-server');
+var env = process.env.WEBPACK_ENV;
 
 var appName = 'app';
 var host = '0.0.0.0';
@@ -14,9 +15,9 @@ var config = {
   ],
   devtool: 'source-map',
   output: {
-    path: __dirname + '/dist',
+    path: path.join(__dirname, '../dist'),
     filename: appName + '.js',
-    publicPath: '/static',
+    publicPath: '/',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
@@ -53,6 +54,7 @@ var config = {
 };
 
 if (env === 'dev') {
+  config.plugins.push(new webpack.HotModuleReplacementPlugin())
   new WebpackDevServer(webpack(config), {
     contentBase: './dist',
     publicPath: config.output.publicPath,
