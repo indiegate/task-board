@@ -90,7 +90,6 @@ class App extends Component {
     const layout = reduction.getIn(['appState', 'layout']) || reduction.getIn(['appState', 'initialLayout']);
     const stories = reduction.getIn(['appState', 'stories']);
     const story = reduction.getIn(['appState', 'story']);
-
     if (!reduction.getIn(['appState', 'isLoggedIn'])) {
       return (
         <LoginForm dispatcher={dispatcher}
@@ -106,7 +105,8 @@ class App extends Component {
             task={this.state.reduction.getIn(['appState', 'task'])}
             story={story}
             layout={layout}
-            stories={stories}/>
+            stories={stories}
+            firebaseId={reduction.getIn(['appState', 'firebaseId'])}/>
       </div>
     );
   }

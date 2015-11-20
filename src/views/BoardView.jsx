@@ -75,8 +75,8 @@ class BoardView extends PureComponent {
         {this._renderTaskModal()}
         {this._renderStoryModal()}
         <div style={{flexFlow: 'row', display: 'flex'}}>
-          <div style={{flex: '0 0 200px', order: 0}}>
-            <Bar stories={this.props.stories} dispatcher={this.props.dispatcher}/>
+          <div style={{flex: '0 0 20rem', order: 0}}>
+            <Bar stories={this.props.stories} firebaseId={this.props.firebaseId} dispatcher={this.props.dispatcher}/>
           </div>
           <div style={{flex: '3 1', order: 1}}>
             <HorizontalBox columns={this.props.layout.toJS().columns} dispatcher={this.props.dispatcher}/>
@@ -93,6 +93,7 @@ BoardView.propTypes = {
   task: React.PropTypes.object,
   story: React.PropTypes.object,
   stories: React.PropTypes.array,
+  firebaseId: React.PropTypes.string.isRequired,
 };
 
 export default BoardView;
