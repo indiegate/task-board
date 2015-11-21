@@ -1,25 +1,10 @@
 import Firebase from 'firebase';
-import * as ActionTypes from '../constants/actionTypes';
-
-const layoutReceived = payload => ({type: ActionTypes.LAYOUT_RECEIVED_OK, payload});
-
-const storiesReceived = payload => ({type: ActionTypes.FIREBASE_STORIES_RECEIVED, payload});
-
-const tasksReceived = payload => ({type: ActionTypes.FIREBASE_TASKS_RECEIVED, payload});
-
-const authFailed = payload => ({type: ActionTypes.AUTHENTICATION_FAILED, payload});
+import * as FirebaseActions from '../actions/FirebaseActions';
 
 const deferDispatch = dispatcher => action => setTimeout(() => dispatcher.dispatch(action), 1);
 
 export const FirebaseService = {
   _ref: null,
-
-  _handleError(error, dispatcher) {
-    if (error.code === 'PERMISSION_DENIED') {
-      dispatcher.dispatch(authFailed(error));
-    }
-    // TODO handle layout, stories, tasks errors
-  },
 
   createTask(dispatcher, task) {
     this._ref
@@ -33,11 +18,8 @@ export const FirebaseService = {
         priority: task.priority,
       }, (err) => {
         if (!err) {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASK_CREATED_OK,
-            payload: null,
-          });
-        }
+          dispatcher.dispatch(FirebaseActions.taskCreated());
+        } // TODO handle task create fail
       });
   },
 
@@ -51,11 +33,8 @@ export const FirebaseService = {
         priority,
       }, (err) => {
         if (!err) {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_TASK_UPDATED_OK,
-            payload: null,
-          });
-        }
+          dispatcher.dispatch(FirebaseActions.taskUpdated());
+        } // TODO handle task update fail
       });
   },
 
@@ -110,11 +89,8 @@ export const FirebaseService = {
         return undefined;
       }, (error, committed) => {
         if (!error && committed) {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_STORY_CREATED_OK,
-            payload: null,
-          });
-        }
+          dispatcher.dispatch(FirebaseActions.storyCreated());
+        } // TODO handle story create fail
       });
   },
 
@@ -123,11 +99,8 @@ export const FirebaseService = {
       .child(`stories/${id}/title`)
       .set(title, (err) => {
         if (!err) {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_STORY_UPDATED_OK,
-            payload: null,
-          });
-        }
+          dispatcher.dispatch(FirebaseActions.storyUpdated());
+        } // TODO handle story update fail
       });
   },
 
@@ -136,23 +109,20 @@ export const FirebaseService = {
       .child(`stories/${id}`)
       .set(null, (err) => {
         if (!err) {
-          dispatcher.dispatch({
-            type: ActionTypes.FIREBASE_STORY_REMOVED_OK,
-            payload: null,
-          });
-        }
+          dispatcher.dispatch(FirebaseActions.storyRemoved());
+        } // TODO handle story removal fail
       });
   },
 
   start(dispatcher, {firebaseId}) {
     const deferredDispatch = deferDispatch(dispatcher);
+    const dispatch = dispatcher.dispatch;
 
     if (!firebaseId ) {
-      const payload = {
+      deferredDispatch(FirebaseActions.authFailed({
         code: 'FIREBASE_ID_NOT_IN_LS',
         message: 'Firebase id not present locally',
-      };
-      deferredDispatch(authFailed(payload));
+      }));
       return;
     }
 
@@ -160,32 +130,29 @@ export const FirebaseService = {
 
     this._ref
       .child('layout')
-      .on('value', layoutSnapshot => deferredDispatch(layoutReceived(layoutSnapshot.val())),
-        layoutError => this._handleError(layoutError, dispatcher));
+      .on('value', layoutSnapshot => deferredDispatch(FirebaseActions.layoutReceived(layoutSnapshot.val())),
+        layoutError => dispatch(FirebaseActions.syncFailed(layoutError)));
 
     this._ref
       .child('stories')
       .on('value', storiesSnapshot => {
-        deferredDispatch(storiesReceived(storiesSnapshot.val() ? storiesSnapshot.val() : []));
-      }, storiesError => this._handleError(storiesError, dispatcher));
+        deferredDispatch(FirebaseActions.storiesReceived(storiesSnapshot.val() ? storiesSnapshot.val() : []));
+      }, storiesError => dispatch(FirebaseActions.syncFailed(storiesError)));
 
     this._ref
       .child('tasks')
-      .on('value', tasksSnapshot => deferredDispatch(tasksReceived(tasksSnapshot.val())),
-        tasksError => this._handleError(tasksError, dispatcher));
+      .on('value', tasksSnapshot => deferredDispatch(FirebaseActions.tasksReceived(tasksSnapshot.val())),
+        tasksError => dispatch(FirebaseActions.syncFailed(tasksError)));
   },
 
   authenticate(dispatcher, {firebaseId, password}) {
+    const deferredDispatch = deferDispatch(dispatcher);
+
     if (!firebaseId) {
-      setTimeout(() => {
-        dispatcher.dispatch({
-          type: ActionTypes.AUTHENTICATION_FAILED,
-          payload: {
-            code: 'INVALID_FIREBASE_ID',
-            message: 'Invalid firebase id',
-          },
-        });
-      }, 1);
+      deferredDispatch(FirebaseActions.authFailed({
+        code: 'INVALID_FIREBASE_ID',
+        message: 'Invalid firebase id',
+      }));
       return;
     }
 
@@ -198,18 +165,9 @@ export const FirebaseService = {
       password,
     }, (error, authData) => {
       if (error) {
-        dispatcher.dispatch({
-          type: ActionTypes.AUTHENTICATION_FAILED,
-          payload: error,
-        });
+        deferredDispatch(FirebaseActions.authFailed(error));
       } else {
-        dispatcher.dispatch({
-          type: ActionTypes.AUTHENTICATION_OK,
-          payload: {
-            authData,
-            firebaseId,
-          },
-        });
+        dispatcher.dispatch(FirebaseActions.authSuccess({authData, firebaseId}));
       }
     });
   },
