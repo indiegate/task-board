@@ -1,6 +1,5 @@
 export const BOARD_MOUNTED = 'BOARD_MOUNTED';
 
-
 // UI/User triggered actions
 export const ADD_TASK_CLICKED = 'ADD_TASK_CLICKED';
 export const EDIT_TASK_CLICKED = 'EDIT_TASK_CLICKED';

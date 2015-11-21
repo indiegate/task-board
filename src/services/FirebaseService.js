@@ -1,16 +1,24 @@
 import Firebase from 'firebase';
 import * as ActionTypes from '../constants/actionTypes';
 
+const layoutReceived = payload => ({type: ActionTypes.LAYOUT_RECEIVED_OK, payload});
+
+const storiesReceived = payload => ({type: ActionTypes.FIREBASE_STORIES_RECEIVED, payload});
+
+const tasksReceived = payload => ({type: ActionTypes.FIREBASE_TASKS_RECEIVED, payload});
+
+const authFailed = payload => ({type: ActionTypes.AUTHENTICATION_FAILED, payload});
+
+const deferDispatch = dispatcher => action => setTimeout(() => dispatcher.dispatch(action), 1);
+
 export const FirebaseService = {
   _ref: null,
 
   _handleError(error, dispatcher) {
     if (error.code === 'PERMISSION_DENIED') {
-      dispatcher.dispatch({
-        type: ActionTypes.AUTHENTICATION_FAILED,
-        payload: error,
-      });
+      dispatcher.dispatch(authFailed(error));
     }
+    // TODO handle layout, stories, tasks errors
   },
 
   createTask(dispatcher, task) {
@@ -137,16 +145,14 @@ export const FirebaseService = {
   },
 
   start(dispatcher, {firebaseId}) {
+    const deferredDispatch = deferDispatch(dispatcher);
+
     if (!firebaseId ) {
-      setTimeout(() => {
-        dispatcher.dispatch({
-          type: ActionTypes.AUTHENTICATION_FAILED,
-          payload: {
-            code: 'FIREBASE_ID_NOT_IN_LS',
-            message: 'Firebase id not present locally',
-          },
-        });
-      }, 1);
+      const payload = {
+        code: 'FIREBASE_ID_NOT_IN_LS',
+        message: 'Firebase id not present locally',
+      };
+      deferredDispatch(authFailed(payload));
       return;
     }
 
@@ -154,35 +160,19 @@ export const FirebaseService = {
 
     this._ref
       .child('layout')
-      .on('value', layoutSnapshot => {
-        setTimeout(() => {
-          dispatcher.dispatch({
-            type: ActionTypes.LAYOUT_RECEIVED_OK,
-            payload: layoutSnapshot.val(),
-          });
-        }, 1);
-        this._ref
-          .child('tasks')
-          .on('value', tasksSnapshot => {
-            setTimeout(() => {
-              dispatcher.dispatch({
-                type: ActionTypes.FIREBASE_TASKS_RECEIVED,
-                payload: tasksSnapshot.val(),
-              });
-            }, 1);
-          }, tasksError => this._handleError(tasksError, dispatcher));
-        this._ref
-          .child('stories')
-          .on('value', storiesSnapshot => {
-            const payload = storiesSnapshot.val() ? storiesSnapshot.val() : [];
-            setTimeout(() => {
-              dispatcher.dispatch({
-                type: ActionTypes.FIREBASE_STORIES_RECEIVED,
-                payload,
-              });
-            }, 1);
-          }, tasksError => this._handleError(tasksError, dispatcher));
-      }, layoutError => this._handleError(layoutError, dispatcher));
+      .on('value', layoutSnapshot => deferredDispatch(layoutReceived(layoutSnapshot.val())),
+        layoutError => this._handleError(layoutError, dispatcher));
+
+    this._ref
+      .child('stories')
+      .on('value', storiesSnapshot => {
+        deferredDispatch(storiesReceived(storiesSnapshot.val() ? storiesSnapshot.val() : []));
+      }, storiesError => this._handleError(storiesError, dispatcher));
+
+    this._ref
+      .child('tasks')
+      .on('value', tasksSnapshot => deferredDispatch(tasksReceived(tasksSnapshot.val())),
+        tasksError => this._handleError(tasksError, dispatcher));
   },
 
   authenticate(dispatcher, {firebaseId, password}) {

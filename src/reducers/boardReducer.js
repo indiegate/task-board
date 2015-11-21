@@ -50,6 +50,7 @@ export const startSync = (reduction) => {
 };
 
 export const tasksReceived = (reduction, payload) => {
+  console.log(reduction.getIn(['appState', 'stories']));
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const tasksArray = [];
   const groupsDict = {};

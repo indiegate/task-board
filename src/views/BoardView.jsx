@@ -45,26 +45,6 @@ class BoardView extends PureComponent {
     });
   }
 
-  _renderTaskModal() {
-    if (this.props.task) {
-      return (
-        <TaskModal task={this.props.task}
-            onSubmit={this._saveTask.bind(this)}
-            onClose={this._closeModal.bind(this)}
-            onArchive={this._archiveTask.bind(this)}
-        />
-      );
-    }
-  }
-
-  _renderStoryModal() {
-    if (this.props.story) {
-      return (
-        <StoryModal story={this.props.story} dispatcher={this.props.dispatcher}/>
-      );
-    }
-  }
-
   render() {
     if (!this.props.layout) {
       return <div className="ui large active loader"></div>;
@@ -72,14 +52,31 @@ class BoardView extends PureComponent {
 
     return (
       <div>
-        {this._renderTaskModal()}
-        {this._renderStoryModal()}
+        { this.props.task ?
+          <TaskModal task={this.props.task}
+                     onSubmit={this._saveTask.bind(this)}
+                     onClose={this._closeModal.bind(this)}
+                     onArchive={this._archiveTask.bind(this)}
+          />
+          :
+          null
+        }
+        { this.props.story ?
+          <StoryModal story={this.props.story} dispatcher={this.props.dispatcher}/>
+          :
+          null
+        }
         <div style={{flexFlow: 'row', display: 'flex'}}>
           <div style={{flex: '0 0 20rem', order: 0}}>
-            <Bar stories={this.props.stories} firebaseId={this.props.firebaseId} dispatcher={this.props.dispatcher}/>
+            <Bar
+                stories={this.props.stories}
+                firebaseId={this.props.firebaseId}
+                dispatcher={this.props.dispatcher}/>
           </div>
           <div style={{flex: '3 1', order: 1}}>
-            <HorizontalBox columns={this.props.layout.toJS().columns} dispatcher={this.props.dispatcher}/>
+            <HorizontalBox
+                columns={this.props.layout.toJS().columns}
+                dispatcher={this.props.dispatcher}/>
           </div>
         </div>
       </div>

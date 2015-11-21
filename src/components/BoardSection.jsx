@@ -86,8 +86,8 @@ class BoardSection extends Component {
 
   render() {
     const { connectDropTarget, name } = this.props;
-
     const sectionClass = 'board-section ' + this._getTargetClass();
+
     return connectDropTarget(
       <div className="column">
         <div className={sectionClass}>

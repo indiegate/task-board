@@ -32,8 +32,6 @@
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "3.4.1",
     "file-loader": "0.8.4",
-    "firebase": "2.2.9",
-    "flux": "2.1.1",
     "html-webpack-plugin": "^1.6.2",
     "immutable": "3.7.5",
     "isomorphic-fetch": "2.1.1",
@@ -62,6 +60,8 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "firebase": "2.2.9",
+    "flux": "2.1.1",
     "react": "0.14.0",
     "react-dom": "0.14.0",
     "react-dnd": "^2.0.2",
