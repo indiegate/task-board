@@ -76,7 +76,7 @@ class App extends Component {
     window.replay = () => {
       const reduction = this.state
         .actionLog
-        .reduce(masterReducer, new Reduction)
+        .reduce(masterReducer, new Reduction())
         .set('effects', List.of());
 
       this.setState({
