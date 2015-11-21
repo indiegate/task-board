@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map as map } from 'immutable';
 import * as EffectTypes from '../constants/effectTypes';
 import buildMessage from '../utils/buildMessage';
 
@@ -27,14 +27,11 @@ const updateLayout = (layout, task) => {
         return updateBox(row);
       });
     } else if (item.id) {
-      return updateBoardSection(item);
+      updateBoardSection(item);
     }
-    return item;
   };
 
-  return layout.columns.map(column => {
-    return updateBox(column);
-  });
+  return layout.columns.forEach(column => updateBox(column));
 };
 
 export const startSync = (reduction) => {
@@ -50,31 +47,25 @@ export const startSync = (reduction) => {
 };
 
 export const tasksReceived = (reduction, payload) => {
-  console.log(reduction.getIn(['appState', 'stories']));
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
-  const tasksArray = [];
-  const groupsDict = {};
-  let group = 0;
-  // put tasks into initialLayout
-  Object.keys(payload).forEach(key => {
-    const task = payload[key];
-    task.id = key;
-    if (task.story) {
-      const num = groupsDict[task.story];
-      if (num) {
-        task.storyGroup = num;
-      } else {
-        group++;
-        groupsDict[task.story] = group;
-        task.storyGroup = group;
-      }
+  const stories = reduction.getIn(['appState', 'stories']);
+  let maxColor = Math.max.apply(Math, stories.map(s => s.color)) + 1;
+
+  const tasks = map(payload).map((value, key) => {
+    value.id = key;
+    if (value.story) {
+      const story = stories.filter(s => s.id === value.story)[0];
+      value.storyGroup = story ? story.color : maxColor++;
     }
-    updateLayout(layout, task);
-    tasksArray.push(task);
-  });
+    return value;
+  }).toArray();
+
+  // TODO refactor this side-effect
+  tasks.forEach(task => updateLayout(layout, task));
+
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout))
-    .setIn(['appState', 'tasks'], tasksArray);
+    .setIn(['appState', 'tasks'], tasks);
 };
 
 export const storiesReceived = (reduction, payload) => {
