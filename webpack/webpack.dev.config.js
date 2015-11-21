@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var env = process.env.WEBPACK_ENV;
 
 var appName = 'app';
 var host = '0.0.0.0';
@@ -53,21 +52,18 @@ var config = {
   }
 };
 
-if (env === 'dev') {
-  config.plugins.push(new webpack.HotModuleReplacementPlugin())
-  new WebpackDevServer(webpack(config), {
-    contentBase: './dist',
-    publicPath: config.output.publicPath,
-    hot: true,
-    debug: true
-  }).listen(port, host, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-  });
-  console.log('-------------------------');
-  console.log('Local web server runs at http://' + host + ':' + port);
-  console.log('-------------------------');
-}
+new WebpackDevServer(webpack(config), {
+  contentBase: './dist',
+  publicPath: config.output.publicPath,
+  hot: true,
+  debug: true
+}).listen(port, host, function (err, result) {
+  if (err) {
+    console.log(err);
+  }
+});
+console.log('-------------------------');
+console.log('Local web server runs at http://' + host + ':' + port);
+console.log('-------------------------');
 
 module.exports = config;
