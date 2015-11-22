@@ -22,16 +22,14 @@ var config = {
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {
+    preLoaders: [
+      { test: /(\.jsx|\.js)$/, loader: "eslint-loader", exclude: /node_modules/}
+    ],
     loaders: [
       {
         test: /(\.jsx|\.js)$/,
         loaders: ['react-hot', 'babel'],
         exclude: /(node_modules|bower_components)/,
-      },
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: "eslint-loader",
-        exclude: /node_modules/
       },
       {
         test: /\.scss$/,

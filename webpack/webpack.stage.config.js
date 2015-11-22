@@ -15,16 +15,18 @@ var config = {
     new webpack.optimize.UglifyJsPlugin(),
   ],
   module: {
+    preLoaders: [
+      {
+        test: /(\.jsx|\.js)$/,
+        loader: "eslint-loader",
+        exclude: /node_modules/,
+      }
+    ],
     loaders: [
       {
         test: /(\.jsx|\.js)$/,
         loaders: ['babel'],
-        exclude: /(node_modules|bower_components)/,
-      },
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: "eslint-loader",
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
