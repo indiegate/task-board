@@ -55,7 +55,7 @@ export const tasksReceived = (reduction, payload) => {
     if (value.story) {
       const story = stories.filter(s => s.id === value.story)[0];
       if (story) {
-        value.storyGroup = story;
+        value.storyGroup = story.color;
       }
     }
     return value;
