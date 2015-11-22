@@ -49,13 +49,14 @@ export const startSync = (reduction) => {
 export const tasksReceived = (reduction, payload) => {
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const stories = reduction.getIn(['appState', 'stories']);
-  let maxColor = Math.max.apply(Math, stories.map(s => s.color)) + 1;
 
   const tasks = map(payload).map((value, key) => {
     value.id = key;
     if (value.story) {
       const story = stories.filter(s => s.id === value.story)[0];
-      value.storyGroup = story ? story.color : maxColor++;
+      if (story) {
+        value.storyGroup = story;
+      }
     }
     return value;
   }).toArray();
