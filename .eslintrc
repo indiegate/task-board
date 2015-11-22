@@ -1,5 +1,9 @@
 {
   "extends": "airbnb",
+  "ecmaFeatures" : {
+    "restParams": true,
+    "experimentalObjectRestSpread": true
+  },
   "rules": {
     "max-len": [1, 120, 2, {
       "ignoreComments": true
