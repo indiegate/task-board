@@ -1,12 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+/*eslint wrap-iife: [2, "outside"]*/
 
+import React, { Component, PropTypes } from 'react';
 class TaskModal extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       dialogContent: this.props.task.content || '',
-      storyContent: this.props.task.story || '',
+      storyContent: this.props.task.story || 'Choose...',
       priorityContent: this.props.task.priority || 0,
       errorText: '',
     };
@@ -109,7 +110,7 @@ class TaskModal extends Component {
   }
 
   render() {
-    const { task } = this.props;
+    const { task, stories } = this.props;
     const dialogName = task && task.id ? 'Edit task' : 'Add new task';
     const displayError = this.state.errorText ? 'block' : 'none';
 
@@ -141,10 +142,17 @@ class TaskModal extends Component {
             </div>
             <div className="three wide field">
               <label>Story</label>
-              <input type="text"
-                     ref="storyContent"
-                     onChange={this._handleStoryInputChange.bind(this)}
-                     value={this.state.storyContent}/>
+              <div className="ui compact menu">
+                <div className="ui simple dropdown item">
+                  {this.state.storyContent}
+                  <i className="dropdown icon"/>
+                  <div className="menu">
+                    {stories.map((story, idx) =>
+                      <div key={idx} className="item">{story.id} : {story.title}</div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="one wide field">
               <label>Priority</label>
@@ -172,6 +180,7 @@ class TaskModal extends Component {
 }
 
 TaskModal.propTypes = {
+  stories: PropTypes.array,
   task: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onClose: PropTypes.func,
