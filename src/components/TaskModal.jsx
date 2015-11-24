@@ -1,5 +1,3 @@
-/*eslint wrap-iife: [2, "outside"]*/
-
 import React, { Component, PropTypes } from 'react';
 class TaskModal extends Component {
 
@@ -7,7 +5,7 @@ class TaskModal extends Component {
     super(props);
     this.state = {
       dialogContent: this.props.task.content || '',
-      storyContent: this.props.task.story || 'Choose...',
+      storyContent: this.props.task.story || 'Assign story',
       priorityContent: this.props.task.priority || 0,
       errorText: '',
     };
@@ -81,7 +79,7 @@ class TaskModal extends Component {
 
     this.props.onSubmit(Object.assign({}, this.props.task, {
       content: trimmedContent,
-      story: trimmedStoryContent !== '' ? trimmedStoryContent : null,
+      story: trimmedStoryContent !== 'Assign story' ? trimmedStoryContent : null,
       priority: parsedPriority ? parsedPriority : null,
     }));
   }
@@ -91,6 +89,18 @@ class TaskModal extends Component {
       errorText: '',
     });
     this.props.onClose();
+  }
+
+  _clearStory() {
+    this.setState({
+      storyContent: 'Assign story',
+    });
+  }
+
+  _selectStory(storyId) {
+    this.setState({
+      storyContent: storyId,
+    });
   }
 
   _renderArchiveButton() {
@@ -147,8 +157,11 @@ class TaskModal extends Component {
                   {this.state.storyContent}
                   <i className="dropdown icon"/>
                   <div className="menu">
+                    <div className="item" onClick={this._clearStory.bind(this)}>Clear story</div>
                     {stories.map((story, idx) =>
-                      <div key={idx} className="item">{story.id} : {story.title}</div>
+                      <div key={idx}
+                          className="item"
+                          onClick={this._selectStory.bind(this, story.id)}>{story.id} : {story.title}</div>
                     )}
                   </div>
                 </div>
