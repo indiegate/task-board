@@ -79,7 +79,7 @@ class TaskModal extends Component {
 
     this.props.onSubmit(Object.assign({}, this.props.task, {
       content: trimmedContent,
-      story: trimmedStoryContent !== 'Assign story' ? trimmedStoryContent : null,
+      story: trimmedStoryContent !== '' ? trimmedStoryContent : null,
       priority: parsedPriority ? parsedPriority : null,
     }));
   }
@@ -91,15 +91,9 @@ class TaskModal extends Component {
     this.props.onClose();
   }
 
-  _clearStory() {
+  _handleStoryChange(event) {
     this.setState({
-      storyContent: 'Assign story',
-    });
-  }
-
-  _selectStory(storyId) {
-    this.setState({
-      storyContent: storyId,
+      storyContent: event.target.value,
     });
   }
 
@@ -152,20 +146,14 @@ class TaskModal extends Component {
             </div>
             <div className="three wide field">
               <label>Story</label>
-              <div className="ui compact menu">
-                <div className="ui simple dropdown item">
-                  {this.state.storyContent}
-                  <i className="dropdown icon"/>
-                  <div className="menu">
-                    <div className="item" onClick={this._clearStory.bind(this)}>Clear story</div>
-                    {stories.map((story, idx) =>
-                      <div key={idx}
-                          className="item"
-                          onClick={this._selectStory.bind(this, story.id)}>{story.id} : {story.title}</div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <select className="ui dropdown"
+                  onChange={this._handleStoryChange.bind(this)}
+                  value={this.state.storyContent}>
+                <option value="">No story</option>
+                {stories.map((story, idx) =>
+                  <option key={idx}value={story.id}>{story.id} : {story.title}</option>
+                )}
+              </select>
             </div>
             <div className="one wide field">
               <label>Priority</label>
