@@ -5,7 +5,7 @@ class TaskModal extends Component {
     super(props);
     this.state = {
       dialogContent: this.props.task.content || '',
-      storyContent: this.props.task.story || 'Assign story',
+      storyValue: this.props.task.story || '',
       priorityContent: this.props.task.priority || 0,
       errorText: '',
     };
@@ -51,13 +51,6 @@ class TaskModal extends Component {
     });
   }
 
-  _handleStoryInputChange(event) {
-    this.setState({
-      errorText: '',
-      storyContent: event.target.value,
-    });
-  }
-
   _handlePriorityInputChange(event) {
     this.setState({
       errorText: '',
@@ -67,9 +60,8 @@ class TaskModal extends Component {
 
   _submitHandler() {
     const trimmedContent = this.state.dialogContent.trim();
-    const trimmedStoryContent = this.state.storyContent.trim();
+    const trimmedStoryContent = this.state.storyValue.trim();
     const parsedPriority = parseInt(this.state.priorityContent, 10);
-
     if (!trimmedContent) {
       this.setState({
         errorText: `Cant't save empty task`,
@@ -93,7 +85,7 @@ class TaskModal extends Component {
 
   _handleStoryChange(event) {
     this.setState({
-      storyContent: event.target.value,
+      storyValue: event.target.value,
     });
   }
 
@@ -148,11 +140,11 @@ class TaskModal extends Component {
               <label>Story</label>
               <select className="ui dropdown"
                   onChange={this._handleStoryChange.bind(this)}
-                  value={this.state.storyContent}>
+                  value={this.state.storyValue}>
                 <option value="">No story</option>
                 {stories.map((story, idx) =>
-                  <option key={idx}value={story.id}>{story.id} : {story.title}</option>
-                )}
+                  <option key={idx} value={story.id}>{story.id} : {story.title}</option>
+                )}a
               </select>
             </div>
             <div className="one wide field">
