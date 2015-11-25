@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-
 class TaskModal extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       dialogContent: this.props.task.content || '',
-      storyContent: this.props.task.story || '',
+      storyValue: this.props.task.story || '',
       priorityContent: this.props.task.priority || 0,
       errorText: '',
     };
@@ -52,13 +51,6 @@ class TaskModal extends Component {
     });
   }
 
-  _handleStoryInputChange(event) {
-    this.setState({
-      errorText: '',
-      storyContent: event.target.value,
-    });
-  }
-
   _handlePriorityInputChange(event) {
     this.setState({
       errorText: '',
@@ -68,9 +60,8 @@ class TaskModal extends Component {
 
   _submitHandler() {
     const trimmedContent = this.state.dialogContent.trim();
-    const trimmedStoryContent = this.state.storyContent.trim();
+    const trimmedStoryContent = this.state.storyValue.trim();
     const parsedPriority = parseInt(this.state.priorityContent, 10);
-
     if (!trimmedContent) {
       this.setState({
         errorText: `Cant't save empty task`,
@@ -92,6 +83,12 @@ class TaskModal extends Component {
     this.props.onClose();
   }
 
+  _handleStoryChange(event) {
+    this.setState({
+      storyValue: event.target.value,
+    });
+  }
+
   _renderArchiveButton() {
     if (!this.props.task.id) {
       return null;
@@ -109,7 +106,7 @@ class TaskModal extends Component {
   }
 
   render() {
-    const { task } = this.props;
+    const { task, stories } = this.props;
     const dialogName = task && task.id ? 'Edit task' : 'Add new task';
     const displayError = this.state.errorText ? 'block' : 'none';
 
@@ -141,10 +138,14 @@ class TaskModal extends Component {
             </div>
             <div className="three wide field">
               <label>Story</label>
-              <input type="text"
-                     ref="storyContent"
-                     onChange={this._handleStoryInputChange.bind(this)}
-                     value={this.state.storyContent}/>
+              <select className="ui dropdown"
+                  onChange={this._handleStoryChange.bind(this)}
+                  value={this.state.storyValue}>
+                <option value="">No story</option>
+                {stories.map((story, idx) =>
+                  <option key={idx} value={story.id}>{story.id} : {story.title}</option>
+                )}a
+              </select>
             </div>
             <div className="one wide field">
               <label>Priority</label>
@@ -172,6 +173,7 @@ class TaskModal extends Component {
 }
 
 TaskModal.propTypes = {
+  stories: PropTypes.array,
   task: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onClose: PropTypes.func,

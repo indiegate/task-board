@@ -5,6 +5,7 @@ import TestUtils from 'react-addons-test-utils';
 function setup(propsOverrides) {
   const props = Object.assign({
     task: {},
+    stories: [],
     onSubmit() {},
     onClose() {},
   }, propsOverrides);
@@ -45,9 +46,15 @@ describe('TaskModal component', () => {
   });
 
   it('calls `onSubmit` by clicking OK', () => {
-    const task = {id: 10, content: 'Some task text'};
+    const task = {id: 10, content: 'Some task text', story: 'STY-123'};
     const spyContent = {called: false, param: null};
     const { rendered } = setup({
+      stories: [
+        {
+          id: 'STY-123',
+          title: 'blah',
+        },
+      ],
       task,
       onSubmit(response) {
         spyContent.called = true;
@@ -55,15 +62,14 @@ describe('TaskModal component', () => {
       },
     });
     const taskInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[0];
-    const storyInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[1];
-    const priorityInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[2];
+    const select = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'select')[0];
+    const priorityInput = TestUtils.scryRenderedDOMComponentsWithTag(rendered, 'input')[1];
     const submitButton = TestUtils.scryRenderedDOMComponentsWithClass(rendered, 'ui button')[2];
 
     taskInput.value = 'Updated task text';
     TestUtils.Simulate.change(taskInput);
-
-    storyInput.value = 'STY-123';
-    TestUtils.Simulate.change(storyInput);
+    select.value = 'STY-123';
+    TestUtils.Simulate.change(select);
 
     priorityInput.value = '1';
     TestUtils.Simulate.change(priorityInput);

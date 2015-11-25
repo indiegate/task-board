@@ -54,6 +54,7 @@ class BoardView extends PureComponent {
       <div>
         { this.props.task ?
           <TaskModal task={this.props.task}
+                     stories={this.props.stories}
                      onSubmit={this._saveTask.bind(this)}
                      onClose={this._closeModal.bind(this)}
                      onArchive={this._archiveTask.bind(this)}
