@@ -6,6 +6,9 @@ import * as ActionTypes from '../constants/actionTypes';
 class Bar extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedStory: null,
+    };
   }
 
   _handleAddStoryClick() {
@@ -31,8 +34,23 @@ class Bar extends PureComponent {
 
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
+      const isHighlighted = this.state.selectedStory === story.id;
       return (
-        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
+        <div className="item"
+            style={{
+              background: isHighlighted ? '#BABABA' : '',
+            }}
+            key={idx}
+            onClick={() => {
+              const { selectedStory } = this.state;
+              this.setState({
+                selectedStory: selectedStory !== story.id ? story.id : null,
+              }, this.dispatchAction({
+                type: 'STORY_FILTER_CLICKED',
+                payload: selectedStory !== story.id ? story.id : null,
+              }));
+            }}
+            onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
           <h4 className="ui header">
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}

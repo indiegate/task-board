@@ -236,3 +236,17 @@ export const logout = (reduction, payload) => {
       .push(buildMessage(EffectTypes.UNAUTHENTICATION_REQUESTED, payload)
       ));
 };
+
+export const applyStoryFilter = (reduction, payload) => {
+  const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
+  const tasks = reduction.getIn(['appState', 'tasks']);
+
+  const filteredOrOriginal = payload ? tasks.filter(task => task.story === payload) : tasks;
+
+  filteredOrOriginal
+    .forEach(task => updateLayout(layout, task));
+
+  return reduction
+    .setIn(['appState', 'selectedStory'], payload)
+    .setIn(['appState', 'layout'], fromJS(layout));
+};
