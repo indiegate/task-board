@@ -125,3 +125,11 @@ h5.ui.header {
 .ui.vertical.menu {
   width: 20rem;
 }
+
+.list .item button {
+  display:none;
+}
+
+.list .item:hover button {
+  display:block;
+}

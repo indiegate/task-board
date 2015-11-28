@@ -36,13 +36,16 @@ class Bar extends PureComponent {
         <div className="item"
              style={{background: isHighlighted ? '#BABABA' : ''}}
              key={idx}
-             onClick={this._handleApplyFilterClick.bind(this, story)}
-             onDoubleClick={() => {this.dispatchAction(editStory(story));}}>
+             onClick={this._handleApplyFilterClick.bind(this, story)}>
           <h4 className="ui header">
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}
           </h4>
           <span>{story.title}</span>
+          <button className="ui adapted icon button"
+                  onClick={() => {this.dispatchAction(editStory(story));}}>
+            <i className="write icon"/>
+          </button>
         </div>);
     });
   }
@@ -63,8 +66,9 @@ class Bar extends PureComponent {
               }}>
           {this.props.firebaseId}
         </h2>
-        <button className="ui compact button" onClick={() => {this.dispatchAction(logout());}}
-                style={{display: 'inline-block', float: 'right', margin: '1rem'}}>
+        <button className="ui compact button"
+            onClick={() => {this.dispatchAction(logout());}}
+            style={{display: 'inline-block', float: 'right', margin: '1rem'}}>
           logout
         </button>
         <div className="item">
