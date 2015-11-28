@@ -19,7 +19,10 @@ class Bar extends PureComponent {
     };
   }
 
-  _handleApplyFilterClick(story) {
+  _handleApplyFilterClick(story, event) {
+    if (event.target.tagName === 'BUTTON' || event.target.tagName === 'I') {
+      return;
+    }
     const { selectedStory } = this.state;
     const newSelectedStory = selectedStory !== story.id ? story.id : null;
     this.setState({
