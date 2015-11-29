@@ -11,6 +11,8 @@ const editStory = story => ({type: ActionTypes.EDIT_STORY_CLICKED, payload: stor
 
 const logout = () => ({type: ActionTypes.LOGOUT_CLICKED, payload: null});
 
+const clearFilter = () => ({type: ActionTypes.CLEAR_STORY_FILTER_CLICKED, payload: null});
+
 class Bar extends PureComponent {
   constructor(props) {
     super(props);
@@ -19,15 +21,13 @@ class Bar extends PureComponent {
     };
   }
 
-  _handleApplyFilterClick(story, event) {
-    if (event.target.tagName === 'BUTTON' || event.target.tagName === 'I') {
-      return;
-    }
+  _handleApplyFilterClick({id}) {
     const { selectedStory } = this.state;
-    const newSelectedStory = selectedStory !== story.id ? story.id : null;
-    this.setState({
-      selectedStory: newSelectedStory,
-    }, this.dispatchAction(applyFilter(newSelectedStory)));
+    if (selectedStory !== id) {
+      this.setState({
+        selectedStory: id,
+      }, this.dispatchAction(applyFilter(id)));
+    }
   }
 
   _renderStoryItems() {
@@ -39,16 +39,13 @@ class Bar extends PureComponent {
         <div className="item"
              style={{background: isHighlighted ? '#BABABA' : ''}}
              key={idx}
-             onClick={this._handleApplyFilterClick.bind(this, story)}>
+             onClick={this._handleApplyFilterClick.bind(this, story)}
+             onDoubleClick={() => {this.dispatchAction(editStory(story));}}>
           <h4 className="ui header">
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}
           </h4>
           <span>{story.title}</span>
-          <button className="ui adapted icon button"
-                  onClick={() => {this.dispatchAction(editStory(story));}}>
-            <i className="write icon"/>
-          </button>
         </div>);
     });
   }
@@ -82,6 +79,14 @@ class Bar extends PureComponent {
             </button>
           </h4>
           <div className="ui relaxed divided selection list">
+            <div className="item"
+                onClick={() => {
+                  this.setState({
+                    selectedStory: null,
+                  }, this.dispatchAction(clearFilter()));
+                }}>
+              <h4 className="ui header">All stories</h4>
+            </div>
             {this._renderStoryItems()}
           </div>
         </div>

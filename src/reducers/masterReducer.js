@@ -75,6 +75,9 @@ export default (reduction, action) => {
     case ActionTypes.STORY_FILTER_CLICKED:
       mutableReduction.update(_r => BoardReducer.applyStoryFilter(_r, payload));
       break;
+    case ActionTypes.CLEAR_STORY_FILTER_CLICKED:
+      mutableReduction.update(_r => BoardReducer.clearStoryFilter(_r, payload));
+      break;
     default:
       console.debug(`Unhandled action of type: ${type}`);
     }

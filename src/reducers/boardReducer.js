@@ -241,12 +241,23 @@ export const applyStoryFilter = (reduction, payload) => {
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const tasks = reduction.getIn(['appState', 'tasks']);
 
-  const filteredOrOriginal = payload ? tasks.filter(task => task.story === payload) : tasks;
-
-  filteredOrOriginal
+  tasks
+    .filter(task => task.story === payload)
     .forEach(task => updateLayout(layout, task));
 
   return reduction
     .setIn(['appState', 'selectedStory'], payload)
+    .setIn(['appState', 'layout'], fromJS(layout));
+};
+
+
+export const clearStoryFilter = (reduction) => {
+  const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
+
+  reduction.getIn(['appState', 'tasks'])
+    .forEach(task => updateLayout(layout, task));
+
+  return reduction
+    .setIn(['appState', 'selectedStory'], null)
     .setIn(['appState', 'layout'], fromJS(layout));
 };
