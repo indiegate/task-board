@@ -77,7 +77,8 @@ class BoardView extends PureComponent {
           <div style={{flex: '3 1', order: 1}}>
             <HorizontalBox
                 columns={this.props.layout.toJS().columns}
-                dispatcher={this.props.dispatcher}/>
+                dispatcher={this.props.dispatcher}
+                parents={[]}/>
           </div>
         </div>
       </div>

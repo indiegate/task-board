@@ -84,22 +84,33 @@ class BoardSection extends Component {
     return '';
   }
 
-  render() {
-    const { connectDropTarget, name } = this.props;
-    const sectionClass = 'board-section ' + this._getTargetClass();
+  _renderBreadcrumb() {
+    const names = this.props.parents.slice();
+    names.push(this.props.name);
+    return names.map((name, idx) => {
+      if (idx === 0) {
+        return <div className="section">{name}</div>;
+      }
+      return (<span key={idx}>
+        <i className="right angle icon divider"></i>
+        <div className="section">{name}</div>
+      </span>);
+    });
+  }
 
+  render() {
+    const { connectDropTarget } = this.props;
+
+    const sectionClass = 'board-section ' + this._getTargetClass();
     return connectDropTarget(
       <div className="column">
         <div className={sectionClass}>
-          <h4 className="ui block header">
-            <div className="content">
-              {name}
+          <div className="ui horizontal divider" onClick={this._handleAddTaskClick.bind(this)}
+               style={{cursor: 'pointer'}}>
+            <div className="ui breadcrumb">
+              {this._renderBreadcrumb()}
             </div>
-            <button className="ui icon button"
-                onClick={this._handleAddTaskClick.bind(this)}>
-              <i className="plus icon"/>
-            </button>
-          </h4>
+          </div>
           <div className="content">
             <div className="ui selection list">
               {this._renderTasks()}
@@ -112,6 +123,7 @@ class BoardSection extends Component {
 }
 
 BoardSection.propTypes = {
+  parents: React.PropTypes.array,
   id: React.PropTypes.string.isRequired,
   name: React.PropTypes.string,
   tasks: React.PropTypes.array,
