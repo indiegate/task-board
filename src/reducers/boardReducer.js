@@ -1,38 +1,7 @@
 import { fromJS, Map as map } from 'immutable';
 import * as EffectTypes from '../constants/effectTypes';
 import buildMessage from '../utils/buildMessage';
-
-const updateLayout = (layout, task) => {
-  const updateBoardSection = (section) => {
-    if (section.id === task.sectionId) {
-      section.tasks = section.tasks || [];
-      section.tasks.push(task);
-    }
-    return section;
-  };
-
-  const updateBox = (item) => {
-    if (item.columns) {
-      item.columns = item.columns.map(column => {
-        if (column.id) {
-          return updateBoardSection(column);
-        }
-        return updateBox(column);
-      });
-    } else if (item.rows) {
-      item.rows = item.rows.map(row => {
-        if (row.id) {
-          return updateBoardSection(row);
-        }
-        return updateBox(row);
-      });
-    } else if (item.id) {
-      updateBoardSection(item);
-    }
-  };
-
-  return layout.columns.forEach(column => updateBox(column));
-};
+import updateLayout from '../utils/updateLayout';
 
 export const startSync = (reduction) => {
   const firebaseId = reduction.getIn(['appState', 'firebaseId']);
@@ -49,7 +18,7 @@ export const startSync = (reduction) => {
 export const tasksReceived = (reduction, payload) => {
   const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
   const stories = reduction.getIn(['appState', 'stories']);
-
+  const selectedStory = reduction.getIn(['appState', 'selectedStory']);
   const tasks = map(payload).map((value, key) => {
     value.id = key;
     if (value.story) {
@@ -60,26 +29,15 @@ export const tasksReceived = (reduction, payload) => {
     }
     return value;
   }).toArray();
-
+  const predicateFn = selectedStory ? task => task.story === selectedStory : () => true;
   // TODO refactor this side-effect
-  tasks.forEach(task => updateLayout(layout, task));
+  tasks
+    .filter(predicateFn)
+    .forEach(task => updateLayout(layout, task));
 
   return reduction
     .setIn(['appState', 'layout'], fromJS(layout))
     .setIn(['appState', 'tasks'], tasks);
-};
-
-export const storiesReceived = (reduction, payload) => {
-  const stories = Object.keys(payload).map(key => {
-    const value = payload[key];
-    return {
-      id: key,
-      title: value.title,
-      color: value.color,
-    };
-  });
-  return reduction
-    .setIn(['appState', 'stories'], stories);
 };
 
 export const layoutReceivedOk = (reduction, payload) => {
@@ -108,37 +66,6 @@ export const saveTaskClicked = (reduction, payload) => {
 export const cancelSaveTaskClicked = (reduction) => {
   return reduction
     .setIn(['appState', 'task'], null);
-};
-
-export const addStoryClicked = (reduction) => {
-  return reduction
-    .setIn(['appState', 'story'], {});
-};
-
-export const editStoryClicked = (reduction, payload) => {
-  return reduction
-    .setIn(['appState', 'story'], payload);
-};
-
-export const closeStoryModalClicked = (reduction) => {
-  return reduction
-    .setIn(['appState', 'story'], null);
-};
-
-export const saveStoryClicked = (reduction, payload) => {
-  reduction
-    .set('effects', reduction
-      .get('effects')
-      .push(buildMessage(EffectTypes.STORY_SAVE_REQUESTED, payload)
-      ));
-};
-
-export const removeStoryClicked = (reduction, payload) => {
-  reduction
-    .set('effects', reduction
-      .get('effects')
-      .push(buildMessage(EffectTypes.STORY_REMOVE_REQUESTED, payload)
-      ));
 };
 
 export const draggedTaskToSection = (reduction, payload) => {
@@ -235,29 +162,4 @@ export const logout = (reduction, payload) => {
       .get('effects')
       .push(buildMessage(EffectTypes.UNAUTHENTICATION_REQUESTED, payload)
       ));
-};
-
-export const applyStoryFilter = (reduction, payload) => {
-  const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
-  const tasks = reduction.getIn(['appState', 'tasks']);
-
-  tasks
-    .filter(task => task.story === payload)
-    .forEach(task => updateLayout(layout, task));
-
-  return reduction
-    .setIn(['appState', 'selectedStory'], payload)
-    .setIn(['appState', 'layout'], fromJS(layout));
-};
-
-
-export const clearStoryFilter = (reduction) => {
-  const layout = reduction.getIn(['appState', 'initialLayout']).toJS();
-
-  reduction.getIn(['appState', 'tasks'])
-    .forEach(task => updateLayout(layout, task));
-
-  return reduction
-    .setIn(['appState', 'selectedStory'], null)
-    .setIn(['appState', 'layout'], fromJS(layout));
 };
