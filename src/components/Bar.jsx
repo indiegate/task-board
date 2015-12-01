@@ -80,6 +80,7 @@ class Bar extends PureComponent {
           </h4>
           <div className="ui relaxed divided selection list">
             <div className="item"
+                style={{background: !this.state.selectedStory ? '#BABABA' : ''}}
                 onClick={() => {
                   this.setState({
                     selectedStory: null,
