@@ -3,36 +3,44 @@ import PureComponent from './PureComponent';
 import intToRGB from '../utils/colors-helper';
 import * as ActionTypes from '../constants/actionTypes';
 
+const applyFilter = payload => ({type: ActionTypes.STORY_FILTER_CLICKED, payload});
+
+const createNewStory = () => ({type: ActionTypes.ADD_STORY_CLICKED, payload: null});
+
+const editStory = story => ({type: ActionTypes.EDIT_STORY_CLICKED, payload: story});
+
+const logout = () => ({type: ActionTypes.LOGOUT_CLICKED, payload: null});
+
+const clearFilter = () => ({type: ActionTypes.CLEAR_STORY_FILTER_CLICKED, payload: null});
+
 class Bar extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedStory: null,
+    };
   }
 
-  _handleAddStoryClick() {
-    this.dispatchAction({
-      type: ActionTypes.ADD_STORY_CLICKED,
-      payload: null,
-    });
-  }
-
-  _handleEditStoryClick(story) {
-    this.dispatchAction({
-      type: ActionTypes.EDIT_STORY_CLICKED,
-      payload: story,
-    });
-  }
-
-  _logout() {
-    this.dispatchAction({
-      type: ActionTypes.LOGOUT_CLICKED,
-      payload: null,
-    });
+  _handleApplyFilterClick({id}) {
+    const { selectedStory } = this.state;
+    if (selectedStory !== id) {
+      this.setState({
+        selectedStory: id,
+      }, this.dispatchAction(applyFilter(id)));
+    }
   }
 
   _renderStoryItems() {
     return this.props.stories.map((story, idx) => {
+      // TODO introduce class for background color + isHighlighted to classNames
+      // TODO handle editStory in a different way than onDoubleClick
+      const isHighlighted = this.state.selectedStory === story.id;
       return (
-        <div className="item" key={idx} onDoubleClick={this._handleEditStoryClick.bind(this, story)}>
+        <div className="item"
+             style={{background: isHighlighted ? '#BABABA' : ''}}
+             key={idx}
+             onClick={this._handleApplyFilterClick.bind(this, story)}
+             onDoubleClick={() => {this.dispatchAction(editStory(story)); }}>
           <h4 className="ui header">
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}
@@ -46,31 +54,45 @@ class Bar extends PureComponent {
     if (!this.props.stories) {
       return <h1>no stories</h1>;
     }
-    return (<div className="ui vertical menu fixed top" style={{height: '100%', backgroundColor: '#ebebeb'}}>
-      <h2 className="ui header"
-          style={{
-            margin: '1rem',
-            display: 'inline-block',
-            width: '10rem',
-            wordWrap: 'break-word',
-          }}>
-        {this.props.firebaseId}
-      </h2>
-      <button className="ui compact button" onClick={this._logout.bind(this)}
-              style={{display: 'inline-block', float: 'right', margin: '1rem'}}>
+    return (
+      <div className="ui vertical menu fixed top"
+          style={{height: '100%', backgroundColor: '#ebebeb'}}>
+        <h2 className="ui header"
+              style={{
+                margin: '1rem',
+                display: 'inline-block',
+                width: '10rem',
+                wordWrap: 'break-word',
+              }}>
+          {this.props.firebaseId}
+        </h2>
+        <button className="ui compact button"
+            onClick={() => {this.dispatchAction(logout()); }}
+            style={{display: 'inline-block', float: 'right', margin: '1rem'}}>
           logout
-      </button>
-      <div className="item">
-        <h4>Stories
-          <button className="ui adapted icon button" onClick={this._handleAddStoryClick.bind(this)}>
-            <i className="plus icon"/>
-          </button>
-        </h4>
-        <div className="ui relaxed divided selection list">
-          {this._renderStoryItems()}
+        </button>
+        <div className="item">
+          <h4>Stories
+            <button className="ui adapted icon button"
+                onClick={() => {this.dispatchAction(createNewStory()); }}>
+              <i className="plus icon"/>
+            </button>
+          </h4>
+          <div className="ui relaxed divided selection list">
+            <div className="item"
+                style={{background: !this.state.selectedStory ? '#BABABA' : ''}}
+                onClick={() => {
+                  this.setState({
+                    selectedStory: null,
+                  }, this.dispatchAction(clearFilter()));
+                }}>
+              <h4 className="ui header">All stories</h4>
+            </div>
+            {this._renderStoryItems()}
+          </div>
         </div>
       </div>
-    </div>);
+    );
   }
 }
 
