@@ -111,62 +111,65 @@ class TaskModal extends Component {
     const displayError = this.state.errorText ? 'block' : 'none';
 
     return (
-      <div className="ui modal" style={{display: 'block'}}>
-        <div className="ui clearing segment">
-          <h3 className="ui left floated header">
-            <div className="content">
-              {dialogName}
-            </div>
-          </h3>
-        </div>
-        <div className="ui form task-form">
+      <div className="ui dimmer modals page transition visible active"
+          style={{display: 'block !important'}}>
+        <div className="ui modal" style={{display: 'block'}}>
+          <div className="ui clearing segment">
+            <h3 className="ui left floated header">
+              <div className="content">
+                {dialogName}
+              </div>
+            </h3>
+          </div>
+          <div className="ui form task-form">
 
-          <div className="fields">
-            <div className="twelve wide field">
-              <label>Task</label>
-              <input type="text"
-                     ref="dialogContent"
-                     autoFocus
-                     onFocus={(event) => {
-                       event.persist();
-                       const node = event.target;
-                       node.selectionStart = node.value.length;
-                       node.selectionEnd = node.value.length;
-                     }}
-                     onChange={this._handleTaskInputChange.bind(this)}
-                     value={this.state.dialogContent}/>
-            </div>
-            <div className="three wide field">
-              <label>Story</label>
-              <select className="ui dropdown"
-                  onChange={this._handleStoryChange.bind(this)}
-                  value={this.state.storyValue}>
-                <option value="">No story</option>
-                {stories.map((story, idx) =>
-                  <option key={idx} value={story.id}>{story.id} : {story.title}</option>
-                )}a
-              </select>
-            </div>
-            <div className="one wide field">
-              <label>Priority</label>
-              <input type="text"
-                     maxLength="1"
-                     ref="storyPriority"
-                     onChange={this._handlePriorityInputChange.bind(this)}
-                     value={this.state.priorityContent}/>
+            <div className="fields">
+              <div className="twelve wide field">
+                <label>Task</label>
+                <input type="text"
+                       ref="dialogContent"
+                       autoFocus
+                       onFocus={(event) => {
+                         event.persist();
+                         const node = event.target;
+                         node.selectionStart = node.value.length;
+                         node.selectionEnd = node.value.length;
+                       }}
+                       onChange={this._handleTaskInputChange.bind(this)}
+                       value={this.state.dialogContent}/>
+              </div>
+              <div className="three wide field">
+                <label>Story</label>
+                <select className="ui dropdown"
+                    onChange={this._handleStoryChange.bind(this)}
+                    value={this.state.storyValue}>
+                  <option value="">No story</option>
+                  {stories.map((story, idx) =>
+                    <option key={idx} value={story.id}>{story.id} : {story.title}</option>
+                  )}a
+                </select>
+              </div>
+              <div className="one wide field">
+                <label>Priority</label>
+                <input type="text"
+                       maxLength="1"
+                       ref="storyPriority"
+                       onChange={this._handlePriorityInputChange.bind(this)}
+                       value={this.state.priorityContent}/>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="actions">
-          {this._renderArchiveButton()}
-          <div className="ui button"
-               ref="dismiss"
-               onClick={this._dismissHandler.bind(this)}>Cancel</div>
-          <div className="ui button"
-               ref="submit"
-               onClick={this._submitHandler.bind(this)}>OK</div>
-        </div>
-        <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
+          <div className="actions">
+            {this._renderArchiveButton()}
+            <div className="ui button"
+                 ref="dismiss"
+                 onClick={this._dismissHandler.bind(this)}>Cancel</div>
+            <div className="ui button"
+                 ref="submit"
+                 onClick={this._submitHandler.bind(this)}>OK</div>
+          </div>
+          <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
+       </div>
       </div>
     );
   }

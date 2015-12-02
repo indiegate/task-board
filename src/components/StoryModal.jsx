@@ -113,46 +113,49 @@ class StoryModal extends Component {
     const idFieldClasses = 'six wide' + (editMode ? ' disabled ' : ' ') + 'field';
 
     return (
-      <div className="ui modal" style={{display: 'block'}}>
-        <div className="ui clearing segment">
-          <h3 className="ui left floated header">
-            <div className="content">
-              {dialogName}
-            </div>
-          </h3>
-        </div>
-        <div className="ui form task-form">
-          <div className="fields">
-            <div className={idFieldClasses}>
-              <label>Id</label>
-              <input type="text"
-                     ref="storyIdContent"
-                     autoFocus={!editMode}
-                     onFocus={(event) => {
-                       event.persist();
-                       const node = event.target;
-                       node.selectionStart = node.value.length;
-                       node.selectionEnd = node.value.length;
-                     }}
-                     onChange={this._handleIdInputChange.bind(this)}
-                     value={this.state.idContent}/>
-            </div>
-            <div className="ten wide field">
-              <label>Title</label>
-              <input type="text"
-                     ref="storyContent"
-                     autoFocus={editMode}
-                     onChange={this._handleTitleInputChange.bind(this)}
-                     value={this.state.titleContent}/>
+      <div className="ui dimmer modals page transition visible active"
+          style={{display: 'block !important'}}>
+        <div className="ui modal" style={{display: 'block'}}>
+          <div className="ui clearing segment">
+            <h3 className="ui left floated header">
+              <div className="content">
+                {dialogName}
+              </div>
+            </h3>
+          </div>
+          <div className="ui form task-form">
+            <div className="fields">
+              <div className={idFieldClasses}>
+                <label>Id</label>
+                <input type="text"
+                       ref="storyIdContent"
+                       autoFocus={!editMode}
+                       onFocus={(event) => {
+                         event.persist();
+                         const node = event.target;
+                         node.selectionStart = node.value.length;
+                         node.selectionEnd = node.value.length;
+                       }}
+                       onChange={this._handleIdInputChange.bind(this)}
+                       value={this.state.idContent}/>
+              </div>
+              <div className="ten wide field">
+                <label>Title</label>
+                <input type="text"
+                       ref="storyContent"
+                       autoFocus={editMode}
+                       onChange={this._handleTitleInputChange.bind(this)}
+                       value={this.state.titleContent}/>
+              </div>
             </div>
           </div>
+          <div className="actions">
+            {this._renderRemoveButton()}
+            <div className="ui button" ref="dismiss" onClick={this._dismissHandler.bind(this)}>Cancel</div>
+            <div className="ui button" ref="submit" onClick={this._submitHandler.bind(this)}>OK</div>
+          </div>
+          <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
         </div>
-        <div className="actions">
-          {this._renderRemoveButton()}
-          <div className="ui button" ref="dismiss" onClick={this._dismissHandler.bind(this)}>Cancel</div>
-          <div className="ui button" ref="submit" onClick={this._submitHandler.bind(this)}>OK</div>
-        </div>
-        <div className="ui error message" style={{display: displayError}}>{this.state.errorText}</div>
       </div>
     );
   }
