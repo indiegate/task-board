@@ -146,7 +146,7 @@ class TaskModal extends Component {
                   <option value="">No story</option>
                   {stories.map((story, idx) =>
                     <option key={idx} value={story.id}>{story.id} : {story.title}</option>
-                  )}a
+                  )}
                 </select>
               </div>
               <div className="one wide field">
