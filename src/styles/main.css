@@ -125,3 +125,11 @@ h5.ui.header {
 .ui.celled.grid {
   border-bottom: 1px solid #d4d4d5;
 }
+
+.ui.menu .ui.list .list>.item:first-child, .ui.menu .ui.list>.item:first-child {
+   padding-top: 6px;
+ }
+
+.ui.menu .ui.list .list>.item:last-child, .ui.menu .ui.list>.item:last-child {
+  padding-bottom: 6px;
+}

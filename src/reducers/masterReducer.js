@@ -1,4 +1,5 @@
 import * as BoardReducer from './boardReducer';
+import * as StoryReducer from './storyReducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 export default (reduction, action) => {
@@ -22,7 +23,7 @@ export default (reduction, action) => {
       mutableReduction.update(_r => BoardReducer.tasksReceived(_r, payload));
       break;
     case ActionTypes.FIREBASE_STORIES_RECEIVED:
-      mutableReduction.update(_r => BoardReducer.storiesReceived(_r, payload));
+      mutableReduction.update(_r => StoryReducer.storiesReceived(_r, payload));
       break;
     case ActionTypes.ADD_TASK_CLICKED:
       mutableReduction.update(_r => BoardReducer.addTaskClicked(_r, payload));
@@ -52,25 +53,31 @@ export default (reduction, action) => {
       mutableReduction.update(_r => BoardReducer.authenticationFailed(_r, payload));
       break;
     case ActionTypes.ADD_STORY_CLICKED:
-      mutableReduction.update(_r => BoardReducer.addStoryClicked(_r));
+      mutableReduction.update(_r => StoryReducer.addStoryClicked(_r));
       break;
     case ActionTypes.EDIT_STORY_CLICKED:
-      mutableReduction.update(_r => BoardReducer.editStoryClicked(_r, payload));
+      mutableReduction.update(_r => StoryReducer.editStoryClicked(_r, payload));
       break;
     case ActionTypes.SAVE_STORY_CLICKED:
-      mutableReduction.update(_r => BoardReducer.saveStoryClicked(_r, payload));
+      mutableReduction.update(_r => StoryReducer.saveStoryClicked(_r, payload));
       break;
     case ActionTypes.REMOVE_STORY_CLICKED:
-      mutableReduction.update(_r => BoardReducer.removeStoryClicked(_r, payload));
+      mutableReduction.update(_r => StoryReducer.removeStoryClicked(_r, payload));
       break;
     case ActionTypes.CLOSE_STORY_MODAL_CLICKED:
     case ActionTypes.FIREBASE_STORY_CREATED_OK:
     case ActionTypes.FIREBASE_STORY_UPDATED_OK:
     case ActionTypes.FIREBASE_STORY_REMOVED_OK:
-      mutableReduction.update(_r => BoardReducer.closeStoryModalClicked(_r));
+      mutableReduction.update(_r => StoryReducer.closeStoryModalClicked(_r));
       break;
     case ActionTypes.LOGOUT_CLICKED:
       mutableReduction.update(_r => BoardReducer.logout(_r, payload));
+      break;
+    case ActionTypes.STORY_FILTER_CLICKED:
+      mutableReduction.update(_r => StoryReducer.applyStoryFilterClicked(_r, payload));
+      break;
+    case ActionTypes.CLEAR_STORY_FILTER_CLICKED:
+      mutableReduction.update(_r => StoryReducer.clearStoryFilterClicked(_r, payload));
       break;
     default:
       console.debug(`Unhandled action of type: ${type}`);

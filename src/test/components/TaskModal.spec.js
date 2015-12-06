@@ -26,7 +26,7 @@ describe('TaskModal component', () => {
   it('renders ok', () => {
     const { output } = setup();
     expect(output.type).to.equal('div');
-    expect(output.props.className).to.equal('ui modal');
+    expect(output.props.className).to.equal('ui dimmer modals page transition visible active');
   });
 
   it('has initial state', () => {
@@ -110,12 +110,12 @@ describe('TaskModal component', () => {
 
   it('contains action bar with 3 buttons', () => {
     const { output } = setup({task: {id: 123}});
-    expect(output.props.children[2].props.children.length).to.equal(3);
+    expect(output.props.children.props.children[2].props.children.length).to.equal(3);
   });
 
   it('displays `remove task` btn when editing', () => {
     const { output } = setup({task: {id: 123}});
-    const removeButton = output.props.children[2].props.children[0];
+    const removeButton = output.props.children.props.children[2].props.children[0];
     expect(removeButton).to.not.be.null;
     expect(removeButton.props.className).to.equal('ui left floated red button');
     expect(removeButton.props.children[0].type).to.equal('i');
@@ -166,7 +166,7 @@ describe('TaskModal component', () => {
 
   it('should not display `Remove` button when creating new task', () => {
     const { output } = setup({task: {sectionId: 123}});
-    expect(output.props.children[2].props.children[0]).to.be.null;
+    expect(output.props.children.props.children[2].props.children[0]).to.be.null;
   });
 });
 
