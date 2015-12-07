@@ -37,11 +37,11 @@ class Bar extends PureComponent {
       const isHighlighted = this.state.selectedStory === story.id;
       return (
         <div className="item"
-             style={{background: isHighlighted ? '#BABABA' : ''}}
+             style={{background: isHighlighted ? '#6c6c6c' : '', color: isHighlighted ? 'white' : ''}}
              key={idx}
              onClick={this._handleApplyFilterClick.bind(this, story)}
              onDoubleClick={() => {this.dispatchAction(editStory(story)); }}>
-          <h4 className="ui header">
+          <h4 className="ui header" style={{color: 'inherit'}}>
             <a className={"ui empty circular label"} style={{backgroundColor: `rgb(${intToRGB(story.color)})`}}/>
             {story.id}
           </h4>
@@ -80,13 +80,16 @@ class Bar extends PureComponent {
           </h4>
           <div className="ui relaxed divided selection list">
             <div className="item"
-                style={{background: !this.state.selectedStory ? '#BABABA' : ''}}
+                style={{
+                  background: !this.state.selectedStory ? '#6c6c6c' : '',
+                  color: !this.state.selectedStory ? 'white' : '',
+                }}
                 onClick={() => {
                   this.setState({
                     selectedStory: null,
                   }, this.dispatchAction(clearFilter()));
                 }}>
-              <h4 className="ui header">All stories</h4>
+              <h4 className="ui header" style={{color: 'inherit'}}>All stories</h4>
             </div>
             {this._renderStoryItems()}
           </div>

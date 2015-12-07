@@ -89,7 +89,7 @@ class BoardSection extends Component {
     names.push(this.props.name);
     return names.map((name, idx) => {
       if (idx === 0) {
-        return <div className="section">{name}</div>;
+        return <div key={idx} className="section">{name}</div>;
       }
       return (<span key={idx}>
         <i className="right angle icon divider"></i>
