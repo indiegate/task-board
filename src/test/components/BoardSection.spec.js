@@ -24,6 +24,7 @@ function setup(ComponentClass, propsForOverride) {
   const props = Object.assign({
     dispatcher: {},
     id: '10',
+    parents: [],
     connectDropTarget: identity,
   }, propsForOverride);
 
@@ -86,7 +87,7 @@ describe('BoardSection', () => {
     expect(component.props.children.props.className).to.equal('board-section yellow-target');
   });
 
-  it('should have a `h4` header with `name` based on props', () => {
+  it('should have a header with `name` based on props', () => {
     const { component } = setup(BoardSection, {
       name: 'TestBestSection',
     });
@@ -97,12 +98,13 @@ describe('BoardSection', () => {
     expect(header.props.children[0].props.children).to.equal('TestBestSection');
   });
 
-  it('should have a header with a clickable `add button`', () => {
+  it('should have a clickable header', () => {
     let called = false;
     let calledArgs = null;
     const { component } = setup(BoardSection, {
       id: '1234',
       name: 'TestBestSection',
+      parents: [],
       dispatcher: {
         dispatch(args) {
           called = true;
@@ -111,11 +113,8 @@ describe('BoardSection', () => {
       },
     });
     const header = component.props.children.props.children[0];
-    expect(header.props.children[1].type).to.equal('button');
-    expect(header.props.children[1].props.className).to.equal('ui icon button');
-    expect(header.props.children[1].props.children.type).to.equal('i');
-    expect(header.props.children[1].props.children.props.className).to.equal('plus icon');
-    header.props.children[1].props.onClick();
+    expect(header.props.className).to.equal('ui horizontal divider');
+    header.props.onClick();
     expect(called).to.be.true;
     expect(calledArgs.type).to.eql('ADD_TASK_CLICKED');
     expect(calledArgs.payload).to.eql({sectionId: '1234'});
@@ -151,6 +150,7 @@ describe('BoardSection', () => {
     const propsForOverride = {
       id: '100',
       dispatcher: {},
+      parents: [],
       name: 'TestBestSection',
       tasks,
     };
