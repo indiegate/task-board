@@ -87,15 +87,30 @@ describe('BoardSection', () => {
     expect(component.props.children.props.className).to.equal('board-section yellow-target');
   });
 
-  it('should have a header with `name` based on props', () => {
+  it('should have a header with single `name` based on props', () => {
     const { component } = setup(BoardSection, {
       name: 'TestBestSection',
+      parents: [],
     });
-    const header = component.props.children.props.children[0];
 
-    expect(header.type).to.equal('h4');
-    expect(header.props.className).to.equal('ui block header');
-    expect(header.props.children[0].props.children).to.equal('TestBestSection');
+    const header = component.props.children.props.children[0];
+    const names = header.props.children.props.children;
+    expect(names.length).to.equal(1);
+    expect(names[0].props.children).to.equal('TestBestSection');
+  });
+
+  it('should have a header with multiple `names` based on props', () => {
+    const { component } = setup(BoardSection, {
+      name: 'TestBestSection',
+      parents: ['ParentName'],
+    });
+
+    const header = component.props.children.props.children[0];
+    const names = header.props.children.props.children;
+    expect(names.length).to.equal(2);
+    expect(names[0].props.children).to.equal('ParentName');
+    expect(names[1].props.children[0].props.className).to.equal('right angle icon divider');
+    expect(names[1].props.children[1].props.children).to.equal('TestBestSection');
   });
 
   it('should have a clickable header', () => {
