@@ -14,31 +14,27 @@ export default class HorizontalBox extends Component {
     }
 
     return this.props.columns.map((column, idx) => {
+      const parents = this.props.parents.slice();
+      if (this.props.name) {
+        parents.push(this.props.name);
+      }
+
       if (column.id) {
         return (
-          <BoardSection key={idx} {...column}
+          <BoardSection key={idx} {...column} parents={parents}
               dispatcher={this.props.dispatcher} />
         );
       }
       return (
-        <VerticalBox key={idx} {...column}
+        <VerticalBox key={idx} {...column} parents={parents}
           dispatcher={this.props.dispatcher} />
       );
     });
   }
 
-  _renderBoxHeader() {
-    if (this.props.name) {
-      return (<div className="column">
-        <div className="ui small block header">{this.props.name}</div>
-      </div>);
-    }
-  }
-
   render() {
     return (
       <div>
-        {this._renderBoxHeader()}
         <div className="ui internally celled stackable equal width grid">
          {this._renderColumns()}
         </div>
@@ -48,6 +44,7 @@ export default class HorizontalBox extends Component {
 }
 
 HorizontalBox.propTypes = {
+  parents: React.PropTypes.array,
   name: React.PropTypes.string,
   columns: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,

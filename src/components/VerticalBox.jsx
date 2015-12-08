@@ -13,33 +13,28 @@ export default class VerticalBox extends Component {
       return null;
     }
 
+    const parents = this.props.parents.slice();
+    if (this.props.name) {
+      parents.push(this.props.name);
+    }
+
     return this.props.rows.map((row, idx) => {
       if (row.id) {
         return (
-          <BoardSection key={idx} {...row}
+          <BoardSection key={idx} {...row} parents={parents}
               dispatcher={this.props.dispatcher} />
         );
       }
       return (
-        <HorizontalBox key={idx} {...row}
+        <HorizontalBox key={idx} {...row} parents={parents}
           dispatcher={this.props.dispatcher} />
       );
     });
   }
 
-  _renderBoxHeader() {
-    if (this.props.name) {
-      return (<div className="column">
-        <div className="ui small block header">{this.props.name}</div>
-      </div>);
-    }
-  }
-
-
   render() {
     return (
       <div className="column">
-        {this._renderBoxHeader()}
         {this._renderRows()}
       </div>
     );
@@ -47,6 +42,7 @@ export default class VerticalBox extends Component {
 }
 
 VerticalBox.propTypes = {
+  parents: React.PropTypes.array,
   name: React.PropTypes.string,
   rows: React.PropTypes.array,
   dispatcher: React.PropTypes.object.isRequired,
