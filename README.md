@@ -1,6 +1,6 @@
 # README #
 ## Task Board Project ##
-### Minimalistic non-intruisive realtime agile task board ###
+### Minimalistic non-intrusive realtime agile task board ###
 [![Build Status](https://travis-ci.org/indiegate/task-board.svg?branch=master)](https://travis-ci.org/indiegate/task-board)
 ## Requirements
 
